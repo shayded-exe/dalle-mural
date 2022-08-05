@@ -1,4 +1,4 @@
-import { Dalle as DalleApi, Task } from 'dalle-node';
+import { Dalle as DalleApi, NewInpaintingTask, Task } from 'dalle-node';
 import got from 'got';
 
 export class Dalle extends DalleApi {
@@ -15,17 +15,19 @@ export class Dalle extends DalleApi {
     maskedImage: string;
     parentGenerationId: string;
   }): Promise<any> {
+    const newTask: NewInpaintingTask = {
+      task_type: 'inpainting',
+      prompt: {
+        caption: prompt,
+        masked_image: maskedImage,
+        parent_generation_id: parentGenerationId,
+        batch_size: 3,
+      },
+    };
+
     return got
       .post(`${this.url}/tasks`, {
-        json: {
-          task_type: 'inpainting',
-          prompt: {
-            caption: prompt,
-            masked_image: maskedImage,
-            parent_generation_id: parentGenerationId,
-            batch_size: 3,
-          },
-        },
+        json: newTask,
         headers: this.#getHeaders(),
       })
       .json<Task>()

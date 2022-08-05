@@ -1,7 +1,29 @@
 import './App.css';
 
-function App() {
-  return <div className="App"></div>;
-}
+import { Input } from '@chakra-ui/react';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
 
-export default App;
+import { Dalle } from './dalle';
+import { useStore } from './store';
+
+export const App = observer(() => {
+  const store = useStore();
+  const dalle = new Dalle(store.authToken);
+
+  const [authToken, setAuthToken] = useState('');
+
+  useEffect(() => {
+    dalle.bearerToken = authToken;
+  }, [authToken]);
+
+  return (
+    <div className='app'>
+      <Input
+        placeholder='Auth token'
+        value={authToken}
+        onChange={e => setAuthToken(e.target.value)}
+      />
+    </div>
+  );
+});

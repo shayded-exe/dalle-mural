@@ -10,16 +10,37 @@ declare module 'dalle-node' {
     data: T[];
   }
 
-  export interface Generation extends DalleObject {
-    object: 'generation';
+  export interface PromptMeta extends DalleObject {
+    object: 'prompt';
 
-    generation_type: string;
-    generation: {
-      image_path: string;
-    };
-    prompt_id: string;
-    task_id: string;
-    is_public: boolean;
+    parent_generation_id: string | null;
+    prompt_type: string;
+  }
+
+  export interface Prompt {
+    caption: string;
+    image_path?: string;
+    masked_image_path?: string;
+  }
+
+  export interface NewPrompt {
+    batch_size: number;
+    caption: string;
+  }
+
+  export interface NewInpaintingPrompt extends NewPrompt {
+    masked_image: string;
+    parent_generation_id: string;
+  }
+
+  export interface NewText2ImageTask {
+    task_type: 'text2im';
+    prompt: NewPrompt;
+  }
+
+  export interface NewInpaintingTask {
+    task_type: 'inpainting';
+    prompt: NewInpaintingPrompt;
   }
 
   export type Task = PendingTask | SuccessfulTask | FailedTask;
@@ -48,6 +69,18 @@ declare module 'dalle-node' {
   }
 
   export type TaskStatus = 'pending' | 'succeeded' | 'rejected';
+
+  export interface Generation extends DalleObject {
+    object: 'generation';
+
+    generation_type: string;
+    generation: {
+      image_path: string;
+    };
+    prompt_id: string;
+    task_id: string;
+    is_public: boolean;
+  }
 
   export class Dalle {
     bearerToken: string;
