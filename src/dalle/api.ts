@@ -3,7 +3,7 @@ import ky from 'ky';
 import { NewInpaintingTask, NewText2ImageTask, Task } from './types';
 
 export class Dalle {
-  readonly url = 'https://labs.openai.com/api/labs';
+  readonly url = 'http://localhost:5174';
 
   authToken?: string;
 
@@ -64,7 +64,7 @@ export class Dalle {
 
   async getTask(taskId: string): Promise<Task> {
     return ky
-      .post(`${this.url}/tasks/${taskId}`, {
+      .get(`${this.url}/tasks/${taskId}`, {
         headers: this.#getHeaders(),
       })
       .json<Task>();
