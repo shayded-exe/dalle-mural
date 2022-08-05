@@ -14,7 +14,7 @@ export const App = observer(() => {
   const [authToken, setAuthToken] = useState('');
 
   useEffect(() => {
-    dalle.bearerToken = authToken;
+    dalle.authToken = authToken;
   }, [authToken]);
 
   return (

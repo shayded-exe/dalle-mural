@@ -12,9 +12,8 @@
     "@chakra-ui/react": "2.2.4",
     "@emotion/react": "11.10.0",
     "@emotion/styled": "11.10.0",
-    "dalle-node": "1.0.5",
     "framer-motion": "7.0.0",
-    "got": "12.3.0",
+    "ky": "0.31.1",
     "mobx": "6.6.1",
     "mobx-persist-store": "1.0.6",
     "mobx-react-lite": "3.4.0",
@@ -22,6 +21,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@types/node": "18.6.4",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
     "@vitejs/plugin-react": "2.0.0",
