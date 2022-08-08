@@ -1,31 +1,43 @@
 import { chakra, Image } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
+import React, { ReactNode } from 'react';
 
-import { GenerationMeta } from '../dalle';
+import { Generation as StoreGeneration } from '../store';
 
 interface Props {
-  generation: GenerationMeta;
+  generation: StoreGeneration;
 
   className?: string;
+  children?: ReactNode;
 }
 
-const _Generation = ({ generation, className }: Props) => {
-  const {
-    generation: { image_path },
-  } = generation;
-
+const _Generation = ({ generation, className, children }: Props) => {
   return (
-    <Image
-      src={image_path}
+    <div
       className={className}
-    />
+      style={{ position: 'relative' }}
+    >
+      <Image src={generation.image} />
+      {children && (
+        <div
+          className='generation-hover-contents'
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          }}
+        >
+          {children}
+        </div>
+      )}
+    </div>
   );
 };
 
 export const Generation = chakra(observer(_Generation), {
   baseStyle: {
-    minWidth: '0',
-    minHeight: '0',
     maxWidth: '1024px',
     maxHeight: '1024px',
   },

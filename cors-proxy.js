@@ -6,10 +6,22 @@ const app = express();
 
 app.use(cors());
 app.use(
-  createProxyMiddleware({
+  createProxyMiddleware('/api', {
     target: 'https://labs.openai.com/api/labs',
+    pathRewrite: { '^/api': '' },
     changeOrigin: true,
-    logger: console,
+    logLevel: 'debug',
+    logProvider: () => console,
+  }),
+);
+
+app.use(
+  createProxyMiddleware('/images', {
+    target: 'https://openailabsprodscus.blob.core.windows.net',
+    pathRewrite: { '^/images': '' },
+    changeOrigin: true,
+    logLevel: 'debug',
+    logProvider: () => console,
   }),
 );
 

@@ -1,2 +1,2 @@
-export * from './Canvas';
 export * from './Generation';
+export * from './Mural';

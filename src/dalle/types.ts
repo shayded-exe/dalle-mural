@@ -9,85 +9,88 @@ export interface DalleList<T> {
   data: T[];
 }
 
-export interface PromptMeta extends DalleObject {
+export interface DallePromptMeta extends DalleObject {
   object: 'prompt';
 
-  prompt_type: PromptType;
-  prompt: Prompt;
+  prompt_type: DallePromptType;
+  prompt: DallePrompt;
 
   parent_generation_id: string | null;
 }
 
-export type PromptType = 'CaptionPrompt' | 'ImageCaptionPrompt';
+export type DallePromptType = 'CaptionPrompt' | 'ImageCaptionPrompt';
 
-export interface Prompt {
+export interface DallePrompt {
   caption: string;
   image_path?: string;
   masked_image_path?: string;
 }
 
-export interface NewPrompt {
+export interface NewDallePrompt {
   batch_size: number;
   caption: string;
 }
 
-export interface NewInpaintingPrompt extends NewPrompt {
+export interface NewInpaintingDallePrompt extends NewDallePrompt {
   masked_image: string;
   parent_generation_id: string;
 }
 
-export interface NewText2ImageTask {
+export interface NewText2ImageDalleTask {
   task_type: 'text2im';
-  prompt: NewPrompt;
+  prompt: NewDallePrompt;
 }
 
-export interface NewInpaintingTask {
+export interface NewInpaintingDalleTask {
   task_type: 'inpainting';
-  prompt: NewInpaintingPrompt;
+  prompt: NewInpaintingDallePrompt;
 }
 
-export type Task = PendingTask | SuccessfulTask | FailedTask;
+export type DalleTask =
+  | PendingDalleTask
+  | SuccessfulDalleTask
+  | FailedDalleTask;
 
-export interface BaseTask extends DalleObject {
+export interface BaseDalleTask extends DalleObject {
   object: 'task';
 
   task_type: string;
 
-  status: TaskStatus;
+  status: DalleTaskStatus;
   status_information: {};
 
-  prompt: PromptMeta;
+  prompt: DallePromptMeta;
   prompt_id: string;
 }
 
-export interface PendingTask extends BaseTask {
+export interface PendingDalleTask extends BaseDalleTask {
   status: 'pending';
 }
 
-export interface SuccessfulTask extends BaseTask {
+export interface SuccessfulDalleTask extends BaseDalleTask {
   status: 'succeeded';
-  generations: DalleList<GenerationMeta>;
+  generations: DalleList<DalleGenerationMeta>;
 }
 
-export interface FailedTask extends BaseTask {
+export interface FailedDalleTask extends BaseDalleTask {
   status: 'rejected';
 }
 
-export type TaskStatus = 'pending' | 'succeeded' | 'rejected';
+export type DalleTaskStatus = 'pending' | 'succeeded' | 'rejected';
 
-export interface GenerationMeta extends DalleObject {
+export interface DalleGenerationMeta extends DalleObject {
   object: 'generation';
 
-  generation_type: GenerationType;
-  generation: Generation;
+  generation_type: DalleGenerationType;
+  generation: DalleGeneration;
 
   prompt_id: string;
   task_id: string;
   is_public: boolean;
 }
 
-export type GenerationType = 'ImageGeneration';
+export type DalleGenerationType = 'ImageGeneration';
 
-export interface Generation {
+export interface DalleGeneration {
   image_path: string;
 }

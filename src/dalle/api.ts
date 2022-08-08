@@ -1,10 +1,13 @@
 import ky from 'ky';
 
-import { NewInpaintingTask, NewText2ImageTask, Task } from './types';
+import { loadImageUrlToBase64_fetch } from '../utils';
+import {
+  DalleTask,
+  NewInpaintingDalleTask,
+  NewText2ImageDalleTask,
+} from './types';
 
 export class Dalle {
-  readonly url = 'http://localhost:5174';
-
   authToken?: string;
 
   get isSignedIn(): boolean {
@@ -12,12 +15,22 @@ export class Dalle {
     return !!this.authToken;
   }
 
+  readonly #url = 'http://localhost:5174';
+
+  get #apiUrl() {
+    return `${this.#url}/api`;
+  }
+
+  get #imagesUrl() {
+    return `${this.#url}/images`;
+  }
+
   constructor(authToken?: string) {
     this.authToken = authToken;
   }
 
-  async generate({ prompt }: { prompt: string }): Promise<Task> {
-    const newTask: NewText2ImageTask = {
+  async generate({ prompt }: { prompt: string }): Promise<DalleTask> {
+    const newTask: NewText2ImageDalleTask = {
       task_type: 'text2im',
       prompt: {
         caption: prompt,
@@ -26,11 +39,11 @@ export class Dalle {
     };
 
     return ky
-      .post(`${this.url}/tasks`, {
+      .post(`${this.#apiUrl}/tasks`, {
         json: newTask,
         headers: this.#getHeaders(),
       })
-      .json<Task>()
+      .json<DalleTask>()
       .then(task => this.#pollTask(task));
   }
 
@@ -42,8 +55,8 @@ export class Dalle {
     prompt: string;
     maskedImage: string;
     parentGenerationId: string;
-  }): Promise<Task> {
-    const newTask: NewInpaintingTask = {
+  }): Promise<DalleTask> {
+    const newTask: NewInpaintingDalleTask = {
       task_type: 'inpainting',
       prompt: {
         caption: prompt,
@@ -54,24 +67,31 @@ export class Dalle {
     };
 
     return ky
-      .post(`${this.url}/tasks`, {
+      .post(`${this.#apiUrl}/tasks`, {
         json: newTask,
         headers: this.#getHeaders(),
       })
-      .json<Task>()
+      .json<DalleTask>()
       .then(task => this.#pollTask(task));
   }
 
-  async getTask(taskId: string): Promise<Task> {
+  async getTask(taskId: string): Promise<DalleTask> {
     return ky
-      .get(`${this.url}/tasks/${taskId}`, {
+      .get(`${this.#apiUrl}/tasks/${taskId}`, {
         headers: this.#getHeaders(),
       })
-      .json<Task>();
+      .json<DalleTask>();
   }
 
-  #pollTask(task: Task): Promise<Task> {
-    return new Promise<Task>((resolve, reject) => {
+  async getImageBase64(dalleUrl: string): Promise<string> {
+    const { pathname, search } = new URL(dalleUrl);
+    const url = [this.#imagesUrl, pathname, search].join('');
+
+    return loadImageUrlToBase64_fetch(url);
+  }
+
+  #pollTask(task: DalleTask): Promise<DalleTask> {
+    return new Promise<DalleTask>((resolve, reject) => {
       const refreshIntervalId = setInterval(async () => {
         try {
           const newTask = await this.getTask(task.id);
