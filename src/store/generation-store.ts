@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
 import { DalleGenerationMeta } from '../dalle';
-import { Generation } from '../domain-objects';
+import { Generation } from './models';
 import { RootStore } from './root-store';
 
 export class GenerationStore {
@@ -15,17 +15,23 @@ export class GenerationStore {
       return [];
     }
 
-    return task.generations.data.map(g => this.getGenerationById(g.id));
+    return task.generations.data.map(g => this.getById(g.id));
+  }
+
+  get #dalle() {
+    return this.#rootStore.dalle;
   }
 
   get #taskStore() {
-    return this.rootStore.taskStore;
+    return this.#rootStore.taskStore;
   }
 
-  constructor(readonly rootStore: RootStore) {
-    makeAutoObservable(this, {
-      rootStore: false,
-    });
+  #rootStore: RootStore;
+
+  constructor(rootStore: RootStore) {
+    this.#rootStore = rootStore;
+
+    makeAutoObservable(this);
     makePersistable(this, {
       name: 'GenerationStore',
       properties: [
@@ -35,7 +41,7 @@ export class GenerationStore {
     });
   }
 
-  getGenerationById(id: string): Generation {
+  getById(id: string): Generation {
     const generation = this.generations.find(g => g.id === id);
 
     if (!generation) {
@@ -45,10 +51,8 @@ export class GenerationStore {
     return generation;
   }
 
-  async addGenerations(dtos: DalleGenerationMeta[]) {
-    const promises = dtos.map(dto =>
-      Generation.fromApi(dto, this.rootStore.dalle),
-    );
+  async add(dtos: DalleGenerationMeta[]) {
+    const promises = dtos.map(dto => Generation.fromApi(dto, this.#dalle));
     const generations = await Promise.all(promises);
 
     runInAction(() => {

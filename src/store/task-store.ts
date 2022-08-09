@@ -53,7 +53,7 @@ export class TaskStore {
     }
 
     this.successfulTasks[task.id] = task;
-    await this.#generationStore.addGenerations(task.generations.data);
+    await this.#generationStore.add(task.generations.data);
   }
 
   async loadResult(task: DalleTask) {

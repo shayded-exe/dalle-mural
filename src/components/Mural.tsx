@@ -4,16 +4,15 @@ import { chakra } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
-import { useStores } from '../store';
+import { models } from '../store';
 import { Generation } from './Generation';
 
 interface Props {
+  mural: models.Mural;
   className?: string;
 }
 
-const _Mural = ({ className }: Props) => {
-  const { mural } = useStores();
-
+const _Mural = ({ mural, className }: Props) => {
   return (
     <div className={className}>
       <TransformWrapper

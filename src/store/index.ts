@@ -17,4 +17,4 @@ export const StoresContext = createContext(new RootStore());
 export const useStores = () => useContext(StoresContext);
 
 export * from './root-store';
-export * from './storage';
+export * as models from './models';

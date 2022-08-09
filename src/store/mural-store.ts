@@ -1,12 +1,28 @@
 import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
-import { Mural } from '../domain-objects';
+import { Generation, Mural, ResizeAnchor } from './models';
 import { RootStore } from './root-store';
-import { DomainObjectStorageController, StorableDomainObject } from './storage';
 
 export class MuralStore {
-  activeMural: Mural;
+  murals: { [id: string]: Mural } = {};
+  activeMuralId?: string;
+
+  get hasActiveMural(): boolean {
+    return !!this.activeMuralId;
+  }
+
+  get activeMural(): Mural {
+    return this.getById(this.activeMuralId!);
+  }
+
+  get generations(): (Generation | null)[][] {
+    return this.activeMural.generations;
+  }
+
+  get #generationStore() {
+    return this.#rootStore.generationStore;
+  }
 
   #rootStore: RootStore;
 
@@ -18,23 +34,65 @@ export class MuralStore {
       name: 'MuralStore',
       properties: [
         //
-        // 'activeMural',
+        'murals',
+        'activeMuralId',
       ],
-      storage: new DomainObjectStorageController({
-        storage: localStorage,
-        transform: this.deserializeProp,
-      }),
     });
 
-    this.activeMural = Mural.create(rootStore);
+    if (!this.hasActiveMural) {
+      this.createAndActivate();
+    }
   }
 
-  deserializeProp(key: string, value: any): any {
-    switch (key as keyof MuralStore) {
-      case 'activeMural':
-        return StorableDomainObject.fromJson(Mural, this.#rootStore, value);
-      default:
-        return value;
+  createAndActivate(): Mural {
+    const mural = Mural.create();
+
+    this.murals[mural.id] = mural;
+    this.activeMuralId = mural.id;
+
+    return mural;
+  }
+
+  getById(id: string): Mural {
+    const mural = this.murals[id];
+
+    if (!mural) {
+      throw new Error(`Generation not found: ${id}`);
     }
+
+    return mural;
+  }
+
+  place({
+    generationId,
+    x,
+    y,
+  }: {
+    generationId: string;
+    x: number;
+    y: number;
+  }) {
+    const mural = this.activeMural;
+
+    if (x < 0 || mural.width <= x || y < 0 || mural.height <= y) {
+      throw new Error(`Generation coordinates out of bounds. ${arguments[0]}`);
+    }
+
+    mural.generations[x][y] = this.#generationStore.getById(generationId);
+  }
+
+  resize({
+    width,
+    height,
+    anchor,
+  }: {
+    width: number;
+    height: number;
+    anchor: ResizeAnchor;
+  }) {
+    const mural = this.activeMural;
+
+    mural.width = width;
+    mural.height = height;
   }
 }

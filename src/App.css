@@ -2,11 +2,3 @@
   width: 100vw;
   height: 100vh;
 }
-
-.addable-generation:not(:hover) .generation-hover-contents {
-  opacity: 0;
-}
-
-.addable-generation:hover .generation-hover-contents {
-  opacity: 1;
-}

@@ -1,44 +1,56 @@
-import { chakra, Image } from '@chakra-ui/react';
+import { Box, chakra, Image } from '@chakra-ui/react';
+import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import React, { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
-import { Generation as StoreGeneration } from '../store';
+import { models } from '../store';
 
 interface Props {
-  generation: StoreGeneration;
+  generation: models.Generation;
 
   className?: string;
   children?: ReactNode;
 }
 
+const hoverContentsStyle: CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  opacity: 0,
+};
+
 const _Generation = ({ generation, className, children }: Props) => {
   return (
-    <div
-      className={className}
-      style={{ position: 'relative' }}
+    <Box
+      role='group'
+      pos='relative'
+      className={classNames('generation', className)}
     >
-      <Image src={generation.image} />
+      <Image
+        src={generation.image}
+        height='100%'
+      />
       {children && (
-        <div
-          className='generation-hover-contents'
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-          }}
+        <Box
+          sx={hoverContentsStyle}
+          _groupHover={{ opacity: 1 }}
         >
           {children}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 
+const pixelSize = `${models.Generation.SIZE}px`;
+
 export const Generation = chakra(observer(_Generation), {
   baseStyle: {
-    maxWidth: '1024px',
-    maxHeight: '1024px',
+    minWidth: 0,
+    minHeight: 0,
+    maxWidth: pixelSize,
+    maxHeight: pixelSize,
   },
 });
