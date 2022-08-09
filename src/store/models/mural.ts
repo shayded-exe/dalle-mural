@@ -6,6 +6,7 @@ export interface Mural {
   id: string;
   width: number;
   height: number;
+  overlap: number;
   // [x][y]
   generations: (Generation | null)[][];
 }
@@ -19,11 +20,17 @@ export namespace Mural {
       id: uuid.v4(),
       width,
       height,
+      overlap: 256,
       generations: Array(width)
         .fill(0)
         .map(() => Array(height).fill(null)),
     };
   }
+}
+
+export interface MuralCoords {
+  x: number;
+  y: number;
 }
 
 export type ResizeAnchor = [

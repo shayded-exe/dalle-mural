@@ -6,14 +6,10 @@ import { RootStore } from './root-store';
 
 export class TaskStore {
   successfulTasks: { [id: string]: SuccessfulDalleTask } = {};
-  resultTaskId?: string;
+  resultTaskId: string | null = null;
 
-  get resultTask(): SuccessfulDalleTask | undefined {
-    if (!this.resultTaskId) {
-      return undefined;
-    }
-
-    return this.getTaskById(this.resultTaskId);
+  get resultTask(): SuccessfulDalleTask | null {
+    return !this.resultTaskId ? null : this.getTaskById(this.resultTaskId);
   }
 
   get #generationStore() {

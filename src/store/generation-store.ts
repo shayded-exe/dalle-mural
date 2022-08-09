@@ -7,6 +7,7 @@ import { RootStore } from './root-store';
 
 export class GenerationStore {
   generations: Generation[] = [];
+  selectedResultId: string | null = null;
 
   get resultGenerations(): Generation[] {
     const task = this.#taskStore.resultTask;
@@ -16,6 +17,10 @@ export class GenerationStore {
     }
 
     return task.generations.data.map(g => this.getById(g.id));
+  }
+
+  get selectedResult(): Generation | null {
+    return !this.selectedResultId ? null : this.getById(this.selectedResultId);
   }
 
   get #dalle() {
@@ -58,5 +63,9 @@ export class GenerationStore {
     runInAction(() => {
       this.generations.push(...generations);
     });
+  }
+
+  selectResult(id: string) {
+    this.selectedResultId = id;
   }
 }

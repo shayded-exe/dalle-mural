@@ -4,8 +4,8 @@ import { chakra } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
-import { models } from '../store';
-import { Generation } from './Generation';
+import { models, useStores } from '../store';
+import { MuralGeneration } from './MuralGeneration';
 
 interface Props {
   mural: models.Mural;
@@ -13,27 +13,40 @@ interface Props {
 }
 
 const _Mural = ({ mural, className }: Props) => {
+  const { muralStore } = useStores();
+
+  const addGeneration = (x: number, y: number) => {
+    // muralStore.
+  };
+
   return (
     <div className={className}>
       <TransformWrapper
-        minScale={0.1}
-        initialScale={0.25}
-        initialPositionX={200}
-        initialPositionY={200}
-        // centerOnInit={true}
-        // centerZoomedOut={true}
+        minScale={0.25}
+        centerOnInit={true}
+        centerZoomedOut={true}
         limitToBounds={false}
       >
-        <TransformComponent>
-          {mural.generations.map(row =>
-            row.map(generation =>
-              generation == null ? null : (
-                <Generation
-                  key={generation.id}
-                  generation={generation}
-                ></Generation>
-              ),
-            ),
+        <TransformComponent
+          contentStyle={{
+            display: 'grid',
+            gridAutoFlow: 'column',
+            gridTemplateRows: `repeat(${mural.height}, ${models.Generation.BASE_DISPLAY_SIZE}px)`,
+            gridAutoColumns: `${models.Generation.BASE_DISPLAY_SIZE}px`,
+          }}
+        >
+          {mural.generations.map((col, x) =>
+            col.map((generation, y) => (
+              <MuralGeneration
+                key={`${x}-${y}`}
+                generation={generation}
+                isSelected={
+                  x === muralStore.selectedTile?.x &&
+                  y === muralStore.selectedTile.y
+                }
+                onSelect={() => muralStore.selectTile({ x, y })}
+              />
+            )),
           )}
         </TransformComponent>
       </TransformWrapper>

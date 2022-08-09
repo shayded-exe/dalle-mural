@@ -1,23 +1,16 @@
-import { Button, chakra, Flex, Spinner } from '@chakra-ui/react';
+import { chakra, Flex, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
-import { models, useStores } from '../store';
+import { useStores } from '../store';
 import { Generation } from './Generation';
 
-interface Props {
+const _ResultGenerations = ({
+  isGenerating,
+  ...passthrough
+}: {
   isGenerating: boolean;
-}
-
-const _ResultGenerations = ({ isGenerating, ...passthrough }: Props) => {
+}) => {
   const { generationStore, muralStore } = useStores();
-
-  const placeGeneration = (generation: models.Generation) => {
-    muralStore.place({
-      generationId: generation.id,
-      x: 0,
-      y: 0,
-    });
-  };
 
   return (
     <Flex
@@ -34,9 +27,10 @@ const _ResultGenerations = ({ isGenerating, ...passthrough }: Props) => {
           <Generation
             key={generation.id}
             generation={generation}
-          >
-            <Button onClick={() => placeGeneration(generation)}>Add</Button>
-          </Generation>
+            isSelected={generation.id === generationStore.selectedResultId}
+            onSelect={() => generationStore.selectResult(generation.id)}
+            cursor='pointer'
+          />
         ))
       )}
     </Flex>

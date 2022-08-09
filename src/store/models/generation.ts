@@ -9,6 +9,7 @@ export interface Generation {
 
 export namespace Generation {
   export const SIZE = 1024;
+  export const BASE_DISPLAY_SIZE = SIZE / 4;
 
   export async function fromApi(
     dto: DalleGenerationMeta,

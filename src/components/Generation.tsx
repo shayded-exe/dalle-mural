@@ -5,13 +5,6 @@ import { CSSProperties, ReactNode } from 'react';
 
 import { models } from '../store';
 
-interface Props {
-  generation: models.Generation;
-
-  className?: string;
-  children?: ReactNode;
-}
-
 const hoverContentsStyle: CSSProperties = {
   position: 'absolute',
   top: 0,
@@ -21,12 +14,32 @@ const hoverContentsStyle: CSSProperties = {
   opacity: 0,
 };
 
-const _Generation = ({ generation, className, children }: Props) => {
+const _Generation = ({
+  generation,
+  isSelected = false,
+  onSelect,
+  className,
+  children,
+  ...passthrough
+}: {
+  generation: models.Generation;
+  isSelected?: boolean;
+
+  onSelect?: () => void;
+  className?: string;
+  children?: ReactNode;
+}) => {
   return (
     <Box
       role='group'
       pos='relative'
       className={classNames('generation', className)}
+      sx={{
+        boxShadow: !isSelected ? undefined : '0px 0px 0px 4px #3182ce',
+        borderRadius: 2,
+      }}
+      onClick={onSelect}
+      {...passthrough}
     >
       <Image
         src={generation.image}
@@ -44,7 +57,7 @@ const _Generation = ({ generation, className, children }: Props) => {
   );
 };
 
-const pixelSize = `${models.Generation.SIZE}px`;
+const pixelSize = `${models.Generation.BASE_DISPLAY_SIZE}px`;
 
 export const Generation = chakra(observer(_Generation), {
   baseStyle: {

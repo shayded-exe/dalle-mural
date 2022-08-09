@@ -1,12 +1,14 @@
 import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
-import { Generation, Mural, ResizeAnchor } from './models';
+import { Generation, Mural, MuralCoords, ResizeAnchor } from './models';
 import { RootStore } from './root-store';
 
 export class MuralStore {
   murals: { [id: string]: Mural } = {};
-  activeMuralId?: string;
+  activeMuralId: string | null = null;
+
+  selectedTile: MuralCoords | null = null;
 
   get hasActiveMural(): boolean {
     return !!this.activeMuralId;
@@ -63,15 +65,17 @@ export class MuralStore {
     return mural;
   }
 
+  selectTile(coords: MuralCoords) {
+    this.selectedTile = coords;
+  }
+
   place({
     generationId,
     x,
     y,
   }: {
     generationId: string;
-    x: number;
-    y: number;
-  }) {
+  } & MuralCoords) {
     const mural = this.activeMural;
 
     if (x < 0 || mural.width <= x || y < 0 || mural.height <= y) {
