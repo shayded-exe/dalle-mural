@@ -31,7 +31,7 @@ export class MuralStore {
   constructor(rootStore: RootStore) {
     this.#rootStore = rootStore;
 
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
     makePersistable(this, {
       name: 'MuralStore',
       properties: [

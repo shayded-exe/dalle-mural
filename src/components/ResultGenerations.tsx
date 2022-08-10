@@ -10,7 +10,9 @@ const _ResultGenerations = ({
 }: {
   isGenerating: boolean;
 }) => {
-  const { generationStore, muralStore } = useStores();
+  const {
+    generationStore: { resultGenerations, selectedResultId, selectResult },
+  } = useStores();
 
   return (
     <Flex
@@ -23,12 +25,12 @@ const _ResultGenerations = ({
       {isGenerating ? (
         <Spinner size='xl' />
       ) : (
-        generationStore.resultGenerations.map(generation => (
+        resultGenerations.map(generation => (
           <Generation
             key={generation.id}
             generation={generation}
-            isSelected={generation.id === generationStore.selectedResultId}
-            onSelect={() => generationStore.selectResult(generation.id)}
+            isSelected={generation.id === selectedResultId}
+            onSelect={() => selectResult(generation.id)}
             cursor='pointer'
           />
         ))

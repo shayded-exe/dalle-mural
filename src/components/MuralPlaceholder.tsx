@@ -22,8 +22,9 @@ const _MuralPlaceholder = ({
   return isSelected && previewGeneration ? (
     <Generation
       generation={previewGeneration}
-      isSelected={isSelected}
       zIndex={'mural-preview'}
+      outline={isSelected && 'solid 2px'}
+      outlineColor={'blue.500'}
     >
       <IconButton
         onClick={() => onPlace(previewGeneration)}
@@ -37,11 +38,12 @@ const _MuralPlaceholder = ({
       onClick={onSelect}
       cursor={'pointer'}
       zIndex={'mural-background'}
-      outlineColor={'blackAlpha.800'}
-      _hover={{ outline: 'solid 1px' }}
+      outline={'solid 1px'}
+      outlineColor={isSelected ? 'blackAlpha.600' : 'blackAlpha.200'}
+      _hover={{ outlineColor: 'blackAlpha.800' }}
       {...passthrough}
     >
-      <AddIcon />
+      <AddIcon opacity={0.5} />
     </Center>
   );
 };

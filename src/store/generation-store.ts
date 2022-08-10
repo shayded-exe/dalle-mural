@@ -39,7 +39,7 @@ export class GenerationStore {
   constructor(rootStore: RootStore) {
     this.#rootStore = rootStore;
 
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
     makePersistable(this, {
       name: 'GenerationStore',
       properties: [

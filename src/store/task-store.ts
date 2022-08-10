@@ -9,7 +9,7 @@ export class TaskStore {
   resultTaskId: string | null = null;
 
   get resultTask(): SuccessfulDalleTask | null {
-    return !this.resultTaskId ? null : this.getTaskById(this.resultTaskId);
+    return !this.resultTaskId ? null : this.getById(this.resultTaskId);
   }
 
   get #generationStore() {
@@ -21,7 +21,7 @@ export class TaskStore {
   constructor(rootStore: RootStore) {
     this.#rootStore = rootStore;
 
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
     makePersistable(this, {
       name: 'TaskStore',
       properties: [
@@ -32,7 +32,7 @@ export class TaskStore {
     });
   }
 
-  getTaskById(id: string): SuccessfulDalleTask {
+  getById(id: string): SuccessfulDalleTask {
     const task = this.successfulTasks[id];
 
     if (!task) {
@@ -42,7 +42,7 @@ export class TaskStore {
     return task;
   }
 
-  async addTask(task: DalleTask) {
+  async add(task: DalleTask) {
     if (task.status !== 'succeeded') {
       throw new Error(`Task not succeeded. ${task}`);
       // console.warn('Task failed', { task });
@@ -53,7 +53,7 @@ export class TaskStore {
   }
 
   async loadResult(task: DalleTask) {
-    await this.addTask(task);
+    await this.add(task);
 
     runInAction(() => {
       this.resultTaskId = task.id;
