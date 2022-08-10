@@ -13,19 +13,20 @@ interface Props {
 }
 
 const _Mural = ({ mural, className }: Props) => {
-  const { muralStore } = useStores();
+  const {
+    muralStore: { selectedTile, selectTile, place },
+  } = useStores();
 
-  const addGeneration = (x: number, y: number) => {
-    // muralStore.
-  };
+  const overlapMargin = `-${mural.overlap * models.Generation.DISPLAY_SIZE}px`;
 
   return (
     <div className={className}>
       <TransformWrapper
         minScale={0.25}
         centerOnInit={true}
-        centerZoomedOut={true}
         limitToBounds={false}
+        panning={{ velocityDisabled: true }}
+        doubleClick={{ mode: 'reset' }}
       >
         <TransformComponent
           contentStyle={{
@@ -37,25 +38,18 @@ const _Mural = ({ mural, className }: Props) => {
             <Flex
               key={x}
               direction='column'
-              className='mural-col'
+              _notFirst={{ marginLeft: overlapMargin }}
             >
               {col.map((generation, y) => (
                 <MuralGeneration
                   key={`${x}-${y}`}
                   generation={generation}
-                  isSelected={
-                    x === muralStore.selectedTile?.x &&
-                    y === muralStore.selectedTile.y
-                  }
-                  onSelect={() => muralStore.selectTile({ x, y })}
+                  isSelected={x === selectedTile?.x && y === selectedTile.y}
+                  onSelect={() => selectTile({ x, y })}
                   onPlace={generation =>
-                    muralStore.place({
-                      generationId: generation.id,
-                      x,
-                      y,
-                    })
+                    place({ generationId: generation.id, x, y })
                   }
-                  className='mural-cell'
+                  _notFirst={{ marginTop: overlapMargin }}
                 />
               ))}
             </Flex>

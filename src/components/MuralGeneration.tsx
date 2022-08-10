@@ -17,8 +17,6 @@ const _MuralGeneration = ({
 
   onSelect?: () => void;
   onPlace: (generation: models.Generation) => void;
-
-  className: string;
 }) => {
   const isSaved = !!generation;
 
@@ -40,7 +38,7 @@ const _MuralGeneration = ({
   );
 };
 
-const pixelSize = `${models.Generation.BASE_DISPLAY_SIZE}px`;
+const pixelSize = `${models.Generation.DISPLAY_SIZE}px`;
 
 export const MuralGeneration = chakra(observer(_MuralGeneration), {
   baseStyle: {

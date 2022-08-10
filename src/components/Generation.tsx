@@ -59,7 +59,7 @@ const _Generation = ({
   );
 };
 
-const pixelSize = `${models.Generation.BASE_DISPLAY_SIZE}px`;
+const pixelSize = `${models.Generation.DISPLAY_SIZE}px`;
 
 export const Generation = chakra(observer(_Generation), {
   baseStyle: {
