@@ -1,3 +1,4 @@
+import keyBy from 'lodash-es/keyBy';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
@@ -6,7 +7,7 @@ import { Generation } from './models';
 import { RootStore } from './root-store';
 
 export class GenerationStore {
-  generations: Generation[] = [];
+  generations: { [id: string]: Generation } = {};
   selectedResultId: string | null = null;
 
   get resultGenerations(): Generation[] {
@@ -20,7 +21,9 @@ export class GenerationStore {
   }
 
   get selectedResult(): Generation | null {
-    return !this.selectedResultId ? null : this.getById(this.selectedResultId);
+    const id = this.selectedResultId;
+
+    return !id ? null : this.getById(id);
   }
 
   get #dalle() {
@@ -47,7 +50,7 @@ export class GenerationStore {
   }
 
   getById(id: string): Generation {
-    const generation = this.generations.find(g => g.id === id);
+    const generation = this.generations[id];
 
     if (!generation) {
       throw new Error(`Generation not found: ${id}`);
@@ -61,7 +64,10 @@ export class GenerationStore {
     const generations = await Promise.all(promises);
 
     runInAction(() => {
-      this.generations.push(...generations);
+      Object.assign(
+        this.generations,
+        keyBy(generations, g => g.id),
+      );
     });
   }
 

@@ -1,49 +1,42 @@
-import { AddIcon } from '@chakra-ui/icons';
-import { Button, chakra, VStack } from '@chakra-ui/react';
+import { Center, chakra } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
-import { models, useStores } from '../store';
+import { models } from '../store';
 import { Generation } from './Generation';
+import { MuralPlaceholder } from './MuralPlaceholder';
 
 const _MuralGeneration = ({
   generation,
   isSelected = false,
   onSelect,
+  onPlace,
   ...passthrough
 }: {
   generation: models.Generation | null;
   isSelected?: boolean;
 
   onSelect?: () => void;
+  onPlace: (generation: models.Generation) => void;
+
+  className: string;
 }) => {
-  const { generationStore } = useStores();
+  const isSaved = !!generation;
 
-  if (isSelected) {
-    generation = generationStore.selectedResult;
-  }
-
-  return generation == null ? (
-    <VStack
-      justify='center'
-      spacing='4'
-      onClick={onSelect}
-      cursor='pointer'
-      {...passthrough}
-    >
-      <Button
-        rightIcon={<AddIcon />}
-        size='lg'
-      >
-        Add
-      </Button>
-    </VStack>
-  ) : (
-    <Generation
-      generation={generation}
-      isSelected={isSelected}
-      onSelect={onSelect}
-      {...passthrough}
-    ></Generation>
+  return (
+    <Center {...passthrough}>
+      {isSaved ? (
+        <Generation
+          generation={generation}
+          zIndex={'mural-placed'}
+        />
+      ) : (
+        <MuralPlaceholder
+          isSelected={isSelected}
+          onSelect={onSelect}
+          onPlace={onPlace}
+        />
+      )}
+    </Center>
   );
 };
 

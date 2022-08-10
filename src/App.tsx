@@ -1,6 +1,6 @@
 import './App.css';
 
-import { Button, chakra, Flex, Input } from '@chakra-ui/react';
+import { Button, Center, chakra, Flex, Input, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { FormEvent, useState } from 'react';
 
@@ -15,6 +15,7 @@ export const App = observer(() => {
     muralStore,
     taskStore,
     clear: clearStore,
+    isHydrated,
   } = useStores();
 
   const [prompt, setPrompt] = useState('');
@@ -52,6 +53,14 @@ export const App = observer(() => {
 
     await taskStore.loadResult(task);
   };
+
+  if (!isHydrated) {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  }
 
   return (
     <Flex

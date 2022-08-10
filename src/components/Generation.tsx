@@ -1,5 +1,4 @@
-import { Box, chakra, Image } from '@chakra-ui/react';
-import classNames from 'classnames';
+import { Box, Center, chakra, Image } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { CSSProperties, ReactNode } from 'react';
 
@@ -33,9 +32,11 @@ const _Generation = ({
     <Box
       role='group'
       pos='relative'
-      className={classNames('generation', className)}
+      className={className}
       sx={{
-        boxShadow: !isSelected ? undefined : '0px 0px 0px 4px #3182ce',
+        boxShadow: !isSelected
+          ? undefined
+          : '0px 0px 0px 4px var(--chakra-colors-blue-500)',
         borderRadius: 2,
       }}
       onClick={onSelect}
@@ -46,12 +47,13 @@ const _Generation = ({
         height='100%'
       />
       {children && (
-        <Box
+        <Center
+          zIndex='mural-overlay'
           sx={hoverContentsStyle}
           _groupHover={{ opacity: 1 }}
         >
           {children}
-        </Box>
+        </Center>
       )}
     </Box>
   );

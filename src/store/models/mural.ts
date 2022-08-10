@@ -20,7 +20,7 @@ export namespace Mural {
       id: uuid.v4(),
       width,
       height,
-      overlap: 256,
+      overlap: 128,
       generations: Array(width)
         .fill(0)
         .map(() => Array(height).fill(null)),

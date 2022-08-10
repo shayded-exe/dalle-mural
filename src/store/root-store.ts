@@ -1,4 +1,4 @@
-import { PersistStoreMap } from 'mobx-persist-store';
+import { isHydrated, PersistStoreMap } from 'mobx-persist-store';
 
 import { Dalle } from '../dalle';
 import { DalleStore } from './dalle-store';
@@ -11,6 +11,15 @@ export class RootStore {
   readonly taskStore = new TaskStore(this);
   readonly generationStore = new GenerationStore(this);
   readonly muralStore = new MuralStore(this);
+
+  get isHydrated(): boolean {
+    return [
+      this.dalleStore,
+      this.taskStore,
+      this.generationStore,
+      this.muralStore,
+    ].every(isHydrated);
+  }
 
   get dalle(): Dalle {
     return this.dalleStore.dalle;

@@ -1,6 +1,6 @@
 import './Mural.css';
 
-import { chakra } from '@chakra-ui/react';
+import { chakra, Flex } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
@@ -29,25 +29,37 @@ const _Mural = ({ mural, className }: Props) => {
       >
         <TransformComponent
           contentStyle={{
-            display: 'grid',
-            gridAutoFlow: 'column',
-            gridTemplateRows: `repeat(${mural.height}, ${models.Generation.BASE_DISPLAY_SIZE}px)`,
-            gridAutoColumns: `${models.Generation.BASE_DISPLAY_SIZE}px`,
+            display: 'flex',
+            flexDirection: 'row',
           }}
         >
-          {mural.generations.map((col, x) =>
-            col.map((generation, y) => (
-              <MuralGeneration
-                key={`${x}-${y}`}
-                generation={generation}
-                isSelected={
-                  x === muralStore.selectedTile?.x &&
-                  y === muralStore.selectedTile.y
-                }
-                onSelect={() => muralStore.selectTile({ x, y })}
-              />
-            )),
-          )}
+          {mural.generations.map((col, x) => (
+            <Flex
+              key={x}
+              direction='column'
+              className='mural-col'
+            >
+              {col.map((generation, y) => (
+                <MuralGeneration
+                  key={`${x}-${y}`}
+                  generation={generation}
+                  isSelected={
+                    x === muralStore.selectedTile?.x &&
+                    y === muralStore.selectedTile.y
+                  }
+                  onSelect={() => muralStore.selectTile({ x, y })}
+                  onPlace={generation =>
+                    muralStore.place({
+                      generationId: generation.id,
+                      x,
+                      y,
+                    })
+                  }
+                  className='mural-cell'
+                />
+              ))}
+            </Flex>
+          ))}
         </TransformComponent>
       </TransformWrapper>
     </div>

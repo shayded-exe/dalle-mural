@@ -2,3 +2,11 @@
   width: 100% !important;
   height: 100% !important;
 }
+
+.mural-col:not(:first-child) {
+  margin-left: -32px;
+}
+
+.mural-cell:not(:first-child) {
+  margin-top: -32px;
+}
