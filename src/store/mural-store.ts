@@ -69,6 +69,11 @@ export class MuralStore {
     this.selectedTile = coords;
   }
 
+  async inpaint({ x, y }: MuralCoords) {
+    const mural = this.activeMural;
+    const raster = await Mural.rasterize(mural);
+  }
+
   place({
     generationId,
     x,
@@ -94,6 +99,7 @@ export class MuralStore {
     height: number;
     anchor: ResizeAnchor;
   }) {
+    throw new Error('Not implemented');
     const mural = this.activeMural;
 
     mural.width = width;

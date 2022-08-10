@@ -1,23 +1,30 @@
-import { AddIcon, CheckIcon } from '@chakra-ui/icons';
+import { AddIcon, CheckIcon, EditIcon } from '@chakra-ui/icons';
 import { Center, chakra, IconButton } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
-import { models, useStores } from '../store';
+import { useStores } from '../store';
 import { Generation } from './Generation';
 
 const _MuralPlaceholder = ({
   isSelected,
   onSelect,
+  onEdit,
   onPlace,
   ...passthrough
 }: {
   isSelected?: boolean;
   onSelect?: () => void;
 
-  onPlace: (generation: models.Generation) => void;
+  onEdit: () => void;
+  onPlace: () => void;
 }) => {
-  const { generationStore } = useStores();
-  const previewGeneration = generationStore.selectedResult;
+  const {
+    generationStore: { selectedResult: previewGeneration },
+  } = useStores();
+
+  if (!previewGeneration) {
+    isSelected = false;
+  }
 
   return isSelected && previewGeneration ? (
     <Generation
@@ -27,7 +34,7 @@ const _MuralPlaceholder = ({
       outlineColor={'blue.500'}
     >
       <IconButton
-        onClick={() => onPlace(previewGeneration)}
+        onClick={onPlace}
         icon={<CheckIcon />}
         colorScheme={'green'}
         aria-label={'Place generation'}
@@ -35,7 +42,7 @@ const _MuralPlaceholder = ({
     </Generation>
   ) : (
     <Center
-      onClick={onSelect}
+      onClick={isSelected ? onSelect : onEdit}
       cursor={'pointer'}
       zIndex={'mural-background'}
       outline={'solid 1px'}
@@ -43,7 +50,7 @@ const _MuralPlaceholder = ({
       _hover={{ outlineColor: 'blackAlpha.800' }}
       {...passthrough}
     >
-      <AddIcon opacity={0.5} />
+      {previewGeneration ? <AddIcon opacity={0.5} /> : <EditIcon />}
     </Center>
   );
 };

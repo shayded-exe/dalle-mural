@@ -6,7 +6,8 @@ import { FormEvent, useState } from 'react';
 
 import { Mural, ResultGenerations } from './components';
 import { SuccessfulDalleTask } from './dalle';
-import { useStores } from './store';
+import { models, useStores } from './store';
+import { downloadImage } from './utils';
 
 export const App = observer(() => {
   const {
@@ -27,12 +28,14 @@ export const App = observer(() => {
 
     setIsGenerating(true);
     const task = await dalle.getTask(`task-${taskId}`);
-    setIsGenerating(false);
 
     try {
       await taskStore.loadResult(task);
     } catch (e) {
       console.error(e);
+      return;
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -108,6 +111,17 @@ export const App = observer(() => {
               onChange={e => setPrompt(e.target.value)}
             />
           </chakra.form>
+
+          <Button
+            onClick={async () => {
+              const image = await models.Mural.rasterize(
+                muralStore.activeMural,
+              );
+              downloadImage(image);
+            }}
+          >
+            Rasterize
+          </Button>
         </Flex>
 
         <ResultGenerations

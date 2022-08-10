@@ -17,7 +17,7 @@ const _Generation = ({
   generation,
   isSelected = false,
   onSelect,
-  className,
+  onDeselect,
   children,
   ...passthrough
 }: {
@@ -25,21 +25,29 @@ const _Generation = ({
   isSelected?: boolean;
 
   onSelect?: () => void;
-  className?: string;
+  onDeselect?: () => void;
+
   children?: ReactNode;
 }) => {
+  const onClick = () => {
+    if (isSelected) {
+      onDeselect?.();
+    } else {
+      onSelect?.();
+    }
+  };
+
   return (
     <Box
       role='group'
       pos='relative'
-      className={className}
       sx={{
         boxShadow: !isSelected
           ? undefined
           : '0px 0px 0px 4px var(--chakra-colors-blue-500)',
         borderRadius: 2,
       }}
-      onClick={onSelect}
+      onClick={onClick}
       {...passthrough}
     >
       <Image

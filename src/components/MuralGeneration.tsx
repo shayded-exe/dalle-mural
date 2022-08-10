@@ -7,16 +7,19 @@ import { MuralPlaceholder } from './MuralPlaceholder';
 
 const _MuralGeneration = ({
   generation,
-  isSelected = false,
+  isSelected,
   onSelect,
+  onEdit,
   onPlace,
   ...passthrough
 }: {
   generation: models.Generation | null;
-  isSelected?: boolean;
 
-  onSelect?: () => void;
-  onPlace: (generation: models.Generation) => void;
+  isSelected?: boolean;
+  onSelect: () => void;
+
+  onEdit: () => void;
+  onPlace: () => void;
 }) => {
   const isSaved = !!generation;
 
@@ -31,6 +34,7 @@ const _MuralGeneration = ({
         <MuralPlaceholder
           isSelected={isSelected}
           onSelect={onSelect}
+          onEdit={onEdit}
           onPlace={onPlace}
         />
       )}

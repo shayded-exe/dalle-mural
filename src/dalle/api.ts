@@ -1,6 +1,6 @@
 import ky from 'ky';
 
-import { loadImageUrlToBase64_fetch } from '../utils';
+import { urlToImageDataUrl_fetch } from '../utils';
 import {
   DalleTask,
   NewInpaintingDalleTask,
@@ -87,7 +87,7 @@ export class Dalle {
     const { pathname, search } = new URL(dalleUrl);
     const url = [this.#imagesUrl, pathname, search].join('');
 
-    return loadImageUrlToBase64_fetch(url);
+    return urlToImageDataUrl_fetch(url);
   }
 
   #pollTask(task: DalleTask): Promise<DalleTask> {

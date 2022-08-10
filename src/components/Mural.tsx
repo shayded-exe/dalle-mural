@@ -14,7 +14,8 @@ interface Props {
 
 const _Mural = ({ mural, className }: Props) => {
   const {
-    muralStore: { selectedTile, selectTile, place },
+    muralStore: { selectedTile, selectTile, inpaint, place },
+    generationStore: { selectedResultId },
   } = useStores();
 
   const overlapMargin = `-${mural.overlap * models.Generation.DISPLAY_SIZE}px`;
@@ -37,7 +38,7 @@ const _Mural = ({ mural, className }: Props) => {
           {mural.generations.map((col, x) => (
             <Flex
               key={x}
-              direction='column'
+              direction={'column'}
               _notFirst={{ marginLeft: overlapMargin }}
             >
               {col.map((generation, y) => (
@@ -46,8 +47,9 @@ const _Mural = ({ mural, className }: Props) => {
                   generation={generation}
                   isSelected={x === selectedTile?.x && y === selectedTile.y}
                   onSelect={() => selectTile({ x, y })}
-                  onPlace={generation =>
-                    place({ generationId: generation.id, x, y })
+                  onEdit={() => inpaint({ x, y })}
+                  onPlace={() =>
+                    place({ generationId: selectedResultId!, x, y })
                   }
                   _notFirst={{ marginTop: overlapMargin }}
                 />

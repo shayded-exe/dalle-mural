@@ -1,5 +1,6 @@
 import * as uuid from 'uuid';
 
+import { createCanvas, ImageDataUrl, urlToImage } from '../../utils';
 import { Generation } from './generation';
 
 export interface Mural {
@@ -25,6 +26,26 @@ export namespace Mural {
         .fill(0)
         .map(() => Array(height).fill(null)),
     };
+  }
+
+  export async function rasterize(mural: Mural): Promise<ImageDataUrl> {
+    const width = mural.width * Generation.SIZE;
+    const height = mural.height * Generation.SIZE;
+
+    const { canvas, ctx } = createCanvas({ width, height });
+
+    for (const [x, col] of mural.generations.entries()) {
+      for (const [y, generation] of col.entries()) {
+        if (!generation) {
+          continue;
+        }
+
+        const image = await urlToImage(generation.image);
+        ctx.drawImage(image, x * Generation.SIZE, y * Generation.SIZE);
+      }
+    }
+
+    return canvas.toDataURL() as ImageDataUrl;
   }
 }
 

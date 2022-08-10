@@ -11,7 +11,12 @@ const _ResultGenerations = ({
   isGenerating: boolean;
 }) => {
   const {
-    generationStore: { resultGenerations, selectedResultId, selectResult },
+    generationStore: {
+      resultGenerations,
+      selectedResultId,
+      selectResult,
+      deselectResult,
+    },
   } = useStores();
 
   return (
@@ -31,6 +36,7 @@ const _ResultGenerations = ({
             generation={generation}
             isSelected={generation.id === selectedResultId}
             onSelect={() => selectResult(generation.id)}
+            onDeselect={deselectResult}
             cursor='pointer'
           />
         ))

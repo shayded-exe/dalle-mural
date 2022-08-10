@@ -1,4 +1,4 @@
-import keyBy from 'lodash-es/keyBy';
+import { keyBy } from 'lodash-es';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
@@ -73,5 +73,9 @@ export class GenerationStore {
 
   selectResult(id: string) {
     this.selectedResultId = id;
+  }
+
+  deselectResult() {
+    this.selectedResultId = null;
   }
 }
