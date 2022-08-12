@@ -25,10 +25,10 @@ function _MuralPlaceholder({
   onPlace: () => void;
 }) {
   const {
-    uiStore: { isGeneratePanelOpen: isGenerateWindowOpen, previewGeneration },
+    uiStore: { isGeneratePanelOpen, isInpaintPanelOpen, previewGeneration },
   } = useStores();
 
-  if (!isGenerateWindowOpen) {
+  if (!isGeneratePanelOpen && !isInpaintPanelOpen) {
     isSelected = false;
   }
 

@@ -1,7 +1,19 @@
 import { extendTheme, ThemeOverride } from '@chakra-ui/react';
 
 const override: ThemeOverride = {
+  semanticTokens: {
+    colors: {
+      'transparent-bg': `
+        repeating-conic-gradient(var(--chakra-colors-blackAlpha-200) 0% 25%, transparent 0% 50%)
+          50% / 2rem 2rem
+      `,
+    },
+  },
   shadows: {
+    'window-left': `
+      -4px 0 12px -1px rgba(0, 0, 0, 0.08),
+      -2px 0 8px -1px rgba(0, 0, 0, 0.04)
+    `,
     'window-right': `
       4px 0 12px -1px rgba(0, 0, 0, 0.08),
       2px 0 8px -1px rgba(0, 0, 0, 0.04)

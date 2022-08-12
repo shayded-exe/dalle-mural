@@ -42,6 +42,7 @@ export const MuralCanvas = ({
   );
 };
 
+// TODO: Split into ActiveMural and Mural
 const _Mural = ({
   mural,
   className,
@@ -50,16 +51,19 @@ const _Mural = ({
   className?: string;
 }) => {
   const {
-    muralStore: {
-      selectedTile,
-      selectTile,
-      loadInpaintingPrompt: inpaint,
-      place,
-    },
-    uiStore: { selectedResultId },
+    muralStore: { selectedTile, selectTile, place },
+    uiStore: { isInpaintPanelOpen, selectedResultId, loadInpaintPromptImage },
   } = useStores();
 
   const overlapMargin = `-${mural.overlap * models.Generation.DISPLAY_SIZE}px`;
+
+  const onSelectGeneration = async (coords: models.MuralCoords) => {
+    selectTile(coords);
+
+    if (isInpaintPanelOpen) {
+      await loadInpaintPromptImage(coords);
+    }
+  };
 
   return (
     <MuralCanvas className={className}>
@@ -74,7 +78,7 @@ const _Mural = ({
               key={`${x}-${y}`}
               generation={generation}
               isSelected={x === selectedTile?.x && y === selectedTile.y}
-              onSelect={() => selectTile({ x, y })}
+              onSelect={() => onSelectGeneration({ x, y })}
               // onEdit={() => inpaint({ x, y })}
               onPlace={() => place({ generationId: selectedResultId!, x, y })}
               _notFirst={{ marginTop: overlapMargin }}

@@ -69,9 +69,8 @@ export class MuralStore {
     this.selectedTile = coords;
   }
 
-  async loadInpaintingPrompt(coords: MuralCoords) {
-    const mural = this.activeMural;
-    const raster = await Mural.rasterizeTile({ mural, ...coords });
+  deselectTile() {
+    this.selectedTile = null;
   }
 
   place({

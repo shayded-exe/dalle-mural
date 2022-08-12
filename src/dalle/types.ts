@@ -33,7 +33,8 @@ export interface NewDallePrompt {
 
 export interface NewInpaintingDallePrompt extends NewDallePrompt {
   masked_image: string;
-  parent_generation_id: string;
+  image?: string;
+  parent_generation_id?: string;
 }
 
 export interface NewText2ImageDalleTask {

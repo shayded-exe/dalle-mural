@@ -1,9 +1,10 @@
-import { ArrowLeftIcon } from '@chakra-ui/icons';
+import { ArrowRightIcon } from '@chakra-ui/icons';
 import {
   chakra,
   Flex,
   Heading,
   IconButton,
+  Image,
   Input,
   Spinner,
 } from '@chakra-ui/react';
@@ -11,49 +12,40 @@ import { observer } from 'mobx-react-lite';
 import { FormEvent, useState } from 'react';
 
 import { SuccessfulDalleTask } from '../dalle';
-import { useStores } from '../store';
+import { models, useStores } from '../store';
 import { ResultGenerations } from './ResultGenerations';
 
-export const GeneratePanel = chakra(observer(_GeneratePanel));
+export const InpaintPanel = chakra(observer(_InpaintPanel));
 
-function _GeneratePanel({ ...passthrough }: {}) {
+function _InpaintPanel({ ...passthrough }: {}) {
   const {
     dalle,
-    uiStore: { closePanel },
+    uiStore: { closePanel, inpaintPromptImage },
     taskStore: { loadResult },
   } = useStores();
 
   const [prompt, setPrompt] = useState('');
-  const [taskId, setTaskId] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const loadTask = async (e: FormEvent) => {
+  const inpaint = async (e: FormEvent) => {
     e.preventDefault();
 
-    setIsGenerating(true);
-    const task = await dalle.getTask(`task-${taskId}`);
-
-    try {
-      await loadResult(task);
-    } catch (e) {
-      console.error(e);
+    if (!inpaintPromptImage) {
       return;
-    } finally {
-      setIsGenerating(false);
     }
-  };
-
-  const generate = async (e: FormEvent) => {
-    e.preventDefault();
 
     setIsGenerating(true);
+    const image = inpaintPromptImage.split(',')[1];
 
     try {
-      const task = (await dalle.generate({ prompt })) as SuccessfulDalleTask;
+      const task = (await dalle.generateInpainting({
+        prompt,
+        maskedImage: image,
+        sourceImage: image,
+      })) as SuccessfulDalleTask;
       await loadResult(task);
     } catch (e) {
       console.error(e);
-      return;
     } finally {
       setIsGenerating(false);
     }
@@ -64,35 +56,24 @@ function _GeneratePanel({ ...passthrough }: {}) {
       padding={4}
       minHeight={0}
       background={'white'}
-      boxShadow={'window-right'}
-      borderRightRadius={'lg'}
+      boxShadow={'window-left'}
+      borderLeftRadius={'lg'}
       direction={'column'}
       gap={4}
       {...passthrough}
     >
       <Flex justify={'space-between'}>
-        <Heading size={'lg'}>Generate</Heading>
+        <Heading size={'lg'}>Inpaint</Heading>
         <IconButton
           onClick={closePanel}
-          icon={<ArrowLeftIcon />}
+          icon={<ArrowRightIcon />}
           aria-label='Close panel'
-          alignSelf={'end'}
+          alignSelf={'start'}
         />
       </Flex>
 
       <chakra.form
-        onSubmit={loadTask}
-        flexGrow={1}
-      >
-        <Input
-          placeholder='Task id'
-          value={taskId}
-          onChange={e => setTaskId(e.target.value)}
-        />
-      </chakra.form>
-
-      <chakra.form
-        onSubmit={generate}
+        onSubmit={inpaint}
         flexGrow={1}
       >
         <Input
@@ -101,6 +82,15 @@ function _GeneratePanel({ ...passthrough }: {}) {
           onChange={e => setPrompt(e.target.value)}
         />
       </chakra.form>
+
+      {inpaintPromptImage && (
+        <Image
+          src={inpaintPromptImage}
+          background='transparent-bg'
+          maxHeight={models.Generation.DISPLAY_SIZE / 2}
+          alignSelf={'center'}
+        />
+      )}
 
       {isGenerating ? <Spinner size={'xl'} /> : <ResultGenerations />}
     </Flex>

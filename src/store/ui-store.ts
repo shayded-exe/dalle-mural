@@ -1,11 +1,16 @@
 import { makeAutoObservable } from 'mobx';
 
-import { Generation, UIMode } from './models';
+import { ImageDataUrl } from '../utils';
+import { Generation, Mural, MuralCoords, UIMode } from './models';
 import { RootStore } from './root-store';
 
 export class UIStore {
   get #generationStore() {
     return this.#rootStore.generationStore;
+  }
+
+  get #muralStore() {
+    return this.#rootStore.muralStore;
   }
 
   #rootStore: RootStore;
@@ -28,14 +33,17 @@ export class UIStore {
 
   closePanel() {
     this.activeMode = UIMode.None;
+    this.#muralStore.deselectTile();
   }
 
   openGeneratePanel() {
     this.activeMode = UIMode.Generate;
+    this.#muralStore.deselectTile();
   }
 
   openInpaintingPanel() {
     this.activeMode = UIMode.Inpaint;
+    this.#muralStore.deselectTile();
   }
 
   selectedResultId: string | null = null;
@@ -52,5 +60,14 @@ export class UIStore {
 
   deselectResult() {
     this.selectedResultId = null;
+  }
+
+  inpaintPromptImage: ImageDataUrl | null = null;
+
+  async loadInpaintPromptImage(coords: MuralCoords) {
+    this.inpaintPromptImage = await Mural.rasterizeTile({
+      mural: this.#muralStore.activeMural,
+      ...coords,
+    });
   }
 }

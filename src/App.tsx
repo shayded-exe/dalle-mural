@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Mural } from './components';
 import { CommandToolbar } from './components/CommandToolbar';
 import { GeneratePanel } from './components/GeneratePanel';
+import { InpaintPanel } from './components/InpaintPanel';
 import { SettingsToolbar } from './components/SettingsToolbar';
 import { useStores } from './store';
 
@@ -35,7 +36,7 @@ export const App = observer(() => {
         margin='2rem'
         width='calc(100% - 4rem)'
         maxWidth='80rem'
-        zIndex={'docked'}
+        zIndex={'overlay'}
       />
 
       {!isGeneratePanelOpen ? null : (
@@ -47,9 +48,18 @@ export const App = observer(() => {
         />
       )}
 
+      {!isInpaintPanelOpen ? null : (
+        <InpaintPanel
+          minWidth={'min-content'}
+          maxWidth={'30%'}
+          alignSelf={'end'}
+          zIndex={'docked'}
+        />
+      )}
+
       <CommandToolbar
         margin='2rem'
-        zIndex={'docked'}
+        zIndex={'overlay'}
       />
 
       <Mural

@@ -1,6 +1,6 @@
 import { Box, Center, chakra, Image } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 import { models } from '../store';
 
@@ -32,18 +32,18 @@ function _Generation({
 
   children?: ReactNode;
 }) {
-  const onClick = () => {
+  const onClick = useCallback(() => {
     if (isSelected) {
       onDeselect?.();
     } else {
       onSelect?.();
     }
-  };
+  }, [onSelect, onDeselect]);
 
   return (
     <Box
       role='group'
-      position='relative'
+      position={'relative'}
       boxShadow={isSelected ? 'outline' : undefined}
       borderRadius={2}
       onClick={onClick}

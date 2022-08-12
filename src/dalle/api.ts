@@ -1,6 +1,6 @@
 import ky from 'ky';
 
-import { urlToImageDataUrl_fetch } from '../utils';
+import { ImageDataUrl, urlToImageDataUrl_fetch } from '../utils';
 import {
   DalleTask,
   NewInpaintingDalleTask,
@@ -52,17 +52,20 @@ export class Dalle {
   async generateInpainting({
     prompt,
     maskedImage,
+    sourceImage,
     parentGenerationId,
   }: {
     prompt: string;
-    maskedImage: string;
-    parentGenerationId: string;
+    maskedImage: ImageDataUrl;
+    sourceImage?: ImageDataUrl;
+    parentGenerationId?: string;
   }): Promise<DalleTask> {
     const newTask: NewInpaintingDalleTask = {
       task_type: 'inpainting',
       prompt: {
         caption: prompt,
         masked_image: maskedImage,
+        image: sourceImage,
         parent_generation_id: parentGenerationId,
         batch_size: 3,
       },
