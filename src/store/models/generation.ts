@@ -9,6 +9,7 @@ export interface Generation {
 
 export namespace Generation {
   export const SIZE = 1024;
+  export const DIMENSIONS = { width: SIZE, height: SIZE };
   export const DISPLAY_SIZE_MULTIPLE = 0.25;
   export const DISPLAY_SIZE = SIZE * DISPLAY_SIZE_MULTIPLE;
 

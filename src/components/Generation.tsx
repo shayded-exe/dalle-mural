@@ -40,7 +40,7 @@ const _Generation = ({
   return (
     <Box
       role='group'
-      pos='relative'
+      position='relative'
       sx={{
         boxShadow: !isSelected
           ? undefined

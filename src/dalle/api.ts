@@ -7,6 +7,8 @@ import {
   NewText2ImageDalleTask,
 } from './types';
 
+export const DALLE_AUTH_TOKEN_LENGTH = 45;
+
 export class Dalle {
   authToken?: string;
 

@@ -4,11 +4,12 @@ import { Opaque } from 'type-fest';
 
 import { createCanvas } from './canvas';
 
-export type ImageDataUrl = Opaque<string, 'DataUrl'>;
+export type ImageDataUrl = Opaque<string, 'ImageDataUrl'>;
 
 export async function urlToImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
+
     img.onload = () => resolve(img);
     img.onerror = e => reject(e);
 
@@ -38,12 +39,11 @@ async function urlToImageDataUrl_canvas(url: string): Promise<ImageDataUrl> {
   return canvas.toDataURL() as ImageDataUrl;
 }
 
-export function openImage(src: string) {
-  const img = new Image();
-  img.src = src;
+export async function openImage(src: string) {
+  const img = await urlToImage(src);
 
-  const w = window.open('');
-  w?.document.write(img.outerHTML);
+  const win = window.open('');
+  win?.document.write(img.outerHTML);
 }
 
 export function downloadImage(src: string, filename?: string) {
@@ -51,14 +51,5 @@ export function downloadImage(src: string, filename?: string) {
   link.style.display = 'none';
   link.href = src;
   link.download = filename ?? `${Date.now()}.png`;
-
-  document.body.appendChild(link);
-
-  try {
-    link.click();
-  } catch (e) {
-    console.error(e);
-  } finally {
-    document.body.removeChild(link);
-  }
+  link.click();
 }

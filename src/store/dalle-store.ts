@@ -8,8 +8,13 @@ export class DalleStore {
 
   readonly dalle = new Dalle();
 
+  get isSignedIn() {
+    this.authToken; // observe
+    return !!this.dalle.isSignedIn;
+  }
+
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
     makePersistable(this, {
       name: 'AuthStore',
       properties: [

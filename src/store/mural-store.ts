@@ -69,9 +69,9 @@ export class MuralStore {
     this.selectedTile = coords;
   }
 
-  async inpaint({ x, y }: MuralCoords) {
+  async loadInpaintingPrompt(coords: MuralCoords) {
     const mural = this.activeMural;
-    const raster = await Mural.rasterize(mural);
+    const raster = await Mural.rasterizeTile({ mural, ...coords });
   }
 
   place({
