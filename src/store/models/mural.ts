@@ -33,24 +33,10 @@ export namespace Mural {
     };
   }
 
-  export async function buildCanvas(mural: Mural): Promise<CanvasWithCtx> {
-    const { canvas, ctx } = createCanvas({
-      width: mural.width * Generation.SIZE,
-      height: mural.height * Generation.SIZE,
-    });
+  export async function rasterize(mural: Mural): Promise<ImageDataUrl> {
+    const { canvas } = await buildCanvas(mural);
 
-    for (const [x, col] of mural.generations.entries()) {
-      for (const [y, generation] of col.entries()) {
-        if (!generation) {
-          continue;
-        }
-
-        const image = await urlToImage(generation.image);
-        ctx.drawImage(image, x * Generation.SIZE, y * Generation.SIZE);
-      }
-    }
-
-    return { canvas, ctx };
+    return canvas.toDataURL() as ImageDataUrl;
   }
 
   export async function rasterizeTile({
@@ -62,10 +48,14 @@ export namespace Mural {
     const dest = createCanvas(Generation.DIMENSIONS);
 
     const size = Generation.SIZE;
+    const overlap = mural.overlap;
+    const sourceX = getPixelOffset({ index: x, overlap });
+    const sourceY = getPixelOffset({ index: y, overlap });
+
     dest.ctx.drawImage(
       src.canvas,
-      x * size, // sourceX
-      y * size, // sourceY
+      sourceX,
+      sourceY,
       size,
       size,
       0,
@@ -77,10 +67,45 @@ export namespace Mural {
     return dest.canvas.toDataURL() as ImageDataUrl;
   }
 
-  export async function rasterize(mural: Mural): Promise<ImageDataUrl> {
-    const { canvas } = await buildCanvas(mural);
+  async function buildCanvas(mural: Mural): Promise<CanvasWithCtx> {
+    const overlap = mural.overlap;
+    const sizeMinusOverlap = getSizeMinusOverlap(overlap);
 
-    return canvas.toDataURL() as ImageDataUrl;
+    const { canvas, ctx } = createCanvas({
+      width: mural.width * sizeMinusOverlap,
+      height: mural.height * sizeMinusOverlap,
+    });
+
+    for (const [x, col] of mural.generations.entries()) {
+      for (const [y, generation] of col.entries()) {
+        if (!generation) {
+          continue;
+        }
+
+        const image = await urlToImage(generation.image);
+        const px = getPixelOffset({ index: x, overlap });
+        const py = getPixelOffset({ index: y, overlap });
+        ctx.drawImage(image, px, py);
+      }
+    }
+
+    return { canvas, ctx };
+  }
+
+  function getSizeMinusOverlap(overlap: number): number {
+    const overlapPx = overlap * Generation.SIZE;
+
+    return Generation.SIZE - overlapPx;
+  }
+
+  function getPixelOffset({
+    index,
+    overlap,
+  }: {
+    index: number;
+    overlap: number;
+  }): number {
+    return index * getSizeMinusOverlap(overlap);
   }
 }
 
