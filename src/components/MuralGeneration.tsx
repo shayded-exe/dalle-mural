@@ -5,43 +5,6 @@ import { models } from '../store';
 import { Generation } from './Generation';
 import { MuralPlaceholder } from './MuralPlaceholder';
 
-const _MuralGeneration = ({
-  generation,
-  isSelected,
-  onSelect,
-  onEdit,
-  onPlace,
-  ...passthrough
-}: {
-  generation: models.Generation | null;
-
-  isSelected?: boolean;
-  onSelect: () => void;
-
-  onEdit: () => void;
-  onPlace: () => void;
-}) => {
-  const isSaved = !!generation;
-
-  return (
-    <Center {...passthrough}>
-      {isSaved ? (
-        <Generation
-          generation={generation}
-          zIndex={'mural-placed'}
-        />
-      ) : (
-        <MuralPlaceholder
-          isSelected={isSelected}
-          onSelect={onSelect}
-          onEdit={onEdit}
-          onPlace={onPlace}
-        />
-      )}
-    </Center>
-  );
-};
-
 const pixelSize = `${models.Generation.DISPLAY_SIZE}px`;
 
 export const MuralGeneration = chakra(observer(_MuralGeneration), {
@@ -50,3 +13,39 @@ export const MuralGeneration = chakra(observer(_MuralGeneration), {
     height: pixelSize,
   },
 });
+
+function _MuralGeneration({
+  generation,
+
+  isSelected,
+  onSelect,
+
+  onPlace,
+  ...passthrough
+}: {
+  generation: models.Generation | null;
+
+  isSelected: boolean;
+  onSelect: () => void;
+
+  onPlace: () => void;
+}) {
+  const isPlaced = !!generation;
+
+  return (
+    <Center {...passthrough}>
+      {isPlaced ? (
+        <Generation
+          generation={generation}
+          zIndex={'mural-placed'}
+        />
+      ) : (
+        <MuralPlaceholder
+          isSelected={isSelected}
+          onSelect={onSelect}
+          onPlace={onPlace}
+        />
+      )}
+    </Center>
+  );
+}

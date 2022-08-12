@@ -1,47 +1,32 @@
-import { chakra, Flex, Spinner } from '@chakra-ui/react';
+import { chakra, Grid } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
 import { useStores } from '../store';
 import { Generation } from './Generation';
 
-const _ResultGenerations = ({
-  isGenerating,
-  ...passthrough
-}: {
-  isGenerating: boolean;
-}) => {
+const _ResultGenerations = ({ ...passthrough }: {}) => {
   const {
-    generationStore: {
-      resultGenerations,
-      selectedResultId,
-      selectResult,
-      deselectResult,
-    },
+    generationStore: { resultGenerations },
+    uiStore: { selectedResultId, selectResult, deselectResult },
   } = useStores();
 
   return (
-    <Flex
-      direction='column'
-      justify='center'
-      align='center'
-      gap='4'
+    <Grid
+      templateColumns={'repeat(2, 1fr)'}
+      gap={4}
       {...passthrough}
     >
-      {isGenerating ? (
-        <Spinner size='xl' />
-      ) : (
-        resultGenerations.map(generation => (
-          <Generation
-            key={generation.id}
-            generation={generation}
-            isSelected={generation.id === selectedResultId}
-            onSelect={() => selectResult(generation.id)}
-            onDeselect={deselectResult}
-            cursor='pointer'
-          />
-        ))
-      )}
-    </Flex>
+      {resultGenerations.map(generation => (
+        <Generation
+          key={generation.id}
+          generation={generation}
+          isSelected={generation.id === selectedResultId}
+          onSelect={() => selectResult(generation.id)}
+          onDeselect={deselectResult}
+          cursor={'pointer'}
+        />
+      ))}
+    </Grid>
   );
 };
 

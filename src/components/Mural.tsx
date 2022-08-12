@@ -56,7 +56,7 @@ const _Mural = ({
       loadInpaintingPrompt: inpaint,
       place,
     },
-    generationStore: { selectedResultId },
+    uiStore: { selectedResultId },
   } = useStores();
 
   const overlapMargin = `-${mural.overlap * models.Generation.DISPLAY_SIZE}px`;
@@ -75,7 +75,7 @@ const _Mural = ({
               generation={generation}
               isSelected={x === selectedTile?.x && y === selectedTile.y}
               onSelect={() => selectTile({ x, y })}
-              onEdit={() => inpaint({ x, y })}
+              // onEdit={() => inpaint({ x, y })}
               onPlace={() => place({ generationId: selectedResultId!, x, y })}
               _notFirst={{ marginTop: overlapMargin }}
             />

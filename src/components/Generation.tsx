@@ -1,19 +1,22 @@
 import { Box, Center, chakra, Image } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { CSSProperties, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { models } from '../store';
 
-const hoverContentsStyle: CSSProperties = {
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  opacity: 0,
-};
+const pixelSize = `${models.Generation.DISPLAY_SIZE}px`;
+const minPixelSize = `${models.Generation.DISPLAY_SIZE / 2}px`;
 
-const _Generation = ({
+export const Generation = chakra(observer(_Generation), {
+  baseStyle: {
+    maxWidth: pixelSize,
+    maxHeight: pixelSize,
+    minWidth: minPixelSize,
+    minHeight: minPixelSize,
+  },
+});
+
+function _Generation({
   generation,
   isSelected = false,
   onSelect,
@@ -28,7 +31,7 @@ const _Generation = ({
   onDeselect?: () => void;
 
   children?: ReactNode;
-}) => {
+}) {
   const onClick = () => {
     if (isSelected) {
       onDeselect?.();
@@ -41,12 +44,8 @@ const _Generation = ({
     <Box
       role='group'
       position='relative'
-      sx={{
-        boxShadow: !isSelected
-          ? undefined
-          : '0px 0px 0px 4px var(--chakra-colors-blue-500)',
-        borderRadius: 2,
-      }}
+      boxShadow={isSelected ? 'outline' : undefined}
+      borderRadius={2}
       onClick={onClick}
       {...passthrough}
     >
@@ -56,8 +55,13 @@ const _Generation = ({
       />
       {children && (
         <Center
-          zIndex='mural-overlay'
-          sx={hoverContentsStyle}
+          position={'absolute'}
+          top={0}
+          right={0}
+          bottom={0}
+          left={0}
+          opacity={0}
+          zIndex={'mural-overlay'}
           _groupHover={{ opacity: 1 }}
         >
           {children}
@@ -65,15 +69,4 @@ const _Generation = ({
       )}
     </Box>
   );
-};
-
-const pixelSize = `${models.Generation.DISPLAY_SIZE}px`;
-
-export const Generation = chakra(observer(_Generation), {
-  baseStyle: {
-    minWidth: 0,
-    minHeight: 0,
-    maxWidth: pixelSize,
-    maxHeight: pixelSize,
-  },
-});
+}

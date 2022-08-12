@@ -2,8 +2,10 @@ import { extendTheme, ThemeOverride } from '@chakra-ui/react';
 
 const override: ThemeOverride = {
   shadows: {
-    'md-up':
-      '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)',
+    'window-right': `
+      4px 0 12px -1px rgba(0, 0, 0, 0.08),
+      2px 0 8px -1px rgba(0, 0, 0, 0.04)
+    `,
   },
   zIndices: {
     'mural-background': 100,

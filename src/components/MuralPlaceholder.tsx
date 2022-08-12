@@ -1,28 +1,34 @@
-import { AddIcon, CheckIcon, EditIcon } from '@chakra-ui/icons';
+import { AddIcon, CheckIcon } from '@chakra-ui/icons';
 import { Center, chakra, IconButton } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
 import { useStores } from '../store';
 import { Generation } from './Generation';
 
+export const MuralPlaceholder = chakra(observer(_MuralPlaceholder), {
+  baseStyle: {
+    width: '100%',
+    height: '100%',
+  },
+});
+
 function _MuralPlaceholder({
   isSelected,
   onSelect,
-  onEdit,
+
   onPlace,
   ...passthrough
 }: {
-  isSelected?: boolean;
-  onSelect?: () => void;
+  isSelected: boolean;
+  onSelect: () => void;
 
-  onEdit: () => void;
   onPlace: () => void;
 }) {
   const {
-    generationStore: { selectedResult: previewGeneration },
+    uiStore: { isGeneratePanelOpen: isGenerateWindowOpen, previewGeneration },
   } = useStores();
 
-  if (!previewGeneration) {
+  if (!isGenerateWindowOpen) {
     isSelected = false;
   }
 
@@ -42,7 +48,7 @@ function _MuralPlaceholder({
     </Generation>
   ) : (
     <Center
-      onClick={isSelected ? onEdit : onSelect}
+      onClick={onSelect}
       cursor={'pointer'}
       zIndex={'mural-background'}
       outline={'solid 1px'}
@@ -50,14 +56,7 @@ function _MuralPlaceholder({
       _hover={{ outlineColor: 'blackAlpha.800' }}
       {...passthrough}
     >
-      {previewGeneration ? <AddIcon opacity={0.5} /> : <EditIcon />}
+      <AddIcon opacity={0.5} />
     </Center>
   );
 }
-
-export const MuralPlaceholder = chakra(observer(_MuralPlaceholder), {
-  baseStyle: {
-    width: '100%',
-    height: '100%',
-  },
-});
