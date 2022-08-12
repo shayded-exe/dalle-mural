@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from '../store';
 import { Generation } from './Generation';
 
-const _MuralPlaceholder = ({
+function _MuralPlaceholder({
   isSelected,
   onSelect,
   onEdit,
@@ -17,7 +17,7 @@ const _MuralPlaceholder = ({
 
   onEdit: () => void;
   onPlace: () => void;
-}) => {
+}) {
   const {
     generationStore: { selectedResult: previewGeneration },
   } = useStores();
@@ -42,7 +42,7 @@ const _MuralPlaceholder = ({
     </Generation>
   ) : (
     <Center
-      onClick={isSelected ? onSelect : onEdit}
+      onClick={isSelected ? onEdit : onSelect}
       cursor={'pointer'}
       zIndex={'mural-background'}
       outline={'solid 1px'}
@@ -53,7 +53,7 @@ const _MuralPlaceholder = ({
       {previewGeneration ? <AddIcon opacity={0.5} /> : <EditIcon />}
     </Center>
   );
-};
+}
 
 export const MuralPlaceholder = chakra(observer(_MuralPlaceholder), {
   baseStyle: {
