@@ -72,8 +72,8 @@ export namespace Mural {
     const sizeMinusOverlap = getSizeMinusOverlap(overlap);
 
     const { canvas, ctx } = createCanvas({
-      width: mural.width * sizeMinusOverlap,
-      height: mural.height * sizeMinusOverlap,
+      width: (mural.width - 1) * sizeMinusOverlap + Generation.SIZE,
+      height: (mural.height - 1) * sizeMinusOverlap + Generation.SIZE,
     });
 
     for (const [x, col] of mural.generations.entries()) {
