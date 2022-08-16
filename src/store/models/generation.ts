@@ -5,6 +5,7 @@ export interface Generation {
   promptId: string;
   taskId: string;
   image: string;
+  created_at: number;
 }
 
 export namespace Generation {
@@ -22,6 +23,7 @@ export namespace Generation {
       promptId: dto.prompt_id,
       taskId: dto.task_id,
       image: await dalle.getImageBase64(dto.generation.image_path),
+      created_at: dto.created,
     };
   }
 }

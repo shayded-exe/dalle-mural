@@ -6,7 +6,7 @@ import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { models, useStores } from '../store';
 import { MuralGeneration } from './MuralGeneration';
 
-export const MuralCanvas = ({
+export const MuralTransformWrapper = ({
   className,
   children,
 }: {
@@ -66,7 +66,7 @@ const _Mural = ({
   };
 
   return (
-    <MuralCanvas className={className}>
+    <MuralTransformWrapper className={className}>
       {mural.generations.map((col, x) => (
         <Flex
           key={x}
@@ -86,7 +86,7 @@ const _Mural = ({
           ))}
         </Flex>
       ))}
-    </MuralCanvas>
+    </MuralTransformWrapper>
   );
 };
 

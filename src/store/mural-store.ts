@@ -23,7 +23,7 @@ export class MuralStore {
   }
 
   get #generationStore() {
-    return this.#rootStore.generationStore;
+    return this.#rootStore.generateStore;
   }
 
   #rootStore: RootStore;

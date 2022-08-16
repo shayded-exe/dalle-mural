@@ -1,22 +1,25 @@
-import { keyBy } from 'lodash-es';
+import { chain, keyBy } from 'lodash';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
-import { DalleGenerationMeta } from '../dalle';
+import { DalleGenerationMeta, SuccessfulDalleTask } from '../dalle';
 import { Generation } from './models';
 import { RootStore } from './root-store';
 
-export class GenerationStore {
+export class GenerateStore {
   generations: { [id: string]: Generation } = {};
+  selectedId: string | null = null;
 
-  get resultGenerations(): Generation[] {
-    const task = this.#taskStore.resultTask;
+  get generationHistory(): Generation[][] {
+    return chain(Object.values(this.generations))
+      .orderBy(g => g.created_at, 'desc')
+      .chunk(4)
+      .value();
+  }
 
-    if (!task) {
-      return [];
-    }
-
-    return task.generations.data.map(g => this.getById(g.id));
+  get previewGeneration(): Generation | null {
+    const id = this.selectedId;
+    return !id ? null : this.getById(id);
   }
 
   get #dalle() {
@@ -62,5 +65,18 @@ export class GenerationStore {
         keyBy(generations, g => g.id),
       );
     });
+  }
+
+  async loadTask(task: SuccessfulDalleTask) {
+    this.#taskStore.add(task);
+    await this.add(task.generations.data);
+  }
+
+  select(id: string) {
+    this.selectedId = id;
+  }
+
+  deselect() {
+    this.selectedId = null;
   }
 }

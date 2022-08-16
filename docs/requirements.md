@@ -32,6 +32,8 @@
   - rect/circle shape selector
   - size slider
 
+fit some error handling in there somewhere at some point
+
 ## flows
 
 ### generate

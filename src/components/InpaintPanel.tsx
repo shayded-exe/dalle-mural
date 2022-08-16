@@ -13,7 +13,7 @@ import { FormEvent, useState } from 'react';
 
 import { SuccessfulDalleTask } from '../dalle';
 import { models, useStores } from '../store';
-import { ResultGenerations } from './ResultGenerations';
+import { GenerationHistory } from './GenerationHistory';
 
 export const InpaintPanel = chakra(observer(_InpaintPanel));
 
@@ -92,7 +92,7 @@ function _InpaintPanel({ ...passthrough }: {}) {
         />
       )}
 
-      {isGenerating ? <Spinner size={'xl'} /> : <ResultGenerations />}
+      {isGenerating ? <Spinner size={'xl'} /> : <GenerationHistory />}
     </Flex>
   );
 }
