@@ -1,31 +1,11 @@
 import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
-import { Generation, Mural, MuralCoords, ResizeAnchor } from './models';
+import { Coordinates } from '../utils';
+import { Generation, Mural } from './models';
 import { RootStore } from './root-store';
 
 export class MuralStore {
-  murals: { [id: string]: Mural } = {};
-  activeMuralId: string | null = null;
-
-  selectedTile: MuralCoords | null = null;
-
-  get hasActiveMural(): boolean {
-    return !!this.activeMuralId;
-  }
-
-  get activeMural(): Mural {
-    return this.getById(this.activeMuralId!);
-  }
-
-  get generations(): (Generation | null)[][] {
-    return this.activeMural.generations;
-  }
-
-  get #generationStore() {
-    return this.#rootStore.generateStore;
-  }
-
   #rootStore: RootStore;
 
   constructor(rootStore: RootStore) {
@@ -44,6 +24,17 @@ export class MuralStore {
     if (!this.hasActiveMural) {
       this.createAndActivate();
     }
+  }
+
+  murals: { [id: string]: Mural } = {};
+  activeMuralId: string | null = null;
+
+  get hasActiveMural(): boolean {
+    return !!this.activeMuralId;
+  }
+
+  get activeMural(): Mural {
+    return this.getById(this.activeMuralId!);
   }
 
   createAndActivate(): Mural {
@@ -65,43 +56,19 @@ export class MuralStore {
     return mural;
   }
 
-  selectTile(coords: MuralCoords) {
-    this.selectedTile = coords;
-  }
-
-  deselectTile() {
-    this.selectedTile = null;
-  }
-
   place({
-    generationId,
+    generation,
     x,
     y,
   }: {
-    generationId: string;
-  } & MuralCoords) {
+    generation: Generation;
+  } & Coordinates) {
     const mural = this.activeMural;
 
     if (x < 0 || mural.width <= x || y < 0 || mural.height <= y) {
       throw new Error(`Generation coordinates out of bounds. ${arguments[0]}`);
     }
 
-    mural.generations[x][y] = this.#generationStore.getById(generationId);
-  }
-
-  resize({
-    width,
-    height,
-    anchor,
-  }: {
-    width: number;
-    height: number;
-    anchor: ResizeAnchor;
-  }) {
-    throw new Error('Not implemented');
-    const mural = this.activeMural;
-
-    mural.width = width;
-    mural.height = height;
+    mural.generations[x][y] = generation;
   }
 }

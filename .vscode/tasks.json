@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev server",
+      "type": "npm",
+      "script": "start",
+      "detail": "vite",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "typecheck",
+      "type": "npm",
+      "script": "typecheck",
+      "problemMatcher": ["$tsc-watch"]
+    },
+    {
+      "label": "openai proxy",
+      "type": "npm",
+      "script": "proxy",
+      "detail": "node cors-proxy.js",
+      "problemMatcher": []
+    }
+  ]
+}

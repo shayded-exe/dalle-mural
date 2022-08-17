@@ -1,10 +1,8 @@
 import { Buffer } from 'buffer';
 import ky from 'ky';
-import { Opaque } from 'type-fest';
 
-import { createCanvas } from './canvas';
-
-export type ImageDataUrl = Opaque<string, 'ImageDataUrl'>;
+import { createCanvas } from '../canvas';
+import { ImageDataUrl } from './primitives';
 
 export async function urlToImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {

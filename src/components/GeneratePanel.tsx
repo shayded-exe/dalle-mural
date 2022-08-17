@@ -12,14 +12,13 @@ export const GeneratePanel = chakra(observer(_GeneratePanel));
 function _GeneratePanel({ ...passthrough }: {}) {
   const {
     dalle,
-    uiStore: { closePanel },
-    generateStore: {
-      generationHistory,
-      loadTask,
-      selectedId,
-      select,
-      deselect,
+    uiStore: {
+      previewGeneration,
+      setPreviewGeneration,
+      clearPreviewGeneration,
+      closePanel,
     },
+    generateStore: { generationHistory, loadTask },
   } = useStores();
 
   const [prompt, setPrompt] = useState('');
@@ -84,9 +83,10 @@ function _GeneratePanel({ ...passthrough }: {}) {
       ) : (
         <GenerationHistory
           generations={generationHistory}
-          selectedId={selectedId}
-          select={select}
-          deselect={deselect}
+          selectedGeneration={previewGeneration}
+          select={setPreviewGeneration}
+          deselect={clearPreviewGeneration}
+          maxHeight={'20rem'}
         />
       )}
     </Flex>

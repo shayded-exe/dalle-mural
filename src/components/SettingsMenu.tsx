@@ -7,8 +7,7 @@ import {
   PopoverTrigger,
 } from '@chakra-ui/react';
 
-import { models, useStores } from '../store';
-import { downloadImage } from '../utils';
+import { useStores } from '../store';
 
 const _SettingsMenu = ({}: {}) => {
   const {
@@ -17,8 +16,8 @@ const _SettingsMenu = ({}: {}) => {
   } = useStores();
 
   const rasterize = async () => {
-    const image = await models.Mural.rasterize(activeMural);
-    downloadImage(image);
+    // const image = await models.Mural.rasterize(activeMural);
+    // downloadImage(image);
   };
 
   return (

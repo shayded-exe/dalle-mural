@@ -7,21 +7,6 @@ import { Generation } from './models';
 import { RootStore } from './root-store';
 
 export class GenerateStore {
-  generations: { [id: string]: Generation } = {};
-  selectedId: string | null = null;
-
-  get generationHistory(): Generation[][] {
-    return chain(Object.values(this.generations))
-      .orderBy(g => g.created_at, 'desc')
-      .chunk(4)
-      .value();
-  }
-
-  get previewGeneration(): Generation | null {
-    const id = this.selectedId;
-    return !id ? null : this.getById(id);
-  }
-
   get #dalle() {
     return this.#rootStore.dalle;
   }
@@ -43,6 +28,15 @@ export class GenerateStore {
         'generations',
       ],
     });
+  }
+
+  generations: { [id: string]: Generation } = {};
+
+  get generationHistory(): Generation[][] {
+    return chain(Object.values(this.generations))
+      .orderBy(g => g.created_at, 'desc')
+      .chunk(4)
+      .value();
   }
 
   getById(id: string): Generation {
@@ -70,13 +64,5 @@ export class GenerateStore {
   async loadTask(task: SuccessfulDalleTask) {
     this.#taskStore.add(task);
     await this.add(task.generations.data);
-  }
-
-  select(id: string) {
-    this.selectedId = id;
-  }
-
-  deselect() {
-    this.selectedId = null;
   }
 }

@@ -7,10 +7,6 @@ import { RootStore } from './root-store';
 export class TaskStore {
   successfulTasks: { [id: string]: SuccessfulDalleTask } = {};
 
-  get #generationStore() {
-    return this.#rootStore.generateStore;
-  }
-
   #rootStore: RootStore;
 
   constructor(rootStore: RootStore) {

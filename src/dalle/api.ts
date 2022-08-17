@@ -88,7 +88,7 @@ export class Dalle {
       .json<DalleTask>();
   }
 
-  async getImageBase64(dalleUrl: string): Promise<string> {
+  async getImageBase64(dalleUrl: string): Promise<ImageDataUrl> {
     const { pathname, search } = new URL(dalleUrl);
     const url = [this.#imagesUrl, pathname, search].join('');
 

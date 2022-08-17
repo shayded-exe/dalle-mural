@@ -1,0 +1,12 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "cSpell.words": [
+    "DALL",
+    "Dalle",
+    "dtos",
+    "inpaint",
+    "Inpainting",
+    "Jsonify",
+    "rasterize"
+  ]
+}

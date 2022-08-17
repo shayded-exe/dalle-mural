@@ -6,14 +6,14 @@ import { Generation } from './Generation';
 
 function _GenerationHistory({
   generations,
-  selectedId,
+  selectedGeneration,
   select,
   deselect,
   ...passthrough
 }: {
   generations: models.Generation[][];
-  selectedId: string | null;
-  select: (id: string) => void;
+  selectedGeneration: models.Generation | null;
+  select: (generation: models.Generation) => void;
   deselect: () => void;
 }) {
   return (
@@ -22,7 +22,6 @@ function _GenerationHistory({
       justifyItems={'center'}
       gap={'1rem'}
       padding={'0.5rem'}
-      maxHeight={'24rem'}
       overflowY={'scroll'}
       {...passthrough}
     >
@@ -30,8 +29,8 @@ function _GenerationHistory({
         <Generation
           key={generation.id}
           generation={generation}
-          isSelected={generation.id === selectedId}
-          onSelect={() => select(generation.id)}
+          isSelected={generation.id === selectedGeneration?.id}
+          onSelect={() => select(generation)}
           onDeselect={deselect}
           cursor={'pointer'}
         />
