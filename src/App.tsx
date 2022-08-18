@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite';
 
 import { CommandToolbar } from './components/CommandToolbar';
 import { GeneratePanel } from './components/GeneratePanel';
-import { Mural } from './components/Mural';
-import { MuralTransformWrapper } from './components/MuralTransformWrapper';
 import { SettingsToolbar } from './components/SettingsToolbar';
+import { Mural } from './mural/Mural';
+import { MuralTransformWrapper } from './mural/MuralTransformWrapper';
 import { useStores } from './store';
 
 export const App = observer(() => {

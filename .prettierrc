@@ -1,7 +1,7 @@
 {
   "arrowParens": "avoid",
   "jsxSingleQuote": true,
-  "printWidth": 80,
+  "printWidth": 88,
   "semi": true,
   "singleAttributePerLine": true,
   "singleQuote": true,

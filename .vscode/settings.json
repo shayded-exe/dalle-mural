@@ -1,5 +1,4 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib",
   "cSpell.words": [
     "DALL",
     "Dalle",
@@ -8,5 +7,7 @@
     "Inpainting",
     "Jsonify",
     "rasterize"
-  ]
+  ],
+  "prettier.configPath": "./.prettierrc",
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

@@ -2,11 +2,9 @@ import { chakra } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
-// export const MuralTransformContext = createContext<Transform
-
 export const MuralTransformWrapper = chakra(_MuralTransformWrapper);
 
-export function _MuralTransformWrapper({
+function _MuralTransformWrapper({
   className,
   children,
 }: {

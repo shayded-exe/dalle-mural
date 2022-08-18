@@ -69,10 +69,7 @@ export function strokePath({
   ctx.stroke(path);
 }
 
-export function getCanvasMouseCoordinates(
-  canvas: HTMLCanvasElement,
-  e: MouseEvent,
-): Coordinates {
+export function getCanvasMouseCoordinates(e: MouseEvent): Coordinates {
   return {
     x: e.nativeEvent.offsetX,
     y: e.nativeEvent.offsetY,

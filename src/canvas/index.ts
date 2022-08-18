@@ -1,2 +1,2 @@
-export * from './layered-canvas';
+export * from './hooks';
 export * from './utils';

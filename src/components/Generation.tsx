@@ -1,4 +1,4 @@
-import { Box, Center, chakra, Image } from '@chakra-ui/react';
+import { chakra, Image } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { ReactNode, useCallback } from 'react';
 
@@ -41,32 +41,13 @@ function _Generation({
   }, [onSelect, onDeselect]);
 
   return (
-    <Box
-      role='group'
-      position={'relative'}
+    <Image
+      src={generation.image}
+      onClick={onClick}
       boxShadow={isSelected ? 'outline' : undefined}
       borderRadius={2}
-      onClick={onClick}
+      height='100%'
       {...passthrough}
-    >
-      <Image
-        src={generation.image}
-        height='100%'
-      />
-      {children && (
-        <Center
-          position={'absolute'}
-          top={0}
-          right={0}
-          bottom={0}
-          left={0}
-          opacity={0}
-          zIndex={'mural-overlay'}
-          _groupHover={{ opacity: 1 }}
-        >
-          {children}
-        </Center>
-      )}
-    </Box>
+    />
   );
 }
