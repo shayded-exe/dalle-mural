@@ -3,9 +3,9 @@ import { chakra, Flex, IconButton, Input, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { FormEvent, useState } from 'react';
 
+import { GenerationHistory } from '../components/GenerationHistory';
 import { SuccessfulDalleTask } from '../dalle';
 import { useStores } from '../store';
-import { GenerationHistory } from './GenerationHistory';
 
 export const GeneratePanel = chakra(observer(_GeneratePanel));
 
@@ -24,31 +24,7 @@ function _GeneratePanel({ ...passthrough }: {}) {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generate = async (e: FormEvent) => {
-    e.preventDefault();
-
-    setIsGenerating(true);
-
-    const getTask = async () => {
-      if (prompt.startsWith('task-')) {
-        return await dalle.getTask(prompt);
-      } else {
-        return await dalle.generate({ prompt });
-      }
-    };
-
-    try {
-      const task = (await getTask()) as SuccessfulDalleTask;
-      await loadTask(task);
-    } catch (e) {
-      console.error(e);
-      return;
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  return (
+  const mainPanel = (
     <Flex
       padding={4}
       minHeight={0}
@@ -91,4 +67,37 @@ function _GeneratePanel({ ...passthrough }: {}) {
       )}
     </Flex>
   );
+
+  return (
+    <Flex
+      direction={'column'}
+      gap={4}
+    >
+      {mainPanel}
+    </Flex>
+  );
+
+  async function generate(e: FormEvent) {
+    e.preventDefault();
+
+    setIsGenerating(true);
+
+    try {
+      const task = (await getTask()) as SuccessfulDalleTask;
+      await loadTask(task);
+    } catch (e) {
+      console.error(e);
+      return;
+    } finally {
+      setIsGenerating(false);
+    }
+
+    async function getTask() {
+      if (prompt.startsWith('task-')) {
+        return await dalle.getTask(prompt);
+      } else {
+        return await dalle.generate({ prompt });
+      }
+    }
+  }
 }

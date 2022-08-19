@@ -1,25 +1,17 @@
+import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
-import { useDeepCompareMemoize } from 'use-deep-compare-effect';
 
-import { clearCanvas, drawImageUrl, useCanvas } from '../canvas';
+import { clearCanvas, drawImageUrl, useCanvasDraw } from '../canvas';
 import { models } from '../store';
 
 export const MainLayer = observer(_MainLayer);
 
 function _MainLayer({ mural, ...passthrough }: { mural: models.Mural }) {
-  const { ref, ctx } = useCanvas();
-
-  useEffect(
-    function draw() {
-      if (!ctx) {
-        return;
-      }
-
+  const { ref } = useCanvasDraw(ctx =>
+    autorun(() => {
       clearCanvas(ctx);
       drawMainLayer({ ctx, mural }).catch(console.error);
-    },
-    [ctx, useDeepCompareMemoize(mural)],
+    }),
   );
 
   return (
@@ -37,9 +29,7 @@ async function drawMainLayer({
   ctx: CanvasRenderingContext2D;
   mural: models.Mural;
 }) {
-  for (const item of mural.items) {
-    await drawItem(item);
-  }
+  await Promise.all(mural.items.map(drawItem));
 
   async function drawItem(item: models.Mural.Item) {
     switch (item.type) {

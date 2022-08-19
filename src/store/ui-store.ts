@@ -28,6 +28,7 @@ export class UIStore {
 
   closePanel() {
     this.activeMode = UIMode.None;
+    this.clearPreviewGeneration();
   }
 
   openGeneratePanel() {

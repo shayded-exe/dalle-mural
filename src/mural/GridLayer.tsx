@@ -1,8 +1,7 @@
+import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
-import { useDeepCompareMemoize } from 'use-deep-compare-effect';
 
-import { clearCanvas, strokePath, useCanvas } from '../canvas';
+import { clearCanvas, strokePath, useCanvasDraw } from '../canvas';
 import { models } from '../store';
 
 export const GridLayer = observer(_GridLayer);
@@ -15,21 +14,16 @@ function _GridLayer({
   mural: models.Mural;
   isVisible?: boolean;
 }) {
-  const { ref, ctx } = useCanvas();
+  const { ref } = useCanvasDraw(
+    ctx =>
+      autorun(() => {
+        clearCanvas(ctx);
 
-  useEffect(
-    function draw() {
-      if (!ctx) {
-        return;
-      }
-
-      clearCanvas(ctx);
-
-      if (isVisible) {
-        drawGridLayer({ ctx, mural });
-      }
-    },
-    [ctx, useDeepCompareMemoize(mural), isVisible],
+        if (isVisible) {
+          drawGridLayer({ ctx, mural });
+        }
+      }),
+    [isVisible],
   );
 
   return (
@@ -59,18 +53,29 @@ function drawGridLayer({
   strokePath({
     ctx,
     path: buildMainPath(),
-    thickness: 2,
-    opacity: 0.7,
+    thickness: 5,
+    opacity: 0.1,
   });
 
   if (gridSubdivideRatio < 1) {
     strokePath({
       ctx,
       path: buildSubdividedPath(),
-      thickness: 1,
-      opacity: 0.2,
+      thickness: 3,
+      opacity: 0.1,
     });
   }
+
+  ctx.globalCompositeOperation = 'destination-out';
+  const path = new Path2D();
+  path.rect(1, 1, width - 2, height - 2);
+  strokePath({
+    ctx,
+    path,
+    thickness: 5,
+    opacity: 1,
+  });
+  ctx.globalCompositeOperation = 'source-over';
 
   function buildMainPath(): Path2D {
     const squareSize = models.Generation.SIZE;

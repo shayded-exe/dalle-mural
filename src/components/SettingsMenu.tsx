@@ -11,7 +11,7 @@ import { useStores } from '../store';
 
 const _SettingsMenu = ({}: {}) => {
   const {
-    muralStore: { activeMural },
+    muralStore: { clearMural },
     clear: clearStore,
   } = useStores();
 
@@ -32,13 +32,20 @@ const _SettingsMenu = ({}: {}) => {
         padding={4}
         gap={4}
       >
-        <Button onClick={rasterize}>Rasterize</Button>
+        <Button onClick={rasterize}>rasterize</Button>
+
+        <Button
+          onClick={() => clearMural()}
+          colorScheme='orange'
+        >
+          clear mural
+        </Button>
 
         <Button
           onClick={() => clearStore()}
           colorScheme='red'
         >
-          Clear store
+          clear store
         </Button>
       </PopoverContent>
     </Popover>

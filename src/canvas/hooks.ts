@@ -1,4 +1,10 @@
-import { useCallback, useState } from 'react';
+import {
+  DependencyList,
+  EffectCallback,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import { getContextOrFail } from './utils';
 
@@ -14,4 +20,19 @@ export function useCanvas() {
   }, []);
 
   return { ref, canvas, ctx };
+}
+
+export function useCanvasDraw(
+  draw: (ctx: CanvasRenderingContext2D) => ReturnType<EffectCallback>,
+  deps: DependencyList = [],
+) {
+  const { ref, ctx } = useCanvas();
+
+  useEffect(() => {
+    if (ctx) {
+      draw(ctx);
+    }
+  }, [ctx, ...deps]);
+
+  return { ref, ctx };
 }

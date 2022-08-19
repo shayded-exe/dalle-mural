@@ -2,21 +2,15 @@ import { Center, Flex, Spacer, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
 import { CommandToolbar } from './components/CommandToolbar';
-import { GeneratePanel } from './components/GeneratePanel';
+import { GeneratePanel } from './generate/GeneratePanel';
 import { SettingsToolbar } from './components/SettingsToolbar';
-import { Mural } from './mural/Mural';
+import { ActiveMural } from './mural/ActiveMural';
 import { MuralTransformWrapper } from './mural/MuralTransformWrapper';
 import { useStores } from './store';
 
 export const App = observer(() => {
   const {
-    muralStore: { activeMural },
-    uiStore: {
-      isPanelOpen,
-      isGeneratePanelOpen,
-      isInpaintPanelOpen,
-      previewGeneration,
-    },
+    uiStore: { isPanelOpen, isGeneratePanelOpen, isInpaintPanelOpen },
     isHydrated,
   } = useStores();
 
@@ -50,8 +44,7 @@ export const App = observer(() => {
         <GeneratePanel
           minWidth={'min-content'}
           maxWidth={'70rem'}
-          marginX={'2rem'}
-          marginBottom={'4rem'}
+          margin={'2rem'}
           zIndex={'docked'}
         />
       )}
@@ -64,10 +57,7 @@ export const App = observer(() => {
       )}
 
       <MuralTransformWrapper position={'absolute'}>
-        <Mural
-          mural={activeMural}
-          previewGeneration={previewGeneration}
-        />
+        <ActiveMural />
       </MuralTransformWrapper>
     </Flex>
   );

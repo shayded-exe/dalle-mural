@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
+import * as uuid from 'uuid';
 
 import { Coordinates } from '../utils';
 import { Generation, Mural } from './models';
@@ -56,19 +57,36 @@ export class MuralStore {
     return mural;
   }
 
-  place({
+  placeGeneration({
     generation,
     x,
     y,
   }: {
     generation: Generation;
-  } & Coordinates) {
+  } & Coordinates): Mural.Item {
     const mural = this.activeMural;
 
     if (x < 0 || mural.width <= x || y < 0 || mural.height <= y) {
       throw new Error(`Generation coordinates out of bounds. ${arguments[0]}`);
     }
 
-    mural.generations[x][y] = generation;
+    const item: Mural.GenerationItem = {
+      id: uuid.v4(),
+      type: 'generation',
+      generation,
+      x,
+      y,
+      ...Generation.DIMENSIONS,
+    };
+    mural.items.push(item);
+    return item;
+  }
+
+  undo(): Mural.Item | undefined {
+    return this.activeMural.items.pop();
+  }
+
+  clearMural() {
+    this.activeMural.items = [];
   }
 }

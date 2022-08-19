@@ -14,7 +14,7 @@ function _MuralTransformWrapper({
   return (
     <TransformWrapper
       minScale={0.25}
-      initialScale={0.5}
+      initialScale={0.25}
       centerOnInit={true}
       limitToBounds={false}
       panning={{ velocityDisabled: true }}

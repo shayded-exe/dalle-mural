@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 
-import { clearCanvas, strokePath, useCanvas } from '../canvas';
+import { clearCanvas, strokePath, useCanvasDraw } from '../canvas';
 import { models } from '../store';
 import { Rect, urlToImage } from '../utils';
 
@@ -15,22 +15,17 @@ function _SelectionLayer({
   selection: Rect | null;
   previewGeneration: models.Generation | null;
 }) {
-  const { ref, ctx } = useCanvas();
   const { previewImage } = usePreviewImage(previewGeneration);
 
-  useEffect(
-    function draw() {
-      if (!ctx) {
-        return;
-      }
-
+  const { ref } = useCanvasDraw(
+    ctx => {
       clearCanvas(ctx);
 
       if (selection) {
         drawSelectionLayer({ ctx, selection, previewImage });
       }
     },
-    [ctx, selection, previewGeneration],
+    [selection, previewGeneration],
   );
 
   return (

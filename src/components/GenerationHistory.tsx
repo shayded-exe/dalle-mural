@@ -4,6 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { models } from '../store';
 import { Generation } from './Generation';
 
+export const GenerationHistory = chakra(observer(_GenerationHistory));
+
 function _GenerationHistory({
   generations,
   selectedGeneration,
@@ -38,5 +40,3 @@ function _GenerationHistory({
     </Grid>
   );
 }
-
-export const GenerationHistory = chakra(observer(_GenerationHistory));
