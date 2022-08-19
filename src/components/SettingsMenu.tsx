@@ -15,11 +15,6 @@ const _SettingsMenu = ({}: {}) => {
     clear: clearStore,
   } = useStores();
 
-  const rasterize = async () => {
-    // const image = await models.Mural.rasterize(activeMural);
-    // downloadImage(image);
-  };
-
   return (
     <Popover placement={'top-end'}>
       <PopoverTrigger>
@@ -32,8 +27,6 @@ const _SettingsMenu = ({}: {}) => {
         padding={4}
         gap={4}
       >
-        <Button onClick={rasterize}>rasterize</Button>
-
         <Button
           onClick={() => clearMural()}
           colorScheme='orange'

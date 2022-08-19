@@ -1,7 +1,8 @@
-import { RepeatClockIcon } from '@chakra-ui/icons';
+import { DownloadIcon, RepeatClockIcon } from '@chakra-ui/icons';
 import { chakra, Flex, IconButton, Spacer } from '@chakra-ui/react';
 
 import { useStores } from '../store';
+import { downloadImage } from '../utils';
 import { AuthTokenSetting } from './AuthTokenSetting';
 import { SettingsMenu } from './SettingsMenu';
 
@@ -9,8 +10,10 @@ export const SettingsToolbar = chakra(_SettingsToolbar);
 
 function _SettingsToolbar({ ...passthrough }: {}) {
   const {
-    muralStore: { undo },
+    muralStore: { undo, rasterize },
   } = useStores();
+
+  const onRasterizeClick = () => downloadImage(rasterize());
 
   return (
     <Flex
@@ -29,6 +32,11 @@ function _SettingsToolbar({ ...passthrough }: {}) {
         onClick={undo}
         icon={<RepeatClockIcon />}
         aria-label={'Undo'}
+      />
+      <IconButton
+        onClick={onRasterizeClick}
+        icon={<DownloadIcon />}
+        aria-label={'Download'}
       />
       <SettingsMenu />
     </Flex>

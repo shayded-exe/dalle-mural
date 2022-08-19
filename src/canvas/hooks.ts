@@ -26,7 +26,7 @@ export function useCanvasDraw(
   draw: (ctx: CanvasRenderingContext2D) => ReturnType<EffectCallback>,
   deps: DependencyList = [],
 ) {
-  const { ref, ctx } = useCanvas();
+  const { ctx, ...rest } = useCanvas();
 
   useEffect(() => {
     if (ctx) {
@@ -34,5 +34,5 @@ export function useCanvasDraw(
     }
   }, [ctx, ...deps]);
 
-  return { ref, ctx };
+  return { ctx, ...rest };
 }
