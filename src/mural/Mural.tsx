@@ -31,12 +31,25 @@ function _Mural({
   previewGeneration: models.Generation | null;
   onCanvasInit?: (canvas: HTMLCanvasElement) => void;
 }) {
+  const adjustSelection = useCallback(
+    (rect: Rect): Rect =>
+      snapToGrid({
+        rect,
+        subdivideRatio: mural.gridSubdivideRatio,
+      }),
+    [mural],
+  );
+
   const {
     //
     selection,
     setSelectionFromMouse,
     selectFromMouse,
-  } = useSelection({ isSelecting, onSelect });
+  } = useSelection({
+    isSelecting,
+    onSelect,
+    adjust: adjustSelection,
+  });
 
   return (
     <ZStack
@@ -62,9 +75,11 @@ function _Mural({
 function useSelection({
   isSelecting,
   onSelect,
+  adjust,
 }: {
   isSelecting: boolean;
   onSelect: (rect: Rect) => void;
+  adjust?: (rect: Rect) => Rect;
 }) {
   const [selection, setSelection] = useState<Rect | null>(null);
 
@@ -110,10 +125,36 @@ function useSelection({
     const size = models.Generation.SIZE;
     const { x, y } = getCanvasMouseCoordinates(e);
 
-    return {
+    let rect: Rect = {
       x: x - size / 2,
       y: y - size / 2,
       ...models.Generation.DIMENSIONS,
     };
+
+    if (adjust) {
+      rect = adjust(rect);
+    }
+
+    return rect;
+  }
+}
+
+function snapToGrid({
+  rect,
+  subdivideRatio,
+}: {
+  rect: Rect;
+  subdivideRatio: number;
+}): Rect {
+  const squareSize = models.Generation.SIZE * subdivideRatio;
+
+  return {
+    ...rect,
+    x: snapValue(rect.x),
+    y: snapValue(rect.y),
+  };
+
+  function snapValue(value: number): number {
+    return value - (value % squareSize);
   }
 }
