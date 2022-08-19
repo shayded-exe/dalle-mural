@@ -14,9 +14,7 @@ function _ActiveMural({ ...passthrough }: {}) {
   } = useStores();
 
   const onCanvasInit = useCallback((canvas: HTMLCanvasElement) => {
-    if (canvas) {
-      setRasterizeFunc(() => canvas.toDataURL() as ImageDataUrl);
-    }
+    setRasterizeFunc(() => canvas.toDataURL() as ImageDataUrl);
   }, []);
 
   return (
