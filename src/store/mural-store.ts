@@ -66,7 +66,12 @@ export class MuralStore {
   } & Coordinates): Mural.Item {
     const mural = this.activeMural;
 
-    if (x < 0 || mural.width <= x || y < 0 || mural.height <= y) {
+    if (
+      x + Generation.SIZE < 0 ||
+      mural.width <= x ||
+      y + Generation.SIZE < 0 ||
+      mural.height <= y
+    ) {
       throw new Error(`Generation coordinates out of bounds. ${arguments[0]}`);
     }
 
