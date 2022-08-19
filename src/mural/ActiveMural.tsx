@@ -2,8 +2,8 @@ import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
 
 import { useStores } from '../store';
-import { Rect } from '../utils';
-import { Mural, MuralHandle } from './Mural';
+import { ImageDataUrl, Rect } from '../utils';
+import { Mural } from './Mural';
 
 export const ActiveMural = observer(_ActiveMural);
 
@@ -13,19 +13,19 @@ function _ActiveMural({ ...passthrough }: {}) {
     uiStore: { previewGeneration },
   } = useStores();
 
-  const ref = useCallback((muralHandle: MuralHandle | null) => {
-    if (muralHandle) {
-      setRasterizeFunc(muralHandle.rasterize);
+  const onCanvasInit = useCallback((canvas: HTMLCanvasElement) => {
+    if (canvas) {
+      setRasterizeFunc(() => canvas.toDataURL() as ImageDataUrl);
     }
   }, []);
 
   return (
     <Mural
-      ref={ref}
       mural={activeMural}
       isSelecting={!!previewGeneration}
       onSelect={onSelect}
       previewGeneration={previewGeneration}
+      onCanvasInit={onCanvasInit}
       {...passthrough}
     />
   );

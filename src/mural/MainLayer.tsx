@@ -1,32 +1,37 @@
-import { useMergeRefs } from '@chakra-ui/react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { forwardRef } from 'react';
 
 import { clearCanvas, drawImageUrl, useCanvasDraw } from '../canvas';
 import { models } from '../store';
 
-interface MainLayerProps {
+export const MainLayer = observer(_MainLayer);
+
+function _MainLayer({
+  mural,
+  onCanvasInit,
+  ...passthrough
+}: {
   mural: models.Mural;
+  onCanvasInit?: (canvas: HTMLCanvasElement) => void;
+}) {
+  const { ref, canvas } = useCanvasDraw(ctx =>
+    autorun(() => {
+      clearCanvas(ctx);
+      drawMainLayer({ ctx, mural }).catch(console.error);
+    }),
+  );
+
+  if (canvas && onCanvasInit) {
+    onCanvasInit(canvas);
+  }
+
+  return (
+    <canvas
+      ref={ref}
+      {...passthrough}
+    />
+  );
 }
-
-export const MainLayer = observer(
-  forwardRef<HTMLCanvasElement, MainLayerProps>(({ mural, ...passthrough }, ref) => {
-    const { ref: canvasRef } = useCanvasDraw(ctx =>
-      autorun(() => {
-        clearCanvas(ctx);
-        drawMainLayer({ ctx, mural }).catch(console.error);
-      }),
-    );
-
-    return (
-      <canvas
-        ref={useMergeRefs(canvasRef, ref)}
-        {...passthrough}
-      />
-    );
-  }),
-);
 
 async function drawMainLayer({
   ctx,

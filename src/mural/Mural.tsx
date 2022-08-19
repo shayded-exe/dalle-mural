@@ -1,14 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import {
-  forwardRef,
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 
-import { getCanvasMouseCoordinates, useCanvas } from '../canvas';
+import { getCanvasMouseCoordinates } from '../canvas';
 import { ZStack } from '../components/ZStack';
 import { models } from '../store';
 import { ImageDataUrl, Rect } from '../utils';
@@ -20,68 +13,51 @@ export interface MuralHandle {
   rasterize(): ImageDataUrl;
 }
 
-interface MuralProps {
+export const Mural = observer(_Mural);
+
+function _Mural({
+  mural,
+  isGridVisible = true,
+  isSelecting = false,
+  onSelect,
+  previewGeneration,
+  onCanvasInit,
+  ...passthrough
+}: {
   mural: models.Mural;
-  previewGeneration: models.Generation | null;
   isGridVisible?: boolean;
   isSelecting: boolean;
   onSelect: (rect: Rect) => void;
+  previewGeneration: models.Generation | null;
+  onCanvasInit?: (canvas: HTMLCanvasElement) => void;
+}) {
+  const {
+    //
+    selection,
+    setSelectionFromMouse,
+    selectFromMouse,
+  } = useSelection({ isSelecting, onSelect });
+
+  return (
+    <ZStack
+      width={mural.width}
+      height={mural.height}
+      onMouseDown={selectFromMouse}
+      onMouseMove={setSelectionFromMouse}
+      {...passthrough}
+    >
+      <MainLayer
+        mural={mural}
+        onCanvasInit={onCanvasInit}
+      />
+      <GridLayer mural={mural} />
+      <SelectionLayer
+        selection={selection}
+        previewGeneration={previewGeneration}
+      />
+    </ZStack>
+  );
 }
-
-export const Mural = observer(
-  forwardRef<MuralHandle, MuralProps>(
-    (
-      {
-        mural,
-        isGridVisible = true,
-        isSelecting = false,
-        onSelect,
-        previewGeneration,
-        ...passthrough
-      },
-      ref,
-    ) => {
-      const {
-        //
-        selection,
-        setSelectionFromMouse,
-        selectFromMouse,
-      } = useSelection({ isSelecting, onSelect });
-
-      const { ref: canvasRef, canvas } = useCanvas();
-
-      useImperativeHandle(
-        ref,
-        () => ({
-          rasterize() {
-            return canvas?.toDataURL() as ImageDataUrl;
-          },
-        }),
-        [canvas],
-      );
-
-      return (
-        <ZStack
-          width={mural.width}
-          height={mural.height}
-          onMouseDown={selectFromMouse}
-          onMouseMove={setSelectionFromMouse}
-          {...passthrough}
-        >
-          <MainLayer
-            ref={canvasRef}
-            mural={mural}
-          />
-          <GridLayer mural={mural} />
-          <SelectionLayer
-            selection={selection}
-            previewGeneration={previewGeneration}
-          />
-        </ZStack>
-      );
-    },
-  ),
-);
 
 function useSelection({
   isSelecting,
