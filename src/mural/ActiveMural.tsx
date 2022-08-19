@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import { useCallback } from 'react';
 
 import { useStores } from '../store';
 import { ImageDataUrl, Rect } from '../utils';
@@ -12,10 +11,6 @@ function _ActiveMural({ ...passthrough }: {}) {
     muralStore: { activeMural, placeGeneration, setRasterizeFunc },
     uiStore: { previewGeneration },
   } = useStores();
-
-  const onCanvasInit = useCallback((canvas: HTMLCanvasElement) => {
-    setRasterizeFunc(() => canvas.toDataURL() as ImageDataUrl);
-  }, []);
 
   return (
     <Mural
@@ -35,5 +30,9 @@ function _ActiveMural({ ...passthrough }: {}) {
         ...rect,
       });
     }
+  }
+
+  function onCanvasInit(canvas: HTMLCanvasElement) {
+    setRasterizeFunc(() => canvas.toDataURL() as ImageDataUrl);
   }
 }
