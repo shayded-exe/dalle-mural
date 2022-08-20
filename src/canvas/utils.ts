@@ -1,19 +1,13 @@
 import React from 'react';
 
-import { Coordinates, ImageDataUrl, Rect, urlToImage } from '../utils';
+import { Coordinates, Dimensions, ImageDataUrl, Rect, urlToImage } from '../utils';
 
 export type CanvasWithContext = {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
 };
 
-export function createCanvas({
-  width,
-  height,
-}: {
-  width: number;
-  height: number;
-}): CanvasWithContext {
+export function createCanvas({ width, height }: Dimensions): CanvasWithContext {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
@@ -35,6 +29,30 @@ export function getContextOrFail(canvas: HTMLCanvasElement): CanvasRenderingCont
 
 export function clearCanvas(ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+}
+
+export function cropCanvasToImage({
+  canvas,
+  rect,
+}: {
+  canvas: HTMLCanvasElement;
+  rect: Rect;
+}): ImageDataUrl {
+  const dest = createCanvas(rect);
+
+  dest.ctx.drawImage(
+    canvas,
+    rect.x,
+    rect.y,
+    rect.width,
+    rect.height,
+    0,
+    0,
+    rect.width,
+    rect.height,
+  );
+
+  return dest.canvas.toDataURL() as ImageDataUrl;
 }
 
 export async function drawImageUrl({

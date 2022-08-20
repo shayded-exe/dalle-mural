@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
+import { cropCanvasToImage } from '../canvas';
 import { ImageDataUrl, Rect } from '../utils';
 import { Generation, UIMode } from './models';
 import { RootStore } from './root-store';
@@ -18,30 +19,29 @@ export class UIStore {
   }
 
   activeMode = UIMode.None;
-
   get isPanelOpen() {
     return this.activeMode !== UIMode.None;
   }
-
   get isGeneratePanelOpen() {
     return this.activeMode === UIMode.Generate;
   }
-
   get isInpaintPanelOpen() {
     return this.activeMode === UIMode.Inpaint;
   }
-
   closePanel() {
     this.activeMode = UIMode.None;
     this.deselectGeneration();
   }
-
   openGeneratePanel() {
     this.activeMode = UIMode.Generate;
   }
-
   openInpaintingPanel() {
     this.activeMode = UIMode.Inpaint;
+  }
+
+  canvas: HTMLCanvasElement | null = null;
+  setCanvas(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
   }
 
   selectedGeneration: Generation | null = null;
@@ -52,11 +52,12 @@ export class UIStore {
     this.selectedGeneration = null;
   }
 
-  get canSelect() {
+  get canSelectArea() {
     return this.isGeneratePanelOpen || this.isInpaintPanelOpen;
   }
 
   selectionArea: Rect | null = null;
+  selectionAreaImage: ImageDataUrl | null = null;
   setSelectionArea(value: Rect | null) {
     this.selectionArea = value;
   }
@@ -64,6 +65,13 @@ export class UIStore {
   isAreaSelected = false;
   selectArea() {
     this.isAreaSelected = true;
+
+    if (this.isInpaintPanelOpen) {
+      this.selectionAreaImage = cropCanvasToImage({
+        canvas: this.canvas!,
+        rect: this.selectionArea!,
+      });
+    }
   }
   deselectArea() {
     this.isAreaSelected = false;
@@ -85,16 +93,7 @@ export class UIStore {
     this.deselectGeneration();
   }
 
-  canvas: HTMLCanvasElement | null = null;
-  setCanvas(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-  }
-
   rasterize(): ImageDataUrl {
-    if (!this.canvas) {
-      throw new Error('Canvas not initialized');
-    }
-
-    return this.canvas.toDataURL() as ImageDataUrl;
+    return this.canvas!.toDataURL() as ImageDataUrl;
   }
 }

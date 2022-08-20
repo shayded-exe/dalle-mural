@@ -1,3 +1,5 @@
+import { ImageBase64 } from '../utils';
+
 export interface DalleObject {
   id: string;
   created: number;
@@ -32,8 +34,8 @@ export interface NewDallePrompt {
 }
 
 export interface NewInpaintingDallePrompt extends NewDallePrompt {
-  masked_image: string;
-  image?: string;
+  masked_image: ImageBase64;
+  image?: ImageBase64;
   parent_generation_id?: string;
 }
 
@@ -47,10 +49,7 @@ export interface NewInpaintingDalleTask {
   prompt: NewInpaintingDallePrompt;
 }
 
-export type DalleTask =
-  | PendingDalleTask
-  | SuccessfulDalleTask
-  | FailedDalleTask;
+export type DalleTask = PendingDalleTask | SuccessfulDalleTask | FailedDalleTask;
 
 export interface BaseDalleTask extends DalleObject {
   object: 'task';

@@ -1,11 +1,7 @@
 import ky from 'ky';
 
-import { ImageDataUrl, urlToImageDataUrl_fetch } from '../utils';
-import {
-  DalleTask,
-  NewInpaintingDalleTask,
-  NewText2ImageDalleTask,
-} from './types';
+import { ImageBase64, ImageDataUrl, urlToImageDataUrl_fetch } from '../utils';
+import { DalleTask, NewInpaintingDalleTask, NewText2ImageDalleTask } from './types';
 
 export const DALLE_AUTH_TOKEN_LENGTH = 45;
 
@@ -56,8 +52,8 @@ export class Dalle {
     parentGenerationId,
   }: {
     prompt: string;
-    maskedImage: ImageDataUrl;
-    sourceImage?: ImageDataUrl;
+    maskedImage: ImageBase64;
+    sourceImage?: ImageBase64;
     parentGenerationId?: string;
   }): Promise<DalleTask> {
     const newTask: NewInpaintingDalleTask = {
