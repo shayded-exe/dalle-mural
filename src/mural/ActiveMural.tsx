@@ -9,13 +9,22 @@ export const ActiveMural = observer(_ActiveMural);
 function _ActiveMural({ ...passthrough }: {}) {
   const {
     muralStore: { activeMural, setRasterizeFunc },
-    uiStore: { previewGeneration, canSelect, selectArea, deselectArea },
+    uiStore: {
+      previewGeneration,
+      canSelect,
+      selectionArea,
+      setSelectionArea,
+      selectArea,
+      deselectArea,
+    },
   } = useStores();
 
   return (
     <Mural
       mural={activeMural}
       canSelect={canSelect}
+      selection={selectionArea}
+      onSelectionChange={setSelectionArea}
       onSelect={selectArea}
       onDeselect={deselectArea}
       previewGeneration={previewGeneration}

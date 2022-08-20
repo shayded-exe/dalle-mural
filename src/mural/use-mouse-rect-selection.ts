@@ -8,16 +8,17 @@ type AdjustFunc = (rect: Rect) => Rect;
 
 export function useMouseRectSelection({
   canSelect,
+  onSelectionChange: setSelection,
   onSelect,
   onDeselect,
   adjust,
 }: {
   canSelect: boolean;
-  onSelect: (rect: Rect) => void;
+  onSelectionChange: (rect: Rect | null) => void;
+  onSelect: () => void;
   onDeselect: () => void;
   adjust?: AdjustFunc;
 }) {
-  const [selection, setSelection] = useState<Rect | null>(null);
   const [isSelected, setIsSelected] = useState(false);
 
   const [moveStartTime, setMoveStartTime] = useState<number>();
@@ -42,7 +43,7 @@ export function useMouseRectSelection({
   });
 
   const onMouseUp = useMouseRectCallback({
-    callback: rect => {
+    callback: () => {
       if (moveStartTime && moveStartTime + MAX_MOVE_TIME_FOR_CLICK < Date.now()) {
         return;
       }
@@ -52,7 +53,7 @@ export function useMouseRectSelection({
         onDeselect();
       } else {
         setIsSelected(true);
-        onSelect(rect);
+        onSelect();
       }
     },
     canSelect,
@@ -70,7 +71,6 @@ export function useMouseRectSelection({
   );
 
   return {
-    selection,
     isSelected,
     selectionEvents: {
       onMouseMove,

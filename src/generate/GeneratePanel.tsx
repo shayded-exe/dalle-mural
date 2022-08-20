@@ -14,8 +14,8 @@ function _GeneratePanel({ ...passthrough }: {}) {
     dalle,
     uiStore: {
       previewGeneration,
-      setPreviewGeneration,
-      clearPreviewGeneration,
+      selectPreviewGeneration,
+      deselectPreviewGeneration,
       closePanel,
       canPlaceGeneration,
       placeGeneration,
@@ -73,8 +73,8 @@ function _GeneratePanel({ ...passthrough }: {}) {
         <GenerationHistory
           generations={generationHistory}
           selectedGeneration={previewGeneration}
-          select={setPreviewGeneration}
-          deselect={clearPreviewGeneration}
+          select={selectPreviewGeneration}
+          deselect={deselectPreviewGeneration}
           maxHeight={'20rem'}
         />
       )}

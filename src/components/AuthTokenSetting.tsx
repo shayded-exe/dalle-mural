@@ -1,6 +1,7 @@
 import { LockIcon } from '@chakra-ui/icons';
 import {
   Button,
+  IconButton,
   Input,
   Popover,
   PopoverContent,
@@ -21,12 +22,17 @@ function _AuthTokenSetting({}: {}) {
 
   const initFocusRef = useRef<any>();
 
-  const button = (
+  const button = isSignedIn ? (
+    <IconButton
+      icon={<LockIcon />}
+      aria-label={'auth token'}
+    />
+  ) : (
     <Button
       leftIcon={<LockIcon />}
-      colorScheme={isSignedIn ? 'gray' : 'blue'}
+      colorScheme={'blue'}
     >
-      {isSignedIn ? 'auth token' : 'set auth token'}
+      set auth token
     </Button>
   );
 

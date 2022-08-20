@@ -1,16 +1,19 @@
 import { DownloadIcon, RepeatClockIcon } from '@chakra-ui/icons';
 import { chakra, Flex, IconButton, Spacer } from '@chakra-ui/react';
+import { observer } from 'mobx-react-lite';
 
 import { useStores } from '../store';
 import { downloadImage } from '../utils';
 import { AuthTokenSetting } from './AuthTokenSetting';
+import { SelectionInfo } from './SelectionInfo';
 import { SettingsMenu } from './SettingsMenu';
 
-export const SettingsToolbar = chakra(_SettingsToolbar);
+export const SettingsToolbar = chakra(observer(_SettingsToolbar));
 
 function _SettingsToolbar({ ...passthrough }: {}) {
   const {
     muralStore: { undo, rasterize },
+    uiStore: { selectionArea },
   } = useStores();
 
   const onRasterizeClick = () => downloadImage(rasterize());
@@ -26,7 +29,7 @@ function _SettingsToolbar({ ...passthrough }: {}) {
       gap={4}
       {...passthrough}
     >
-      <AuthTokenSetting />
+      <SelectionInfo selection={selectionArea} />
       <Spacer />
       <IconButton
         onClick={undo}
@@ -38,6 +41,7 @@ function _SettingsToolbar({ ...passthrough }: {}) {
         icon={<DownloadIcon />}
         aria-label={'Download'}
       />
+      <AuthTokenSetting />
       <SettingsMenu />
     </Flex>
   );

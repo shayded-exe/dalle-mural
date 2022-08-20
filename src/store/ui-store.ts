@@ -33,7 +33,7 @@ export class UIStore {
 
   closePanel() {
     this.activeMode = UIMode.None;
-    this.clearPreviewGeneration();
+    this.deselectPreviewGeneration();
   }
 
   openGeneratePanel() {
@@ -45,12 +45,10 @@ export class UIStore {
   }
 
   previewGeneration: Generation | null = null;
-
-  setPreviewGeneration(generation: Generation) {
+  selectPreviewGeneration(generation: Generation | null) {
     this.previewGeneration = generation;
   }
-
-  clearPreviewGeneration() {
+  deselectPreviewGeneration() {
     this.previewGeneration = null;
   }
 
@@ -59,13 +57,16 @@ export class UIStore {
   }
 
   selectionArea: Rect | null = null;
-
-  selectArea(rect: Rect) {
-    this.selectionArea = rect;
+  setSelectionArea(value: Rect | null) {
+    this.selectionArea = value;
   }
 
+  isAreaSelected = false;
+  selectArea() {
+    this.isAreaSelected = true;
+  }
   deselectArea() {
-    this.selectionArea = null;
+    this.isAreaSelected = false;
   }
 
   get canPlaceGeneration() {
@@ -81,6 +82,6 @@ export class UIStore {
       generation: this.previewGeneration!,
       ...this.selectionArea!,
     });
-    this.clearPreviewGeneration();
+    this.deselectPreviewGeneration();
   }
 }

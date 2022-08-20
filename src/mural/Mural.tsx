@@ -1,17 +1,12 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
 
 import { ZStack } from '../components/ZStack';
 import { models } from '../store';
-import { ImageDataUrl, Rect } from '../utils';
+import { Rect } from '../utils';
 import { GridLayer } from './GridLayer';
 import { MainLayer } from './MainLayer';
 import { SelectionLayer } from './SelectionLayer';
 import { useMouseRectSelection } from './use-mouse-rect-selection';
-
-export interface MuralHandle {
-  rasterize(): ImageDataUrl;
-}
 
 export const Mural = observer(_Mural);
 
@@ -19,6 +14,8 @@ function _Mural({
   mural,
   isGridVisible = true,
   canSelect = false,
+  selection,
+  onSelectionChange,
   onSelect,
   onDeselect,
   previewGeneration,
@@ -28,18 +25,20 @@ function _Mural({
   mural: models.Mural;
   isGridVisible?: boolean;
   canSelect: boolean;
-  onSelect: (rect: Rect) => void;
+  selection: Rect | null;
+  onSelectionChange: (rect: Rect | null) => void;
+  onSelect: () => void;
   onDeselect: () => void;
   previewGeneration: models.Generation | null;
   onCanvasInit?: (canvas: HTMLCanvasElement) => void;
 }) {
   const {
     //
-    selection,
     isSelected,
     selectionEvents,
   } = useMouseRectSelection({
     canSelect,
+    onSelectionChange,
     onSelect,
     onDeselect,
     adjust: rect =>
