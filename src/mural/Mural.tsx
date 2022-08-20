@@ -7,7 +7,7 @@ import { ImageDataUrl, Rect } from '../utils';
 import { GridLayer } from './GridLayer';
 import { MainLayer } from './MainLayer';
 import { SelectionLayer } from './SelectionLayer';
-import { useSelection } from './use-selection';
+import { useMouseRectSelection } from './use-mouse-rect-selection';
 
 export interface MuralHandle {
   rasterize(): ImageDataUrl;
@@ -37,9 +37,8 @@ function _Mural({
     //
     selection,
     isSelected,
-    setSelectionFromMouse,
-    toggleIsSelectedFromMouse,
-  } = useSelection({
+    selectionEvents,
+  } = useMouseRectSelection({
     canSelect,
     onSelect,
     onDeselect,
@@ -54,8 +53,7 @@ function _Mural({
     <ZStack
       width={mural.width}
       height={mural.height}
-      onMouseMove={setSelectionFromMouse}
-      onMouseUp={toggleIsSelectedFromMouse}
+      {...selectionEvents}
       {...passthrough}
     >
       <MainLayer
