@@ -69,14 +69,14 @@ async function drawSelectionLayer({
     strokePath({
       ctx,
       path: new Path2DBuilder().rect(x, y, width, height).path,
-      thickness: 7,
+      thickness: 6,
       strokeStyle: 'rgb(66, 153, 225)',
     });
   } else if (!previewImage) {
     strokePath({
       ctx,
       path: new Path2DBuilder().rect(x, y, width, height).path,
-      thickness: 3,
+      thickness: 4,
       opacity: 0.9,
     });
   }

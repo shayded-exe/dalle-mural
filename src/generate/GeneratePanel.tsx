@@ -1,7 +1,7 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { chakra, Flex, IconButton, Input, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { FormEvent, useState } from 'react';
+import React, { useState } from 'react';
 
 import { GenerationHistory } from '../components/GenerationHistory';
 import { SuccessfulDalleTask } from '../dalle';
@@ -14,7 +14,7 @@ function _GeneratePanel({ ...passthrough }: {}) {
   const {
     dalle,
     uiStore: { selectedGeneration, selectGeneration, deselectGeneration, closePanel },
-    generateStore: { generationHistory, loadTask },
+    generateStore: { generationHistory, addFromTask },
   } = useStores();
 
   const [prompt, setPrompt] = useState('');
@@ -22,7 +22,7 @@ function _GeneratePanel({ ...passthrough }: {}) {
 
   return (
     <GeneratePanelContainer {...passthrough}>
-      <Flex gap={4}>
+      <Flex gap={'1rem'}>
         <chakra.form
           onSubmit={generate}
           flexGrow={1}
@@ -55,17 +55,16 @@ function _GeneratePanel({ ...passthrough }: {}) {
     </GeneratePanelContainer>
   );
 
-  async function generate(e: FormEvent) {
+  async function generate(e: React.FormEvent) {
     e.preventDefault();
 
     setIsGenerating(true);
 
     try {
       const task = (await getTask()) as SuccessfulDalleTask;
-      await loadTask(task);
+      await addFromTask(task);
     } catch (e) {
       console.error(e);
-      return;
     } finally {
       setIsGenerating(false);
     }

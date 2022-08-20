@@ -53,7 +53,7 @@ function drawGridLayer({
   strokePath({
     ctx,
     path: buildMainPath(),
-    thickness: 5,
+    thickness: 6,
     opacity: 0.1,
   });
 
@@ -61,7 +61,7 @@ function drawGridLayer({
     strokePath({
       ctx,
       path: buildSubdividedPath(),
-      thickness: 3,
+      thickness: 4,
       opacity: 0.1,
     });
   }
@@ -69,8 +69,8 @@ function drawGridLayer({
   ctx.globalCompositeOperation = 'destination-out';
   strokePath({
     ctx,
-    path: new Path2DBuilder().rect(1, 1, width - 2, height - 2).path,
-    thickness: 5,
+    path: new Path2DBuilder().rect(0, 0, width - 1, height - 1).path,
+    thickness: 6,
     opacity: 1,
   });
   ctx.globalCompositeOperation = 'source-over';

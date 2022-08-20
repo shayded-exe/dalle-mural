@@ -1,20 +1,11 @@
-import { chakra, Image } from '@chakra-ui/react';
+import { chakra } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { ReactNode, useCallback } from 'react';
 
 import { models } from '../store';
+import { GenerationImage } from './GenerationImage';
 
-const pixelSize = `${models.Generation.DISPLAY_SIZE}px`;
-const minPixelSize = `${models.Generation.DISPLAY_SIZE / 2}px`;
-
-export const Generation = chakra(observer(_Generation), {
-  baseStyle: {
-    maxWidth: pixelSize,
-    maxHeight: pixelSize,
-    minWidth: minPixelSize,
-    minHeight: minPixelSize,
-  },
-});
+export const Generation = chakra(observer(_Generation));
 
 function _Generation({
   generation,
@@ -41,12 +32,11 @@ function _Generation({
   }, [onSelect, onDeselect]);
 
   return (
-    <Image
-      src={generation.image}
+    <GenerationImage
+      image={generation.image}
       onClick={onClick}
       boxShadow={isSelected ? 'outline' : undefined}
       borderRadius={2}
-      height='100%'
       {...passthrough}
     />
   );

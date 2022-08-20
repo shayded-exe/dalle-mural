@@ -30,6 +30,7 @@ export class UIStore {
   }
   closePanel() {
     this.activeMode = UIMode.None;
+    this.deselectArea();
     this.deselectGeneration();
   }
   openGeneratePanel() {
@@ -75,6 +76,7 @@ export class UIStore {
   }
   deselectArea() {
     this.isAreaSelected = false;
+    this.selectionAreaImage = null;
   }
 
   get canPlaceGeneration() {

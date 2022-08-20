@@ -12,8 +12,8 @@ export interface Generation {
 export namespace Generation {
   export const SIZE = 1024;
   export const DIMENSIONS: Dimensions = { width: SIZE, height: SIZE };
-  export const DISPLAY_SIZE_MULTIPLE = 0.25;
-  export const DISPLAY_SIZE = SIZE * DISPLAY_SIZE_MULTIPLE;
+  export const DISPLAY_SIZE = `${(SIZE * 1) / 4}px`;
+  export const MIN_DISPLAY_SIZE = `${(SIZE * 1) / 8}px`;
 
   export async function fromApi(
     dto: DalleGenerationMeta,

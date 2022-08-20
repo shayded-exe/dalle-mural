@@ -6,35 +6,44 @@ import { DalleGenerationMeta, SuccessfulDalleTask } from '../dalle';
 import { Generation } from './models';
 import { RootStore } from './root-store';
 
-export class GenerateStore {
+export class InpaintStore {
   get #dalle() {
     return this.#rootStore.dalle;
+  }
+
+  get #uiStore() {
+    return this.#rootStore.uiStore;
   }
 
   #rootStore: RootStore;
 
   constructor(rootStore: RootStore) {
     this.#rootStore = rootStore;
-
     makeAutoObservable(this, {}, { autoBind: true });
     makePersistable(this, {
-      name: 'GenerateStore',
+      name: 'InpaintStore',
       properties: [
         //
-        'generations',
+        'inpaintings',
       ],
     });
+
+    // reaction(
+    //   () => this.#uiStore.selectionAreaImage,
+    //   () => this.clear(),
+    // );
   }
 
-  generations: { [id: string]: Generation } = {};
+  inpaintings: { [id: string]: Generation } = {};
 
-  get generationHistory(): Generation[][] {
-    return chain(Object.values(this.generations))
+  get inpaintHistory(): Generation[][] {
+    return chain(Object.values(this.inpaintings))
       .orderBy(g => g.created_at, 'desc')
-      .chunk(4)
+      .chunk(3)
       .value();
   }
 
+  // TODO: dedupe with GenerationStore
   async add(dtos: DalleGenerationMeta[]) {
     const generations = await Promise.all(
       dtos.map(dto => Generation.fromApi(dto, this.#dalle)),
@@ -42,7 +51,7 @@ export class GenerateStore {
 
     runInAction(() => {
       Object.assign(
-        this.generations,
+        this.inpaintings,
         keyBy(generations, g => g.id),
       );
     });
@@ -50,5 +59,9 @@ export class GenerateStore {
 
   async addFromTask(task: SuccessfulDalleTask) {
     await this.add(task.generations.data);
+  }
+
+  clear() {
+    this.inpaintings = {};
   }
 }
