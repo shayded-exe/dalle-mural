@@ -10,14 +10,14 @@ export const SelectionLayer = observer(_SelectionLayer);
 function _SelectionLayer({
   selection,
   isSelected,
-  previewGeneration,
+  selectedGeneration,
   ...passthrough
 }: {
   selection: Rect | null;
   isSelected: boolean;
-  previewGeneration: models.Generation | null;
+  selectedGeneration: models.Generation | null;
 }) {
-  const { previewImage } = usePreviewImage(previewGeneration);
+  const { previewImage } = usePreviewImage(selectedGeneration);
   const { ref } = useSelectionLayer({ selection, isSelected, previewImage });
 
   return (

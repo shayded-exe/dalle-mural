@@ -33,7 +33,7 @@ export class UIStore {
 
   closePanel() {
     this.activeMode = UIMode.None;
-    this.deselectPreviewGeneration();
+    this.deselectGeneration();
   }
 
   openGeneratePanel() {
@@ -44,12 +44,12 @@ export class UIStore {
     this.activeMode = UIMode.Inpaint;
   }
 
-  previewGeneration: Generation | null = null;
-  selectPreviewGeneration(generation: Generation | null) {
-    this.previewGeneration = generation;
+  selectedGeneration: Generation | null = null;
+  selectGeneration(generation: Generation | null) {
+    this.selectedGeneration = generation;
   }
-  deselectPreviewGeneration() {
-    this.previewGeneration = null;
+  deselectGeneration() {
+    this.selectedGeneration = null;
   }
 
   get canSelect() {
@@ -70,7 +70,7 @@ export class UIStore {
   }
 
   get canPlaceGeneration() {
-    return !!this.previewGeneration && !!this.selectionArea;
+    return !!this.selectedGeneration && !!this.selectionArea;
   }
 
   placeGeneration() {
@@ -79,9 +79,9 @@ export class UIStore {
     }
 
     this.#muralStore.placeGeneration({
-      generation: this.previewGeneration!,
+      generation: this.selectedGeneration!,
       ...this.selectionArea!,
     });
-    this.deselectPreviewGeneration();
+    this.deselectGeneration();
   }
 }

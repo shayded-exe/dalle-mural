@@ -11,9 +11,9 @@ import {
 import { observer } from 'mobx-react-lite';
 import { FormEvent, useState } from 'react';
 
+import { GenerationHistory } from '../components/GenerationHistory';
 import { SuccessfulDalleTask } from '../dalle';
 import { models, useStores } from '../store';
-import { GenerationHistory } from './GenerationHistory';
 
 export const InpaintPanel = chakra(observer(_InpaintPanel));
 

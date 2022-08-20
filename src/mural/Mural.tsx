@@ -18,7 +18,7 @@ function _Mural({
   onSelectionChange,
   onSelect,
   onDeselect,
-  previewGeneration,
+  selectedGeneration,
   onCanvasInit,
   ...passthrough
 }: {
@@ -29,7 +29,7 @@ function _Mural({
   onSelectionChange: (rect: Rect | null) => void;
   onSelect: () => void;
   onDeselect: () => void;
-  previewGeneration: models.Generation | null;
+  selectedGeneration: models.Generation | null;
   onCanvasInit?: (canvas: HTMLCanvasElement) => void;
 }) {
   const {
@@ -63,7 +63,7 @@ function _Mural({
       <SelectionLayer
         selection={selection}
         isSelected={isSelected}
-        previewGeneration={previewGeneration}
+        selectedGeneration={selectedGeneration}
       />
     </ZStack>
   );

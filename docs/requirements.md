@@ -1,6 +1,13 @@
 # requirements
 
-### mural
+### general
+
+- view token count
+- keyboard shortcuts
+  - fully usable via shortcuts
+  - toggle to show shortcut keys in ui
+
+### mural canvas
 
 - save/load murals
 - toggleable grid
@@ -17,9 +24,11 @@
   - show overlay of selected generation under cursor on canvas
 - confirm before overwriting an existing image
 - zoom images on hover
-- show history of all generations for the current mural
+- show history of all generations
   - history is a vertical list with one result set per row
   - can expand to show more history
+  - can filter by current mural, all murals, and hearted generations
+  - generations can be hearted just like in dall-e
 
 ### inpaint
 
@@ -35,6 +44,12 @@
 fit some error handling in there somewhere at some point
 
 ## flows
+
+### login
+
+1. if auth token isn't set, show login page
+2. set token and submit
+3. can logout from settings menu
 
 ### generate
 

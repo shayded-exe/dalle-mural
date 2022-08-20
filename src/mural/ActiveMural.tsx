@@ -10,7 +10,7 @@ function _ActiveMural({ ...passthrough }: {}) {
   const {
     muralStore: { activeMural, setRasterizeFunc },
     uiStore: {
-      previewGeneration,
+      selectedGeneration,
       canSelect,
       selectionArea,
       setSelectionArea,
@@ -27,7 +27,7 @@ function _ActiveMural({ ...passthrough }: {}) {
       onSelectionChange={setSelectionArea}
       onSelect={selectArea}
       onDeselect={deselectArea}
-      previewGeneration={previewGeneration}
+      selectedGeneration={selectedGeneration}
       onCanvasInit={onCanvasInit}
       {...passthrough}
     />
