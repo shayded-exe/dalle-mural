@@ -1,7 +1,7 @@
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
-import { clearCanvas, strokePath, useCanvasDraw } from '../canvas';
+import { clearCanvas, Path2DBuilder, strokePath, useCanvasDraw } from '../canvas';
 import { models } from '../store';
 
 export const GridLayer = observer(_GridLayer);
@@ -67,11 +67,9 @@ function drawGridLayer({
   }
 
   ctx.globalCompositeOperation = 'destination-out';
-  const path = new Path2D();
-  path.rect(1, 1, width - 2, height - 2);
   strokePath({
     ctx,
-    path,
+    path: new Path2DBuilder().rect(1, 1, width - 2, height - 2).path,
     thickness: 5,
     opacity: 1,
   });

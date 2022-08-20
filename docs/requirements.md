@@ -41,8 +41,8 @@ fit some error handling in there somewhere at some point
 1. click generate
 2. generate panel appears
 3. type prompt and submit
-4. select result
-5. select placement location
+4. select result & placement location in either order
+5. confirm placement
 
 ### inpaint
 
@@ -51,7 +51,7 @@ fit some error handling in there somewhere at some point
 3. inpaint panel appears
 4. type prompt and submit
 5. select result
-6. select placement location
+6. confirm placement
 
 ### erase
 

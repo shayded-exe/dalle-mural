@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import React from 'react';
 
 import { Coordinates, ImageDataUrl, Rect, urlToImage } from '../utils';
 
@@ -24,9 +24,7 @@ export function createCanvas({
   };
 }
 
-export function getContextOrFail(
-  canvas: HTMLCanvasElement,
-): CanvasRenderingContext2D {
+export function getContextOrFail(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
   const ctx = canvas.getContext('2d');
   if (!ctx) {
     throw new Error('Failed to get canvas context 2d');
@@ -57,19 +55,21 @@ export function strokePath({
   ctx,
   path,
   thickness,
-  opacity,
+  strokeStyle,
+  opacity = 1,
 }: {
   ctx: CanvasRenderingContext2D;
   path: Path2D;
   thickness: number;
-  opacity: number;
+  strokeStyle?: string;
+  opacity?: number;
 }) {
   ctx.lineWidth = thickness;
-  ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`;
+  ctx.strokeStyle = strokeStyle || `rgba(0, 0, 0, ${opacity})`;
   ctx.stroke(path);
 }
 
-export function getCanvasMouseCoordinates(e: MouseEvent): Coordinates {
+export function getCanvasMouseCoordinates(e: React.MouseEvent): Coordinates {
   return {
     x: e.nativeEvent.offsetX,
     y: e.nativeEvent.offsetY,

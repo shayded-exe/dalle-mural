@@ -2,8 +2,8 @@ import { Center, Flex, Spacer, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
 import { CommandToolbar } from './components/CommandToolbar';
-import { GeneratePanel } from './generate/GeneratePanel';
 import { SettingsToolbar } from './components/SettingsToolbar';
+import { GeneratePanel } from './generate/GeneratePanel';
 import { ActiveMural } from './mural/ActiveMural';
 import { MuralTransformWrapper } from './mural/MuralTransformWrapper';
 import { useStores } from './store';
@@ -30,6 +30,7 @@ export const App = observer(() => {
       justify={'space-between'}
       width='100vw'
       height='100vh'
+      backgroundColor={'blackAlpha.50'}
     >
       <SettingsToolbar
         margin='2rem'

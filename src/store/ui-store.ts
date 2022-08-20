@@ -1,9 +1,14 @@
 import { makeAutoObservable } from 'mobx';
 
+import { Rect } from '../utils';
 import { Generation, UIMode } from './models';
 import { RootStore } from './root-store';
 
 export class UIStore {
+  get #muralStore() {
+    return this.#rootStore.muralStore;
+  }
+
   #rootStore: RootStore;
 
   constructor(rootStore: RootStore) {
@@ -47,5 +52,35 @@ export class UIStore {
 
   clearPreviewGeneration() {
     this.previewGeneration = null;
+  }
+
+  get canSelect() {
+    return this.isGeneratePanelOpen || this.isInpaintPanelOpen;
+  }
+
+  selectionArea: Rect | null = null;
+
+  selectArea(rect: Rect) {
+    this.selectionArea = rect;
+  }
+
+  deselectArea() {
+    this.selectionArea = null;
+  }
+
+  get canPlaceGeneration() {
+    return !!this.previewGeneration && !!this.selectionArea;
+  }
+
+  placeGeneration() {
+    if (!this.canPlaceGeneration) {
+      throw new Error(`Tried to place generation when not allowed`);
+    }
+
+    this.#muralStore.placeGeneration({
+      generation: this.previewGeneration!,
+      ...this.selectionArea!,
+    });
+    this.clearPreviewGeneration();
   }
 }

@@ -1,5 +1,5 @@
-import { CloseIcon } from '@chakra-ui/icons';
-import { chakra, Flex, IconButton, Input, Spinner } from '@chakra-ui/react';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { Button, chakra, Flex, IconButton, Input, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { FormEvent, useState } from 'react';
 
@@ -17,6 +17,8 @@ function _GeneratePanel({ ...passthrough }: {}) {
       setPreviewGeneration,
       clearPreviewGeneration,
       closePanel,
+      canPlaceGeneration,
+      placeGeneration,
     },
     generateStore: { generationHistory, loadTask },
   } = useStores();
@@ -24,16 +26,27 @@ function _GeneratePanel({ ...passthrough }: {}) {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const confirmPlaceButton = (
+    <Button
+      onClick={placeGeneration}
+      rightIcon={<CheckIcon />}
+      colorScheme={'green'}
+      alignSelf={'end'}
+      boxShadow={'md'}
+    >
+      Place
+    </Button>
+  );
+
   const mainPanel = (
     <Flex
+      direction={'column'}
+      gap={4}
       padding={4}
       minHeight={0}
       background={'white'}
       boxShadow={'lg'}
       borderRadius={'lg'}
-      direction={'column'}
-      gap={4}
-      {...passthrough}
     >
       <Flex gap={4}>
         <chakra.form
@@ -72,7 +85,9 @@ function _GeneratePanel({ ...passthrough }: {}) {
     <Flex
       direction={'column'}
       gap={4}
+      {...passthrough}
     >
+      {canPlaceGeneration && confirmPlaceButton}
       {mainPanel}
     </Flex>
   );
