@@ -12,8 +12,8 @@ export const SettingsToolbar = chakra(observer(_SettingsToolbar));
 
 function _SettingsToolbar({ ...passthrough }: {}) {
   const {
-    muralStore: { undo, rasterize },
-    uiStore: { selectionArea },
+    muralStore: { undo },
+    uiStore: { selectionArea, rasterize },
   } = useStores();
 
   const onRasterizeClick = () => downloadImage(rasterize());

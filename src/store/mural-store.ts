@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 import * as uuid from 'uuid';
 
-import { Coordinates, ImageDataUrl } from '../utils';
+import { Coordinates } from '../utils';
 import { Generation, Mural } from './models';
 import { RootStore } from './root-store';
 
@@ -94,20 +94,4 @@ export class MuralStore {
   clearMural() {
     this.activeMural.items = [];
   }
-
-  #rasterizeFunc: RasterizeFunc | null = null;
-
-  setRasterizeFunc(func: RasterizeFunc) {
-    this.#rasterizeFunc = func;
-  }
-
-  rasterize(): ImageDataUrl {
-    if (!this.#rasterizeFunc) {
-      throw new Error('Rasterize func not set');
-    }
-
-    return this.#rasterizeFunc();
-  }
 }
-
-type RasterizeFunc = () => ImageDataUrl;

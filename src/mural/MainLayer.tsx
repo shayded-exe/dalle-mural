@@ -1,5 +1,7 @@
+import { useMergeRefs } from '@chakra-ui/react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { useCallback } from 'react';
 
 import { clearCanvas, drawImageUrl, useCanvasDraw } from '../canvas';
 import { models } from '../store';
@@ -14,20 +16,22 @@ function _MainLayer({
   mural: models.Mural;
   onCanvasInit?: (canvas: HTMLCanvasElement) => void;
 }) {
-  const { ref, canvas } = useCanvasDraw(ctx =>
+  const { ref } = useCanvasDraw(ctx =>
     autorun(() => {
       clearCanvas(ctx);
       drawMainLayer({ ctx, mural }).catch(console.error);
     }),
   );
 
-  if (canvas && onCanvasInit) {
-    onCanvasInit(canvas);
-  }
+  const onCanvasInitRef = useCallback((canvas: HTMLCanvasElement | null) => {
+    if (canvas) {
+      onCanvasInit?.(canvas);
+    }
+  }, []);
 
   return (
     <canvas
-      ref={ref}
+      ref={useMergeRefs(ref, onCanvasInitRef)}
       {...passthrough}
     />
   );

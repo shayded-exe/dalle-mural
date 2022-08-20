@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import { Rect } from '../utils';
+import { ImageDataUrl, Rect } from '../utils';
 import { Generation, UIMode } from './models';
 import { RootStore } from './root-store';
 
@@ -83,5 +83,18 @@ export class UIStore {
       ...this.selectionArea!,
     });
     this.deselectGeneration();
+  }
+
+  canvas: HTMLCanvasElement | null = null;
+  setCanvas(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
+  }
+
+  rasterize(): ImageDataUrl {
+    if (!this.canvas) {
+      throw new Error('Canvas not initialized');
+    }
+
+    return this.canvas.toDataURL() as ImageDataUrl;
   }
 }
