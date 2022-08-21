@@ -3,15 +3,17 @@ import { observer } from 'mobx-react-lite';
 
 import { CommandToolbar } from './components/CommandToolbar';
 import { SettingsToolbar } from './components/SettingsToolbar';
+import { ErasePanel } from './erase/ErasePanel';
 import { GeneratePanel } from './generate/GeneratePanel';
 import { InpaintPanel } from './generate/InpaintPanel';
 import { ActiveMural } from './mural/ActiveMural';
 import { MuralTransformWrapper } from './mural/MuralTransformWrapper';
 import { useStores } from './store';
+import { UIMode } from './store/models';
 
 export const App = observer(() => {
   const {
-    uiStore: { isPanelOpen, isGeneratePanelOpen, isInpaintPanelOpen },
+    uiStore: { activeMode },
     isHydrated,
   } = useStores();
 
@@ -42,26 +44,32 @@ export const App = observer(() => {
 
       <Spacer />
 
-      {!isGeneratePanelOpen ? null : (
+      {activeMode === UIMode.Generate && (
         <GeneratePanel
-          minWidth={'min-content'}
           margin={'2rem'}
           zIndex={'docked'}
         />
       )}
 
-      {!isInpaintPanelOpen ? null : (
+      {activeMode === UIMode.Inpaint && (
         <InpaintPanel
-          minWidth={'min-content'}
           // maxWidth={'70rem'}
           margin={'2rem'}
           zIndex={'docked'}
         />
       )}
 
-      {isPanelOpen ? null : (
+      {activeMode === UIMode.Erase && (
+        <ErasePanel
+          marginX={'2rem'}
+          marginBottom={'8rem'}
+          zIndex={'docked'}
+        />
+      )}
+
+      {activeMode === UIMode.None && (
         <CommandToolbar
-          margin='2rem'
+          margin={'2rem'}
           zIndex={'docked'}
         />
       )}

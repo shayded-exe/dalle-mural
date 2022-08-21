@@ -27,7 +27,7 @@ function _GenerationHistory({
   return (
     <Grid
       templateColumns={'repeat(4, 1fr)'}
-      justifyItems={'center'}
+      justifyItems={'stretch'}
       gap={'1rem'}
       padding={'0.5rem'}
       scrollPadding={'0.5rem'}

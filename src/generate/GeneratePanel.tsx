@@ -1,11 +1,11 @@
-import { CloseIcon } from '@chakra-ui/icons';
-import { chakra, Flex, IconButton, Input, Spinner } from '@chakra-ui/react';
+import { chakra, Flex, Icon, IconButton, Input, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
+import { CgClose } from 'react-icons/cg';
 
-import { GenerationHistory } from './GenerationHistory';
 import { useStores } from '../store';
 import { GeneratePanelContainer } from './GeneratePanelContainer';
+import { GenerationHistory } from './GenerationHistory';
 
 export const GeneratePanel = chakra(observer(_GeneratePanel));
 
@@ -34,7 +34,12 @@ function _GeneratePanel({ ...passthrough }: {}) {
 
         <IconButton
           onClick={closePanel}
-          icon={<CloseIcon />}
+          icon={
+            <Icon
+              as={CgClose}
+              boxSize={'1.5rem'}
+            />
+          }
           aria-label='Close panel'
         />
       </Flex>

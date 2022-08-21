@@ -1,17 +1,22 @@
-import { Button, chakra, Flex } from '@chakra-ui/react';
+import { Button, ButtonProps, chakra, Flex, Icon } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
+import { CgErase } from 'react-icons/cg';
 
 import { useStores } from '../store';
+import { UIMode } from '../store/models';
 
 export const CommandToolbar = chakra(observer(_CommandToolbar));
 
 function _CommandToolbar({ ...passthrough }: {}) {
   const {
-    uiStore: {
-      openGeneratePanel: openGenerateWindow,
-      openInpaintingPanel: openInpaintingWindow,
-    },
+    uiStore: { activateMode },
   } = useStores();
+
+  const buttonProps: ButtonProps = {
+    size: 'lg',
+    width: 40,
+    boxShadow: 'md',
+  };
 
   return (
     <Flex
@@ -19,20 +24,27 @@ function _CommandToolbar({ ...passthrough }: {}) {
       {...passthrough}
     >
       <Button
-        onClick={openGenerateWindow}
-        size={'lg'}
-        width={40}
+        onClick={() => activateMode(UIMode.Generate)}
         colorScheme={'blue'}
+        {...buttonProps}
       >
         Generate
       </Button>
+
       <Button
-        onClick={openInpaintingWindow}
-        size={'lg'}
-        width={40}
+        onClick={() => activateMode(UIMode.Inpaint)}
         colorScheme={'green'}
+        {...buttonProps}
       >
         Inpaint
+      </Button>
+
+      <Button
+        onClick={() => activateMode(UIMode.Erase)}
+        leftIcon={<Icon as={CgErase} />}
+        {...buttonProps}
+      >
+        erase
       </Button>
     </Flex>
   );

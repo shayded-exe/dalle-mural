@@ -33,8 +33,8 @@ function _GenerationImage({
         <Image src={image} />
       ) : (
         <Box
-          width={DISPLAY_SIZE}
-          height={DISPLAY_SIZE}
+          width={'100%'}
+          height={'100%'}
         />
       )}
     </Box>

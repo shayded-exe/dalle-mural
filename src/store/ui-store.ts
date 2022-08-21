@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
 import { cropCanvasToImage } from '../canvas';
-import { ImageDataUrl, Rect } from '../utils';
+import { Dimensions, ImageDataUrl, Rect } from '../utils';
 import { Generation, UIMode } from './models';
 import { RootStore } from './root-store';
 
@@ -19,25 +19,13 @@ export class UIStore {
   }
 
   activeMode = UIMode.None;
-  get isPanelOpen() {
-    return this.activeMode !== UIMode.None;
-  }
-  get isGeneratePanelOpen() {
-    return this.activeMode === UIMode.Generate;
-  }
-  get isInpaintPanelOpen() {
-    return this.activeMode === UIMode.Inpaint;
+  activateMode(mode: Exclude<UIMode, UIMode.None>) {
+    this.activeMode = mode;
   }
   closePanel() {
     this.activeMode = UIMode.None;
     this.deselectArea();
     this.deselectGeneration();
-  }
-  openGeneratePanel() {
-    this.activeMode = UIMode.Generate;
-  }
-  openInpaintingPanel() {
-    this.activeMode = UIMode.Inpaint;
   }
 
   canvas: HTMLCanvasElement | null = null;
@@ -54,35 +42,53 @@ export class UIStore {
   }
 
   get canSelectArea() {
-    return this.isGeneratePanelOpen || this.isInpaintPanelOpen;
+    return [
+      //
+      UIMode.Generate,
+      UIMode.Inpaint,
+      UIMode.Erase,
+    ].includes(this.activeMode);
   }
+  _selectionAreaScale = 1;
+  get selectionAreaScale(): number {
+    return this.activeMode === UIMode.Erase ? this._selectionAreaScale : 1;
+  }
+  setSelectionAreaScale(value: number) {
+    this._selectionAreaScale = value;
+  }
+  get selectionAreaDimensions(): Dimensions {
+    if (this.activeMode === UIMode.Erase) {
+      const size = Generation.SIZE * this.selectionAreaScale;
+      return Dimensions.fromSize(size);
+    }
 
+    return Generation.DIMENSIONS;
+  }
   selectionArea: Rect | null = null;
-  selectionAreaImage: ImageDataUrl | null = null;
   setSelectionArea(value: Rect | null) {
     this.selectionArea = value;
   }
-
   isAreaSelected = false;
   selectArea() {
     this.isAreaSelected = true;
-
-    if (this.isInpaintPanelOpen) {
-      this.selectionAreaImage = cropCanvasToImage({
+  }
+  deselectArea() {
+    this.isAreaSelected = false;
+  }
+  get selectionAreaImage(): ImageDataUrl | null {
+    if (this.isAreaSelected && this.activeMode === UIMode.Inpaint) {
+      return cropCanvasToImage({
         canvas: this.canvas!,
         rect: this.selectionArea!,
       });
     }
-  }
-  deselectArea() {
-    this.isAreaSelected = false;
-    this.selectionAreaImage = null;
+
+    return null;
   }
 
   get canPlaceGeneration() {
     return !!this.selectedGeneration && !!this.isAreaSelected;
   }
-
   placeGeneration() {
     if (!this.canPlaceGeneration) {
       throw new Error(`Tried to place generation when not allowed`);

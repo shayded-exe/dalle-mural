@@ -10,7 +10,7 @@ function _ActiveMural({ ...passthrough }: {}) {
     muralStore: { activeMural },
     uiStore: {
       canSelectArea,
-      selectionArea,
+      selectionAreaDimensions,
       setSelectionArea,
       selectArea,
       deselectArea,
@@ -23,7 +23,7 @@ function _ActiveMural({ ...passthrough }: {}) {
     <Mural
       mural={activeMural}
       canSelect={canSelectArea}
-      selection={selectionArea}
+      selectionDimensions={selectionAreaDimensions}
       onSelectionChange={setSelectionArea}
       onSelect={selectArea}
       onDeselect={deselectArea}

@@ -7,6 +7,14 @@
   - fully usable via shortcuts
   - toggle to show shortcut keys in ui
 
+### generations
+
+- zoom images on hover
+- can expand to show more history
+- can filter by current mural, all murals, and hearted generations
+- generations can be hearted just like in dall-e
+- link to open in dall-e
+
 ### mural canvas
 
 - save/load murals
@@ -17,25 +25,14 @@
 - brush and rect erasing
 - undo/redo
 
-### generate
+### place mode
 
-- generate images from a prompt
+- generate or inpaint from a prompt
 - place generated image anywhere on the canvas
   - show overlay of selected generation under cursor on canvas
-- confirm before overwriting an existing image
-- zoom images on hover
-- show history of all generations
-  - history is a vertical list with one result set per row
-  - can expand to show more history
-  - can filter by current mural, all murals, and hearted generations
-  - generations can be hearted just like in dall-e
+- confirm before placing
 
-### inpaint
-
-- select anywhere on grid to inpaint
-- show history of generations for the current selection
-
-### erase
+### erase mode
 
 - brush panel
   - rect/circle shape selector

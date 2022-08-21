@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 
 import { ZStack } from '../components/ZStack';
 import { models } from '../store';
-import { Rect } from '../utils';
+import { Dimensions, Rect } from '../utils';
 import { GridLayer } from './GridLayer';
 import { MainLayer } from './MainLayer';
 import { SelectionLayer } from './SelectionLayer';
@@ -14,7 +14,7 @@ function _Mural({
   mural,
   isGridVisible = true,
   canSelect = false,
-  selection,
+  selectionDimensions,
   onSelectionChange,
   onSelect,
   onDeselect,
@@ -25,7 +25,7 @@ function _Mural({
   mural: models.Mural;
   isGridVisible?: boolean;
   canSelect: boolean;
-  selection: Rect | null;
+  selectionDimensions: Dimensions;
   onSelectionChange: (rect: Rect | null) => void;
   onSelect: () => void;
   onDeselect: () => void;
@@ -34,6 +34,7 @@ function _Mural({
 }) {
   const {
     //
+    selection,
     isSelected,
     selectionEvents,
   } = useMouseRectSelection({
@@ -41,6 +42,7 @@ function _Mural({
     onSelectionChange,
     onSelect,
     onDeselect,
+    dimensions: selectionDimensions,
     adjust: rect =>
       snapToGrid({
         rect,

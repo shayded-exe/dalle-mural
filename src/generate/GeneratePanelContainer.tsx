@@ -28,8 +28,7 @@ function _GeneratePanelContainer({
       <Flex
         direction={'column'}
         gap={4}
-        padding={4}
-        minHeight={0}
+        padding={'1rem'}
         background={'white'}
         boxShadow={'lg'}
         borderRadius={'lg'}
