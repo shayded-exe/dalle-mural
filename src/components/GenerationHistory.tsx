@@ -1,5 +1,6 @@
-import { chakra, Flex, Grid } from '@chakra-ui/react';
+import { chakra, Grid } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
+import React from 'react';
 
 import { models } from '../store';
 import { ImageDataUrl } from '../utils';
@@ -9,50 +10,55 @@ import { GenerationImage } from './GenerationImage';
 export const GenerationHistory = chakra(observer(_GenerationHistory));
 
 function _GenerationHistory({
-  generations,
-  showPromptImage = false,
+  tasks,
+  isInpaintingMode = false,
   promptImage,
   selectedGeneration,
   select,
   deselect,
   ...passthrough
 }: {
-  generations: models.Generation[][];
-  showPromptImage?: boolean;
+  tasks: models.Task[];
+  isInpaintingMode?: boolean;
   promptImage?: ImageDataUrl | null;
   selectedGeneration: models.Generation | null;
   select: (generation: models.Generation) => void;
   deselect: () => void;
 }) {
-  const columns = showPromptImage ? 3 : 4;
-
   return (
-    <Flex
-      direction={'row'}
-      align={'start'}
+    <Grid
+      templateColumns={'repeat(4, 1fr)'}
+      justifyItems={'center'}
+      gap={'1rem'}
+      padding={'0.5rem'}
+      scrollPadding={'0.5rem'}
+      maxHeight={'100%'}
+      overflowY={'scroll'}
+      scrollSnapType={'y mandatory'}
       {...passthrough}
     >
-      {showPromptImage && (
-        <GenerationImage
-          image={promptImage}
-          transparentBg={true}
-          margin={'0.5rem'}
-          width={`${models.Generation.SIZE}px`}
-          height={`${models.Generation.SIZE}px`}
+      {tasks.map((task, i) => (
+        <Task
+          key={task.id}
+          task={task}
+          isFirst={i === 0}
         />
-      )}
+      ))}
+    </Grid>
+  );
 
-      <Grid
-        templateColumns={`repeat(${columns}, 1fr)`}
-        justifyItems={'center'}
-        gap={'1rem'}
-        padding={'0.5rem'}
-        scrollPadding={'0.5rem'}
-        maxHeight={'100%'}
-        overflowY={'scroll'}
-        scrollSnapType={'y mandatory'}
-      >
-        {generations.flat().map(generation => (
+  function Task({ task, isFirst }: { task: models.Task; isFirst: boolean }) {
+    return (
+      <>
+        {isInpaintingMode && (
+          <GenerationImage
+            key={task.id}
+            image={isFirst ? promptImage : task.promptImage}
+            transparentBg={true}
+          />
+        )}
+
+        {task.generations.map(generation => (
           <Generation
             key={generation.id}
             generation={generation}
@@ -60,10 +66,10 @@ function _GenerationHistory({
             onSelect={() => select(generation)}
             onDeselect={deselect}
             cursor={'pointer'}
-            scrollSnapAlign={'start'}
+            scrollSnapAlign={'center'}
           />
         ))}
-      </Grid>
-    </Flex>
-  );
+      </>
+    );
+  }
 }

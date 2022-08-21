@@ -20,7 +20,7 @@ function _GenerationImage({
   transparentBg = false,
   ...passthrough
 }: {
-  image?: ImageDataUrl | null;
+  image: ImageDataUrl | null | undefined;
   transparentBg?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }) {

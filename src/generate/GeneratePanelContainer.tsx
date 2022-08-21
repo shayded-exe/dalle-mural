@@ -17,25 +17,13 @@ function _GeneratePanelContainer({
     uiStore: { canPlaceGeneration, placeGeneration },
   } = useStores();
 
-  const confirmPlaceButton = (
-    <Button
-      onClick={placeGeneration}
-      rightIcon={<CheckIcon />}
-      colorScheme={'green'}
-      alignSelf={'end'}
-      boxShadow={'md'}
-    >
-      Place
-    </Button>
-  );
-
   return (
     <Flex
       direction={'column'}
       gap={4}
       {...passthrough}
     >
-      {canPlaceGeneration && confirmPlaceButton}
+      {canPlaceGeneration && <ConfirmPlaceButton />}
 
       <Flex
         direction={'column'}
@@ -50,4 +38,20 @@ function _GeneratePanelContainer({
       </Flex>
     </Flex>
   );
+
+  function ConfirmPlaceButton() {
+    return (
+      <Button
+        onClick={placeGeneration}
+        rightIcon={<CheckIcon />}
+        iconSpacing={4}
+        size={'lg'}
+        colorScheme={'green'}
+        alignSelf={'end'}
+        boxShadow={'md'}
+      >
+        Place
+      </Button>
+    );
+  }
 }

@@ -2,7 +2,7 @@ import { Buffer } from 'buffer';
 import ky from 'ky';
 
 import { createCanvas } from '../canvas';
-import { ImageDataUrl } from './primitives';
+import { ImageBase64, ImageDataUrl } from './primitives';
 
 export async function urlToImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -15,9 +15,7 @@ export async function urlToImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-export async function urlToImageDataUrl_fetch(
-  url: string,
-): Promise<ImageDataUrl> {
+export async function urlToImageDataUrl_fetch(url: string): Promise<ImageDataUrl> {
   return ky
     .get(url)
     .arrayBuffer()
@@ -50,4 +48,8 @@ export function downloadImage(src: string, filename?: string) {
   link.href = src;
   link.download = filename ?? `${Date.now()}.png`;
   link.click();
+}
+
+export function imageDataUrlToBase64(dataUrl: ImageDataUrl): ImageBase64 {
+  return dataUrl.split(',')[1] as ImageBase64;
 }

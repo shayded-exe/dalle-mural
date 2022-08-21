@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 
 import { GenerationHistory } from '../components/GenerationHistory';
-import { SuccessfulDalleTask } from '../dalle';
 import { useStores } from '../store';
 import { GeneratePanelContainer } from './GeneratePanelContainer';
 
@@ -12,9 +11,8 @@ export const GeneratePanel = chakra(observer(_GeneratePanel));
 
 function _GeneratePanel({ ...passthrough }: {}) {
   const {
-    dalle,
+    dalleStore: { dalle, generationTasks, addTask },
     uiStore: { selectedGeneration, selectGeneration, deselectGeneration, closePanel },
-    generateStore: { generationHistory, addFromTask },
   } = useStores();
 
   const [prompt, setPrompt] = useState('');
@@ -45,7 +43,7 @@ function _GeneratePanel({ ...passthrough }: {}) {
         <Spinner size={'xl'} />
       ) : (
         <GenerationHistory
-          generations={generationHistory}
+          tasks={generationTasks}
           selectedGeneration={selectedGeneration}
           select={selectGeneration}
           deselect={deselectGeneration}
@@ -60,18 +58,14 @@ function _GeneratePanel({ ...passthrough }: {}) {
 
     setIsGenerating(true);
 
-    try {
-      const task = (await getTask()) as SuccessfulDalleTask;
-      await addFromTask(task);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsGenerating(false);
-    }
+    await getTask()
+      .then(addTask)
+      .catch(console.error)
+      .finally(() => setIsGenerating(false));
 
     async function getTask() {
       if (prompt.startsWith('task-')) {
-        return await dalle.getTask(prompt);
+        return await dalle.getSuccessfulTask(prompt);
       } else {
         return await dalle.generate({ prompt });
       }

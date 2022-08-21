@@ -80,7 +80,7 @@ export class UIStore {
   }
 
   get canPlaceGeneration() {
-    return !!this.selectedGeneration && !!this.selectionArea;
+    return !!this.selectedGeneration && !!this.isAreaSelected;
   }
 
   placeGeneration() {

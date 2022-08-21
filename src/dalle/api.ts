@@ -1,7 +1,15 @@
 import ky from 'ky';
 
-import { ImageBase64, ImageDataUrl, urlToImageDataUrl_fetch } from '../utils';
-import { DalleTask, NewInpaintingDalleTask, NewText2ImageDalleTask } from './types';
+import { ImageDataUrl, imageDataUrlToBase64, urlToImageDataUrl_fetch } from '../utils';
+import {
+  DalleTask,
+  DalleTaskStatus,
+  DalleTaskType,
+  NewInpaintingDalleTask,
+  NewText2ImageDalleTask,
+  SuccessfulDalleTask,
+} from './task';
+import { DalleId } from './types';
 
 export const DALLE_AUTH_TOKEN_LENGTH = 45;
 
@@ -9,7 +17,6 @@ export class Dalle {
   authToken?: string;
 
   get isSignedIn(): boolean {
-    // TODO: Check expiration
     return !!this.authToken;
   }
 
@@ -27,9 +34,9 @@ export class Dalle {
     this.authToken = authToken;
   }
 
-  async generate({ prompt }: { prompt: string }): Promise<DalleTask> {
+  async generate({ prompt }: { prompt: string }): Promise<SuccessfulDalleTask> {
     const newTask: NewText2ImageDalleTask = {
-      task_type: 'text2im',
+      task_type: DalleTaskType.Generation,
       prompt: {
         caption: prompt,
         batch_size: 4,
@@ -42,7 +49,8 @@ export class Dalle {
         headers: this.#getHeaders(),
       })
       .json<DalleTask>()
-      .then(task => this.#pollTask(task));
+      .then(task => this.#pollTask(task))
+      .then(rejectIfTaskNotSuccessful);
   }
 
   async generateInpainting({
@@ -52,16 +60,16 @@ export class Dalle {
     parentGenerationId,
   }: {
     prompt: string;
-    maskedImage: ImageBase64;
-    sourceImage?: ImageBase64;
-    parentGenerationId?: string;
-  }): Promise<DalleTask> {
+    maskedImage: ImageDataUrl;
+    sourceImage: ImageDataUrl;
+    parentGenerationId?: DalleId;
+  }): Promise<SuccessfulDalleTask> {
     const newTask: NewInpaintingDalleTask = {
-      task_type: 'inpainting',
+      task_type: DalleTaskType.Inpainting,
       prompt: {
         caption: prompt,
-        masked_image: maskedImage,
-        image: sourceImage,
+        masked_image: imageDataUrlToBase64(maskedImage),
+        image: imageDataUrlToBase64(sourceImage),
         parent_generation_id: parentGenerationId,
         batch_size: 3,
       },
@@ -73,7 +81,8 @@ export class Dalle {
         headers: this.#getHeaders(),
       })
       .json<DalleTask>()
-      .then(task => this.#pollTask(task));
+      .then(task => this.#pollTask(task))
+      .then(rejectIfTaskNotSuccessful);
   }
 
   async getTask(taskId: string): Promise<DalleTask> {
@@ -84,6 +93,10 @@ export class Dalle {
       .json<DalleTask>();
   }
 
+  async getSuccessfulTask(taskId: string): Promise<SuccessfulDalleTask> {
+    return this.getTask(taskId).then(rejectIfTaskNotSuccessful);
+  }
+
   async getImageBase64(dalleUrl: string): Promise<ImageDataUrl> {
     const { pathname, search } = new URL(dalleUrl);
     const url = [this.#imagesUrl, pathname, search].join('');
@@ -92,24 +105,18 @@ export class Dalle {
   }
 
   #pollTask(task: DalleTask): Promise<DalleTask> {
-    return new Promise<DalleTask>((resolve, reject) => {
+    return new Promise(resolve => {
       const refreshIntervalId = setInterval(async () => {
-        try {
-          const newTask = await this.getTask(task.id);
-          task = newTask;
-        } catch {}
+        await this.getTask(task.id)
+          .then(newTask => (task = newTask))
+          .catch(console.warn);
 
-        if (task.status === 'pending') {
+        if (task.status === DalleTaskStatus.Pending) {
           return;
         }
 
         clearInterval(refreshIntervalId);
-
-        if (task.status === 'succeeded') {
-          resolve(task);
-        } else {
-          reject(task);
-        }
+        resolve(task);
       }, 2000);
     });
   }
@@ -119,4 +126,16 @@ export class Dalle {
       Authorization: `Bearer ${this.authToken}`,
     };
   }
+}
+
+async function rejectIfTaskNotSuccessful(
+  task: DalleTask,
+): Promise<SuccessfulDalleTask> {
+  return new Promise((resolve, reject) => {
+    if (task.status === DalleTaskStatus.Succeeded) {
+      resolve(task);
+    } else {
+      reject(task);
+    }
+  });
 }

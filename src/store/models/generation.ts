@@ -1,30 +1,34 @@
-import { Dalle, DalleGenerationMeta } from '../../dalle';
+import { Dalle, DalleGenerationMeta, DalleId } from '../../dalle';
 import { Dimensions, ImageDataUrl } from '../../utils';
 
 export interface Generation {
-  id: string;
-  promptId: string;
-  taskId: string;
+  id: DalleId;
   image: ImageDataUrl;
-  created_at: number;
+  createdAt: number;
 }
 
 export namespace Generation {
   export const SIZE = 1024;
   export const DIMENSIONS: Dimensions = { width: SIZE, height: SIZE };
-  export const DISPLAY_SIZE = `${(SIZE * 1) / 4}px`;
-  export const MIN_DISPLAY_SIZE = `${(SIZE * 1) / 8}px`;
+  export const DISPLAY_SIZE = `${SIZE / 4}px`;
+  export const MIN_DISPLAY_SIZE = `${SIZE / 8}px`;
 
-  export async function fromApi(
-    dto: DalleGenerationMeta,
+  export async function fromDtos(
     dalle: Dalle,
-  ): Promise<Generation> {
-    return {
-      id: dto.id,
-      promptId: dto.prompt_id,
-      taskId: dto.task_id,
-      image: await dalle.getImageBase64(dto.generation.image_path),
-      created_at: dto.created,
-    };
+    ...dtos: DalleGenerationMeta[]
+  ): Promise<Generation[]> {
+    return await Promise.all(dtos.map(fromDto));
+
+    async function fromDto({
+      id,
+      created,
+      generation: { image_path },
+    }: DalleGenerationMeta): Promise<Generation> {
+      return {
+        id,
+        image: await dalle.getImageBase64(image_path),
+        createdAt: created,
+      };
+    }
   }
 }

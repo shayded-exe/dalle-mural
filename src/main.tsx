@@ -1,4 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import { toJS } from 'mobx';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -9,9 +10,13 @@ import { THEME } from './theme';
 declare global {
   // debug only
   var __store: RootStore;
+  var __toJS: typeof toJS;
 }
 
-const rootStore = (globalThis.__store = new RootStore());
+const rootStore = new RootStore();
+
+globalThis.__store = rootStore;
+globalThis.__toJS = toJS;
 
 const rootElement = document.getElementById('root')!;
 ReactDOM.createRoot(rootElement).render(

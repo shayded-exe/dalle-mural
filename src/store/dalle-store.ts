@@ -1,7 +1,8 @@
-import { autorun, makeAutoObservable } from 'mobx';
+import { autorun, makeAutoObservable, runInAction } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 
-import { Dalle } from '../dalle';
+import { Dalle, DalleTaskType, SuccessfulDalleTask } from '../dalle';
+import { Task } from './models';
 
 export class DalleStore {
   constructor() {
@@ -11,6 +12,7 @@ export class DalleStore {
       properties: [
         //
         'authToken',
+        'tasks',
       ],
     });
 
@@ -28,5 +30,33 @@ export class DalleStore {
   get isSignedIn() {
     this.authToken; // observe
     return !!this.dalle.isSignedIn;
+  }
+
+  // newest first
+  tasks: Task[] = [];
+  get generationTasks(): Task[] {
+    return this.tasks.filter(t => t.type === DalleTaskType.Generation);
+  }
+  get inpaintingTasks(): Task[] {
+    return this.tasks.filter(t => t.type === DalleTaskType.Inpainting);
+  }
+  getTaskById(id: string): Task | undefined {
+    return this.tasks.find(t => t.id === id);
+  }
+  async addTask(dto: SuccessfulDalleTask): Promise<Task> {
+    let task = this.getTaskById(dto.id);
+
+    if (task) {
+      console.warn('Tried to add task that already exists', { dto });
+      return task;
+    }
+
+    [task] = await Task.fromDtos(this.dalle, dto);
+
+    runInAction(() => {
+      this.tasks.unshift(task!);
+    });
+
+    return task;
   }
 }

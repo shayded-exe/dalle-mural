@@ -4,16 +4,14 @@ import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 
 import { GenerationHistory } from '../components/GenerationHistory';
-import { SuccessfulDalleTask } from '../dalle';
 import { useStores } from '../store';
-import { ImageBase64 } from '../utils';
 import { GeneratePanelContainer } from './GeneratePanelContainer';
 
 export const InpaintPanel = chakra(observer(_InpaintPanel));
 
 function _InpaintPanel({ ...passthrough }: {}) {
   const {
-    dalle,
+    dalleStore: { dalle, inpaintingTasks, addTask },
     uiStore: {
       selectionAreaImage,
       selectedGeneration,
@@ -21,7 +19,6 @@ function _InpaintPanel({ ...passthrough }: {}) {
       deselectGeneration,
       closePanel,
     },
-    inpaintStore: { inpaintHistory, addFromTask },
   } = useStores();
 
   const [prompt, setPrompt] = useState('');
@@ -52,9 +49,9 @@ function _InpaintPanel({ ...passthrough }: {}) {
         <Spinner size={'xl'} />
       ) : (
         <GenerationHistory
-          generations={inpaintHistory}
+          tasks={inpaintingTasks}
           promptImage={selectionAreaImage}
-          showPromptImage={true}
+          isInpaintingMode={true}
           selectedGeneration={selectedGeneration}
           select={selectGeneration}
           deselect={deselectGeneration}
@@ -67,24 +64,29 @@ function _InpaintPanel({ ...passthrough }: {}) {
   async function inpaint(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!selectionAreaImage) {
+    const isTaskId = prompt.startsWith('task-');
+
+    if (!isTaskId && !selectionAreaImage) {
       return;
     }
 
     setIsGenerating(true);
 
-    try {
-      const image = selectionAreaImage.split(',')[1] as ImageBase64;
-      const task = (await dalle.generateInpainting({
-        prompt,
-        maskedImage: image,
-        sourceImage: image,
-      })) as SuccessfulDalleTask;
-      await addFromTask(task);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsGenerating(false);
+    await getTask()
+      .then(addTask)
+      .catch(console.error)
+      .finally(() => setIsGenerating(false));
+
+    async function getTask() {
+      if (isTaskId) {
+        return await dalle.getSuccessfulTask(prompt);
+      } else {
+        return await dalle.generateInpainting({
+          prompt,
+          maskedImage: selectionAreaImage!,
+          sourceImage: selectionAreaImage!,
+        });
+      }
     }
   }
 }
