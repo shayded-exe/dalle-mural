@@ -4,14 +4,9 @@ import * as uuid from 'uuid';
 
 import { Coordinates } from '../utils';
 import { Generation, Mural } from './models';
-import { RootStore } from './root-store';
 
 export class MuralStore {
-  #rootStore: RootStore;
-
-  constructor(rootStore: RootStore) {
-    this.#rootStore = rootStore;
-
+  constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
     makePersistable(this, {
       name: 'MuralStore',

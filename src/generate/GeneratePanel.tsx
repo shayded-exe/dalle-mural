@@ -3,7 +3,7 @@ import { chakra, Flex, IconButton, Input, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 
-import { GenerationHistory } from '../components/GenerationHistory';
+import { GenerationHistory } from './GenerationHistory';
 import { useStores } from '../store';
 import { GeneratePanelContainer } from './GeneratePanelContainer';
 
