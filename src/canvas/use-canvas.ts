@@ -1,23 +1,16 @@
-import {
-  DependencyList,
-  EffectCallback,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { DependencyList, EffectCallback, useEffect, useState } from 'react';
 
+import { useOnInitRef } from '../utils';
 import { getContextOrFail } from './utils';
 
 export function useCanvas() {
   const [canvas, setCanvas] = useState<HTMLCanvasElement>();
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>();
 
-  const ref = useCallback((canvasEl: HTMLCanvasElement | null) => {
-    if (canvasEl) {
-      setCanvas(canvasEl);
-      setCtx(getContextOrFail(canvasEl));
-    }
-  }, []);
+  const ref = useOnInitRef<HTMLCanvasElement>(canvasEl => {
+    setCanvas(canvasEl);
+    setCtx(getContextOrFail(canvasEl));
+  });
 
   return { ref, canvas, ctx };
 }

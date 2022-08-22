@@ -10,12 +10,14 @@ function _ActiveMural({ ...passthrough }: {}) {
     muralStore: { activeMural },
     uiStore: {
       canSelectArea,
-      selectionAreaDimensions,
       setSelectionArea,
       selectArea,
       deselectArea,
       selectedGeneration,
-      setCanvas,
+      canErase,
+      eraseBrushSize,
+      onEraseStart,
+      setMuralRef,
     },
   } = useStores();
 
@@ -23,12 +25,14 @@ function _ActiveMural({ ...passthrough }: {}) {
     <Mural
       mural={activeMural}
       canSelect={canSelectArea}
-      selectionDimensions={selectionAreaDimensions}
       onSelectionChange={setSelectionArea}
       onSelect={selectArea}
       onDeselect={deselectArea}
       selectedGeneration={selectedGeneration}
-      onCanvasInit={setCanvas}
+      canErase={canErase}
+      eraseBrushSize={eraseBrushSize}
+      onEraseStart={onEraseStart}
+      muralRef={setMuralRef}
       {...passthrough}
     />
   );

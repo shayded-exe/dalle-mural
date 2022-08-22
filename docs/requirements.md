@@ -2,41 +2,45 @@
 
 ### general
 
-- view token count
-- keyboard shortcuts
-  - fully usable via shortcuts
-  - toggle to show shortcut keys in ui
+- [ ] view token count
+- [ ] keyboard shortcuts
+  - [ ] fully usable via shortcuts
+  - [ ] toggle to show shortcut keys in ui
+- [ ] track credits used per mural
 
 ### generations
 
-- zoom images on hover
-- can expand to show more history
-- can filter by current mural, all murals, and hearted generations
-- generations can be hearted just like in dall-e
-- link to open in dall-e
+- [ ] zoom images on hover
+- [ ] can expand to show more history
+- [ ] can filter by current mural, all murals, and hearted generations
+- [ ] generations can be hearted just like in dall-e
+- [ ] link to open in dall-e
 
 ### mural canvas
 
-- save/load murals
-- toggleable grid
-- toggleable grid snapping
-- set overlap %
-- dynamically expand canvas
-- brush and rect erasing
-- undo/redo
+- [ ] save/load murals
+- [ ] toggleable grid
+- [ ] toggleable grid snapping
+- [ ] set overlap %
+- [ ] dynamically expand canvas
+- [ ] undo/redo
 
 ### place mode
 
-- generate or inpaint from a prompt
-- place generated image anywhere on the canvas
-  - show overlay of selected generation under cursor on canvas
-- confirm before placing
+- [x] generate or inpaint from a prompt
+- [x] place generated image anywhere on the canvas
+  - [x] show overlay of selected generation under cursor on canvas
+- [x] confirm before placing
 
 ### erase mode
 
-- brush panel
-  - rect/circle shape selector
-  - size slider
+- [x] brush panel
+- [ ] rect/circle shape selector
+- [x] size slider
+
+### outpaint mode
+
+- [ ] scale down mural and outpaint
 
 fit some error handling in there somewhere at some point
 

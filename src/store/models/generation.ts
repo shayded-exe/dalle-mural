@@ -1,5 +1,6 @@
+import { Dimensions } from '../../canvas';
 import { Dalle, DalleGenerationMeta, DalleId } from '../../dalle';
-import { Dimensions, ImageDataUrl } from '../../utils';
+import { ImageDataUrl } from '../../utils';
 
 export interface Generation {
   id: DalleId;

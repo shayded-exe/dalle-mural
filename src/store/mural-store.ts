@@ -2,7 +2,8 @@ import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 import * as uuid from 'uuid';
 
-import { Coordinates } from '../utils';
+import { Coordinates } from '../canvas';
+import { ImageDataUrl } from '../utils';
 import { Generation, Mural } from './models';
 
 export class MuralStore {
@@ -58,7 +59,7 @@ export class MuralStore {
     y,
   }: {
     generation: Generation;
-  } & Coordinates): Mural.Item {
+  } & Coordinates): Mural.GenerationItem {
     const mural = this.activeMural;
 
     if (
@@ -77,6 +78,22 @@ export class MuralStore {
       x,
       y,
       ...Generation.DIMENSIONS,
+    };
+    mural.items.push(item);
+    return item;
+  }
+
+  placeErase(mask: ImageDataUrl): Mural.EraseItem {
+    const mural = this.activeMural;
+
+    const item: Mural.EraseItem = {
+      id: uuid.v4(),
+      type: 'erase',
+      mask,
+      x: 0,
+      y: 0,
+      width: mural.width,
+      height: mural.height,
     };
     mural.items.push(item);
     return item;

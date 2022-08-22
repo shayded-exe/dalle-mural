@@ -1,7 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 
-import { cropCanvasToImage } from '../canvas';
-import { Dimensions, ImageDataUrl, Rect } from '../utils';
+import { BrushShape, BrushSize, CircleSize, Dimensions, Rect } from '../canvas';
+import { MuralRef } from '../mural/Mural';
+import { ImageDataUrl } from '../utils';
 import { Generation, UIMode } from './models';
 import { RootStore } from './root-store';
 
@@ -23,14 +24,18 @@ export class UIStore {
     this.activeMode = mode;
   }
   closePanel() {
+    if (this.activeMode === UIMode.Erase) {
+      this.cancelErase();
+    }
+
     this.activeMode = UIMode.None;
     this.deselectArea();
     this.deselectGeneration();
   }
 
-  canvas: HTMLCanvasElement | null = null;
-  setCanvas(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
+  muralRef: MuralRef | null = null;
+  setMuralRef(ref: MuralRef | null) {
+    this.muralRef = ref;
   }
 
   selectedGeneration: Generation | null = null;
@@ -46,23 +51,7 @@ export class UIStore {
       //
       UIMode.Generate,
       UIMode.Inpaint,
-      UIMode.Erase,
     ].includes(this.activeMode);
-  }
-  _selectionAreaScale = 1;
-  get selectionAreaScale(): number {
-    return this.activeMode === UIMode.Erase ? this._selectionAreaScale : 1;
-  }
-  setSelectionAreaScale(value: number) {
-    this._selectionAreaScale = value;
-  }
-  get selectionAreaDimensions(): Dimensions {
-    if (this.activeMode === UIMode.Erase) {
-      const size = Generation.SIZE * this.selectionAreaScale;
-      return Dimensions.fromSize(size);
-    }
-
-    return Generation.DIMENSIONS;
   }
   selectionArea: Rect | null = null;
   setSelectionArea(value: Rect | null) {
@@ -77,10 +66,7 @@ export class UIStore {
   }
   get selectionAreaImage(): ImageDataUrl | null {
     if (this.isAreaSelected && this.activeMode === UIMode.Inpaint) {
-      return cropCanvasToImage({
-        canvas: this.canvas!,
-        rect: this.selectionArea!,
-      });
+      return this.muralRef!.getRectImage(this.selectionArea!);
     }
 
     return null;
@@ -101,7 +87,42 @@ export class UIStore {
     this.deselectGeneration();
   }
 
+  get canErase() {
+    return this.activeMode === UIMode.Erase;
+  }
+  eraseBrushShape = BrushShape.Circle;
+  setEraseBrushShape(value: BrushShape) {
+    this.eraseBrushShape = value;
+  }
+  eraseBrushScale = 1 / 4;
+  setEraseBrushScale(value: number) {
+    this.eraseBrushScale = value;
+  }
+  get eraseBrushSize(): BrushSize {
+    const size = Generation.SIZE * this.eraseBrushScale;
+
+    switch (this.eraseBrushShape) {
+      case BrushShape.Rect:
+        return Dimensions.fromSize(size);
+      case BrushShape.Circle:
+        return { radius: size / 2 } as CircleSize;
+    }
+  }
+  canPlaceErase = false;
+  onEraseStart() {
+    this.canPlaceErase = true;
+  }
+  placeErase() {
+    const eraseMask = this.muralRef!.getEraseMask();
+    this.#muralStore.placeErase(eraseMask);
+    this.cancelErase();
+  }
+  cancelErase() {
+    this.canPlaceErase = false;
+    this.muralRef!.clearEraseFill();
+  }
+
   rasterize(): ImageDataUrl {
-    return this.canvas!.toDataURL() as ImageDataUrl;
+    return this.muralRef!.rasterize();
   }
 }

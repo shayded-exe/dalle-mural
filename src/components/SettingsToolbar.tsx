@@ -1,10 +1,11 @@
-import { DownloadIcon, RepeatClockIcon } from '@chakra-ui/icons';
 import { chakra, Flex, IconButton, Spacer } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
+import { CgSoftwareDownload, CgUndo } from 'react-icons/cg';
 
 import { useStores } from '../store';
 import { downloadImage } from '../utils';
 import { AuthTokenSetting } from './AuthTokenSetting';
+import { CgIcon } from './CgIcon';
 import { SelectionInfo } from './SelectionInfo';
 import { SettingsMenu } from './SettingsMenu';
 
@@ -33,13 +34,13 @@ function _SettingsToolbar({ ...passthrough }: {}) {
       <Spacer />
       <IconButton
         onClick={undo}
-        icon={<RepeatClockIcon />}
-        aria-label={'Undo'}
+        icon={<CgIcon as={CgUndo} />}
+        aria-label={'undo'}
       />
       <IconButton
         onClick={onRasterizeClick}
-        icon={<DownloadIcon />}
-        aria-label={'Download'}
+        icon={<CgIcon as={CgSoftwareDownload} />}
+        aria-label={'download'}
       />
       <AuthTokenSetting />
       <SettingsMenu />

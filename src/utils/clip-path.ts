@@ -1,4 +1,4 @@
-export function getTrapezoidClipPath({
+export function trapezoidClipPath({
   top = 100,
   right = 100,
   bottom = 100,

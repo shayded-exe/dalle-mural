@@ -1,0 +1,30 @@
+diff --git a/node_modules/react-zoom-pan-pinch/dist/index.cjs.js b/node_modules/react-zoom-pan-pinch/dist/index.cjs.js
+index 988c178..fd4b52f 100644
+--- a/node_modules/react-zoom-pan-pinch/dist/index.cjs.js
++++ b/node_modules/react-zoom-pan-pinch/dist/index.cjs.js
+@@ -330,6 +330,10 @@ function checkZoomBounds(zoom, minScale, maxScale, zoomPadding, enablePadding) {
+ }
+ 
+ var isPanningStartAllowed = function (contextInstance, event) {
++    // middle click pan only
++    if (event.buttons !== 4) {
++        return false;
++    }
+     var excluded = contextInstance.setup.panning.excluded;
+     var isInitialized = contextInstance.isInitialized, wrapperComponent = contextInstance.wrapperComponent;
+     var target = event.target;
+diff --git a/node_modules/react-zoom-pan-pinch/dist/index.esm.js b/node_modules/react-zoom-pan-pinch/dist/index.esm.js
+index 9ac35dc..951a78f 100644
+--- a/node_modules/react-zoom-pan-pinch/dist/index.esm.js
++++ b/node_modules/react-zoom-pan-pinch/dist/index.esm.js
+@@ -322,6 +322,10 @@ function checkZoomBounds(zoom, minScale, maxScale, zoomPadding, enablePadding) {
+ }
+ 
+ var isPanningStartAllowed = function (contextInstance, event) {
++    // middle click pan only
++    if (event.buttons !== 4) {
++        return false;
++    }
+     var excluded = contextInstance.setup.panning.excluded;
+     var isInitialized = contextInstance.isInitialized, wrapperComponent = contextInstance.wrapperComponent;
+     var target = event.target;

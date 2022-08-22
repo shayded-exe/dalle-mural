@@ -1,4 +1,3 @@
-import { SettingsIcon } from '@chakra-ui/icons';
 import {
   Button,
   IconButton,
@@ -6,10 +5,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@chakra-ui/react';
+import { CgOptions } from 'react-icons/cg';
 
 import { useStores } from '../store';
+import { CgIcon } from './CgIcon';
 
-const _SettingsMenu = ({}: {}) => {
+export function SettingsMenu() {
   const {
     muralStore: { clearMural },
     clear: clearStore,
@@ -19,7 +20,7 @@ const _SettingsMenu = ({}: {}) => {
     <Popover placement={'top-end'}>
       <PopoverTrigger>
         <IconButton
-          icon={<SettingsIcon />}
+          icon={<CgIcon as={CgOptions} />}
           aria-label={'Settings'}
         />
       </PopoverTrigger>
@@ -43,6 +44,4 @@ const _SettingsMenu = ({}: {}) => {
       </PopoverContent>
     </Popover>
   );
-};
-
-export const SettingsMenu = _SettingsMenu;
+}

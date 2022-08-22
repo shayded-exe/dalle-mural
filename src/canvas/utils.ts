@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Coordinates, Dimensions, ImageDataUrl, Rect, urlToImage } from '../utils';
+import { ImageDataUrl, urlToImage } from '../utils';
+import { Coordinates, Dimensions, Rect } from './primitives';
 
 export type CanvasWithContext = {
   canvas: HTMLCanvasElement;
@@ -31,6 +32,10 @@ export function clearCanvas(ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
+export function canvasToImage(canvas: HTMLCanvasElement): ImageDataUrl {
+  return canvas.toDataURL('image/png') as ImageDataUrl;
+}
+
 export function cropCanvasToImage({
   canvas,
   rect,
@@ -52,7 +57,7 @@ export function cropCanvasToImage({
     rect.height,
   );
 
-  return dest.canvas.toDataURL() as ImageDataUrl;
+  return canvasToImage(dest.canvas);
 }
 
 export async function drawImageUrl({

@@ -20,14 +20,14 @@ function _GeneratePanelContainer({
   return (
     <Flex
       direction={'column'}
-      gap={4}
+      gap={'1rem'}
       {...passthrough}
     >
       {canPlaceGeneration && <ConfirmPlaceButton />}
 
       <Flex
         direction={'column'}
-        gap={4}
+        gap={'1rem'}
         padding={'1rem'}
         background={'white'}
         boxShadow={'lg'}
@@ -43,13 +43,13 @@ function _GeneratePanelContainer({
       <Button
         onClick={placeGeneration}
         rightIcon={<CheckIcon />}
-        iconSpacing={4}
+        iconSpacing={'1rem'}
         size={'lg'}
         colorScheme={'green'}
         alignSelf={'end'}
         boxShadow={'md'}
       >
-        Place
+        place
       </Button>
     );
   }

@@ -1,80 +1,102 @@
-import {
-  chakra,
-  Flex,
-  Icon,
-  IconButton,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-} from '@chakra-ui/react';
+import { ButtonGroup, chakra, Flex, IconButton } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
-import { CgClose, CgShapeSquare } from 'react-icons/cg';
+import { CgClose, CgErase, CgShapeCircle, CgShapeSquare, CgUndo } from 'react-icons/cg';
 
+import { BrushShape } from '../canvas';
+import { CgIcon } from '../components/CgIcon';
 import { useStores } from '../store';
-import { getTrapezoidClipPath } from '../utils';
+import { EraseBrushSizeSlider } from './EraseBrushSizeSlider';
 
 export const ErasePanel = chakra(observer(_ErasePanel));
 
 function _ErasePanel({ ...passthrough }: {}) {
   const {
-    uiStore: { selectionAreaScale, setSelectionAreaScale, closePanel },
+    uiStore: {
+      eraseBrushShape,
+      setEraseBrushShape,
+      eraseBrushScale,
+      setEraseBrushScale,
+      canPlaceErase,
+      placeErase,
+      cancelErase,
+      closePanel,
+    },
   } = useStores();
 
-  const minScale = 1 / 16;
+  const minScale = 1 / 32;
   const maxScale = 1;
 
   return (
     <Flex
-      direction={'row'}
       align={'center'}
-      gap={'1.25rem'}
+      gap={'1.5rem'}
       padding={'1rem'}
       background={'white'}
       boxShadow={'lg'}
       borderRadius={'lg'}
       {...passthrough}
     >
-      <Icon
-        as={CgShapeSquare}
-        boxSize={'1rem'}
+      <ShapeRadioButtons />
+
+      <EraseBrushSizeSlider
+        shape={eraseBrushShape}
+        value={eraseBrushScale}
+        onChange={setEraseBrushScale}
+        sliderProps={{
+          min: minScale,
+          max: maxScale,
+          step: minScale,
+        }}
       />
 
-      <Slider
-        value={selectionAreaScale}
-        onChange={setSelectionAreaScale}
-        focusThumbOnChange={false}
-        min={minScale}
-        max={maxScale}
-        step={minScale}
-        minWidth={'10rem'}
-      >
-        <SliderTrack
-          boxSize={'0.75rem'}
-          clipPath={getTrapezoidClipPath({
-            left: 40,
-          })}
-        >
-          <SliderFilledTrack />
-        </SliderTrack>
-        <SliderThumb boxSize={'1.5rem'} />
-      </Slider>
-
-      <Icon
-        as={CgShapeSquare}
-        boxSize={'1.5rem'}
-      />
-
-      <IconButton
-        onClick={closePanel}
-        icon={
-          <Icon
-            as={CgClose}
-            boxSize={'1.5rem'}
-          />
-        }
-        aria-label='Close panel'
-      />
+      {canPlaceErase ? (
+        <ConfirmButtons />
+      ) : (
+        <IconButton
+          onClick={closePanel}
+          icon={<CgIcon as={CgClose} />}
+          aria-label='close'
+        />
+      )}
     </Flex>
   );
+
+  function ConfirmButtons() {
+    return (
+      <Flex gap={'0.75rem'}>
+        <IconButton
+          onClick={cancelErase}
+          icon={<CgIcon as={CgUndo} />}
+          aria-label='cancel'
+        />
+
+        <IconButton
+          onClick={placeErase}
+          icon={<CgIcon as={CgErase} />}
+          colorScheme={'red'}
+          aria-label='erase'
+        />
+      </Flex>
+    );
+  }
+
+  function ShapeRadioButtons() {
+    return (
+      <ButtonGroup isAttached>
+        <IconButton
+          onClick={() => setEraseBrushShape(BrushShape.Circle)}
+          colorScheme={eraseBrushShape === BrushShape.Circle ? 'blue' : undefined}
+          icon={<CgIcon as={CgShapeCircle} />}
+          aria-label={'circle'}
+        />
+
+        <IconButton
+          onClick={() => setEraseBrushShape(BrushShape.Rect)}
+          colorScheme={eraseBrushShape === BrushShape.Rect ? 'blue' : undefined}
+          icon={<CgIcon as={CgShapeSquare} />}
+          aria-label={'square'}
+        />
+      </ButtonGroup>
+    );
+  }
 }

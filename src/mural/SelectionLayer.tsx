@@ -1,8 +1,7 @@
 import { observer } from 'mobx-react-lite';
 
-import { clearCanvas, Path2DBuilder, strokePath, useCanvasDraw } from '../canvas';
+import { clearCanvas, Path2DBuilder, Rect, strokePath, useCanvasDraw } from '../canvas';
 import { models } from '../store';
-import { Rect } from '../utils';
 import { usePreviewImage } from './use-preview-image';
 
 export const SelectionLayer = observer(_SelectionLayer);
@@ -18,7 +17,19 @@ function _SelectionLayer({
   selectedGeneration: models.Generation | null;
 }) {
   const { previewImage } = usePreviewImage(selectedGeneration);
-  const { ref } = useSelectionLayer({ selection, isSelected, previewImage });
+
+  const { ref } = useCanvasDraw(
+    ctx => {
+      clearCanvas(ctx);
+
+      if (selection) {
+        drawSelectionLayer({ ctx, selection, isSelected, previewImage }).catch(
+          console.error,
+        );
+      }
+    },
+    [selection, isSelected, previewImage],
+  );
 
   return (
     <canvas
@@ -28,29 +39,9 @@ function _SelectionLayer({
   );
 }
 
-function useSelectionLayer({
-  selection,
-  ...args
-}: {
-  selection: Rect | null;
-  isSelected: boolean;
-  previewImage: HTMLImageElement | null;
-}) {
-  return useCanvasDraw(
-    ctx => {
-      clearCanvas(ctx);
-
-      if (selection) {
-        drawSelectionLayer({ ctx, selection, ...args });
-      }
-    },
-    [selection, ...Object.values(args)],
-  );
-}
-
 async function drawSelectionLayer({
   ctx,
-  selection,
+  selection: { x, y, width, height },
   isSelected,
   previewImage,
 }: {
@@ -59,8 +50,6 @@ async function drawSelectionLayer({
   isSelected: boolean;
   previewImage: HTMLImageElement | null;
 }) {
-  const { x, y, width, height } = selection;
-
   if (previewImage) {
     ctx.drawImage(previewImage, x, y, width, height);
   }

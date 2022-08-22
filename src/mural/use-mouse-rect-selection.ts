@@ -1,7 +1,6 @@
 import { DependencyList, useCallback, useEffect, useState } from 'react';
 
-import { getCanvasMouseCoordinates } from '../canvas';
-import { Dimensions, Rect } from '../utils';
+import { Dimensions, getCanvasMouseCoordinates, Rect } from '../canvas';
 
 type AdjustFunc = (rect: Rect) => Rect;
 
@@ -68,48 +67,43 @@ export function useMouseRectSelection({
     adjust,
   });
 
-  useEffect(
-    function updateDimensions() {
-      if (selection) {
-        setSelection({
-          ...selection,
-          ...dimensions,
-        });
-      }
-    },
-    [dimensions],
-  );
-
-  useEffect(
-    function resetSelection() {
-      if (!canSelect) {
-        setSelection(null);
-        setIsSelected(false);
-      }
-    },
-    [canSelect],
-  );
+  useEffect(updateDimensions, [dimensions]);
+  useEffect(resetSelection, [canSelect]);
 
   return {
     selection,
     isSelected,
-    selectionEvents: {
+    events: {
       onMouseMove,
       onMouseDown,
       onMouseUp,
     },
-  };
+  } as const;
+
+  function updateDimensions() {
+    if (selection) {
+      setSelection({ ...selection, ...dimensions });
+    }
+  }
+
+  function resetSelection() {
+    if (!canSelect) {
+      setSelection(null);
+      setIsSelected(false);
+    }
+  }
 }
 
+// TODO: dedupe with brush hook
 function useMouseRectCallback({
   callback,
-  deps = [],
+  deps,
   canSelect,
   dimensions,
   adjust,
 }: {
   callback: (rect: Rect) => void;
-  deps?: DependencyList;
+  deps: DependencyList;
   canSelect: boolean;
   dimensions: Dimensions;
   adjust?: AdjustFunc;
@@ -117,7 +111,10 @@ function useMouseRectCallback({
   return useCallback(
     (e: React.MouseEvent) => {
       if (canSelect && e.button === 0) {
-        const rect = getSelectionRectFromMouse({ e, dimensions, adjust });
+        let rect = getSelectionRectFromMouse(e, dimensions);
+        if (adjust) {
+          rect = adjust(rect);
+        }
         callback(rect);
       }
     },
@@ -125,27 +122,16 @@ function useMouseRectCallback({
   );
 }
 
-function getSelectionRectFromMouse({
-  e,
-  dimensions: { width, height },
-  adjust,
-}: {
-  e: React.MouseEvent;
-  dimensions: Dimensions;
-  adjust?: AdjustFunc;
-}): Rect {
+function getSelectionRectFromMouse(
+  e: React.MouseEvent,
+  { width, height }: Dimensions,
+): Rect {
   const { x, y } = getCanvasMouseCoordinates(e);
 
-  let rect: Rect = {
+  return {
     x: x - width / 2,
     y: y - height / 2,
     width,
     height,
   };
-
-  if (adjust) {
-    rect = adjust(rect);
-  }
-
-  return rect;
 }

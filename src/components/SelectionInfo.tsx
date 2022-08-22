@@ -1,7 +1,7 @@
 import { chakra, Text } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
-import { Rect } from '../utils';
+import { Rect } from '../canvas';
 
 export const SelectionInfo = chakra(observer(_SelectionInfo));
 

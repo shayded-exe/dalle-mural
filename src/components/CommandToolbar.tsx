@@ -1,9 +1,10 @@
-import { Button, ButtonProps, chakra, Flex, Icon } from '@chakra-ui/react';
+import { Button, ButtonProps, chakra, Flex } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { CgErase } from 'react-icons/cg';
 
 import { useStores } from '../store';
 import { UIMode } from '../store/models';
+import { CgIcon } from './CgIcon';
 
 export const CommandToolbar = chakra(observer(_CommandToolbar));
 
@@ -41,7 +42,8 @@ function _CommandToolbar({ ...passthrough }: {}) {
 
       <Button
         onClick={() => activateMode(UIMode.Erase)}
-        leftIcon={<Icon as={CgErase} />}
+        leftIcon={<CgIcon as={CgErase} />}
+        colorScheme={'red'}
         {...buttonProps}
       >
         erase

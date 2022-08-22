@@ -5,63 +5,23 @@ export class Path2DBuilder {
     return this.#path;
   }
 
-  addPath(path: Path2D, transform?: DOMMatrix2DInit): this {
-    this.path.addPath(path, transform);
+  addPath(...args: Parameters<Path2D['addPath']>): this {
+    this.path.addPath(...args);
     return this;
   }
 
-  arc({
-    x,
-    y,
-    radius,
-    startAngle,
-    endAngle,
-    counterclockwise,
-  }: {
-    x: number;
-    y: number;
-    radius: number;
-    startAngle: number;
-    endAngle: number;
-    counterclockwise?: boolean;
-  }): this {
-    this.path.arc(x, y, radius, startAngle, endAngle, counterclockwise);
+  arc(...args: Parameters<Path2D['arc']>): this {
+    this.path.arc(...args);
     return this;
   }
 
-  arcTo({
-    x1,
-    y1,
-    x2,
-    y2,
-    radius,
-  }: {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    radius: number;
-  }): this {
-    this.path.arcTo(x1, y1, x2, y2, radius);
+  arcTo(...args: Parameters<Path2D['arcTo']>): this {
+    this.path.arcTo(...args);
     return this;
   }
 
-  bezierCurveTo({
-    cp1x,
-    cp1y,
-    cp2x,
-    cp2y,
-    x,
-    y,
-  }: {
-    cp1x: number;
-    cp1y: number;
-    cp2x: number;
-    cp2y: number;
-    x: number;
-    y: number;
-  }): this {
-    this.path.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+  bezierCurveTo(...args: Parameters<Path2D['bezierCurveTo']>): this {
+    this.path.bezierCurveTo(...args);
     return this;
   }
 
@@ -70,65 +30,34 @@ export class Path2DBuilder {
     return this;
   }
 
-  ellipse({
-    x,
-    y,
-    radiusX,
-    radiusY,
-    rotation,
-    startAngle,
-    endAngle,
-    counterclockwise,
-  }: {
-    x: number;
-    y: number;
-    radiusX: number;
-    radiusY: number;
-    rotation: number;
-    startAngle: number;
-    endAngle: number;
-    counterclockwise?: boolean;
-  }): this {
-    this.path.ellipse(
-      x,
-      y,
-      radiusX,
-      radiusY,
-      rotation,
-      startAngle,
-      endAngle,
-      counterclockwise,
-    );
+  ellipse(...args: Parameters<Path2D['ellipse']>): this {
+    this.path.ellipse(...args);
     return this;
   }
 
-  lineTo({ x, y }: { x: number; y: number }): this {
-    this.path.lineTo(x, y);
+  lineTo(...args: Parameters<Path2D['lineTo']>): this {
+    this.path.lineTo(...args);
     return this;
   }
 
-  moveTo({ x, y }: { x: number; y: number }): this {
-    this.path.moveTo(x, y);
+  moveTo(...args: Parameters<Path2D['moveTo']>): this {
+    this.path.moveTo(...args);
     return this;
   }
 
-  quadraticCurveTo({
-    cpx,
-    cpy,
-    x,
-    y,
-  }: {
-    cpx: number;
-    cpy: number;
-    x: number;
-    y: number;
-  }): this {
-    this.path.quadraticCurveTo(cpx, cpy, x, y);
+  quadraticCurveTo(...args: Parameters<Path2D['quadraticCurveTo']>): this {
+    this.path.quadraticCurveTo(...args);
     return this;
   }
 
-  rect(x: number, y: number, w: number, h: number): this {
-    this.path.rect(x, y, w, h);
+  rect(...args: Parameters<Path2D['rect']>): this {
+    this.path.rect(...args);
     return this;
+  }
+
+  // extra
+
+  circle(x: number, y: number, radius: number): this {
+    return this.arc(x, y, radius, 0, 2 * Math.PI);
   }
 }

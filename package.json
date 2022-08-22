@@ -8,7 +8,8 @@
     "typecheck": "tsc --watch --noEmit",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "proxy": "node cors-proxy.js"
+    "proxy": "node cors-proxy.js",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@chakra-ui/icons": "2.0.8",
@@ -24,6 +25,7 @@
     "ky": "0.31.1",
     "localforage": "1.10.0",
     "lodash": "4.17.21",
+    "merge-props": "5.0.3",
     "mobx": "6.6.1",
     "mobx-persist-store": "1.0.6",
     "mobx-react-lite": "3.4.0",
@@ -39,6 +41,7 @@
     "@types/react-dom": "18.0.6",
     "@types/uuid": "8.3.4",
     "@vitejs/plugin-react": "2.0.0",
+    "patch-package": "6.4.7",
     "type-fest": "2.18.0",
     "typescript": "4.7.4",
     "vite": "3.0.0"

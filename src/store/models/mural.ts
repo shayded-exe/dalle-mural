@@ -1,6 +1,7 @@
 import * as uuid from 'uuid';
 
-import { Dimensions, ImageDataUrl, Rect } from '../../utils';
+import { Dimensions, Rect } from '../../canvas';
+import { ImageDataUrl } from '../../utils';
 import { Generation } from './generation';
 
 export interface Mural extends Dimensions {

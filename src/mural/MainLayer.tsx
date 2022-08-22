@@ -1,7 +1,6 @@
 import { useMergeRefs } from '@chakra-ui/react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useCallback } from 'react';
 
 import { clearCanvas, drawImageUrl, useCanvasDraw } from '../canvas';
 import { models } from '../store';
@@ -10,28 +9,22 @@ export const MainLayer = observer(_MainLayer);
 
 function _MainLayer({
   mural,
-  onCanvasInit,
+  canvasRef,
   ...passthrough
 }: {
   mural: models.Mural;
-  onCanvasInit?: (canvas: HTMLCanvasElement) => void;
+  canvasRef?: React.Ref<HTMLCanvasElement>;
 }) {
-  const { ref } = useCanvasDraw(ctx =>
+  const { ref: _ref } = useCanvasDraw(ctx =>
     autorun(() => {
       clearCanvas(ctx);
       drawMainLayer({ ctx, mural }).catch(console.error);
     }),
   );
 
-  const onCanvasInitRef = useCallback((canvas: HTMLCanvasElement | null) => {
-    if (canvas) {
-      onCanvasInit?.(canvas);
-    }
-  }, []);
-
   return (
     <canvas
-      ref={useMergeRefs(ref, onCanvasInitRef)}
+      ref={useMergeRefs(_ref, canvasRef)}
       {...passthrough}
     />
   );
@@ -44,7 +37,9 @@ async function drawMainLayer({
   ctx: CanvasRenderingContext2D;
   mural: models.Mural;
 }) {
-  await Promise.all(mural.items.map(drawItem));
+  for (const item of mural.items) {
+    await drawItem(item);
+  }
 
   async function drawItem(item: models.Mural.Item) {
     switch (item.type) {
@@ -78,5 +73,13 @@ async function drawMainLayer({
     });
   }
 
-  async function drawEraseItem(item: models.Mural.EraseItem) {}
+  async function drawEraseItem(item: models.Mural.EraseItem) {
+    ctx.globalCompositeOperation = 'destination-out';
+    await drawImageUrl({
+      ctx,
+      imageUrl: item.mask,
+      rect: item,
+    });
+    ctx.globalCompositeOperation = 'source-over';
+  }
 }

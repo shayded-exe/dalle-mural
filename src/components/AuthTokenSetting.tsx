@@ -1,4 +1,3 @@
-import { LockIcon } from '@chakra-ui/icons';
 import {
   Button,
   IconButton,
@@ -9,9 +8,11 @@ import {
 } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { useRef } from 'react';
+import { CgLogIn, CgLogOut } from 'react-icons/cg';
 
 import { DALLE_AUTH_TOKEN_LENGTH } from '../dalle';
 import { useStores } from '../store';
+import { CgIcon } from './CgIcon';
 
 export const AuthTokenSetting = observer(_AuthTokenSetting);
 
@@ -24,12 +25,12 @@ function _AuthTokenSetting({}: {}) {
 
   const button = isSignedIn ? (
     <IconButton
-      icon={<LockIcon />}
+      icon={<CgIcon as={CgLogOut} />}
       aria-label={'auth token'}
     />
   ) : (
     <Button
-      leftIcon={<LockIcon />}
+      leftIcon={<CgIcon as={CgLogIn} />}
       colorScheme={'blue'}
     >
       set auth token

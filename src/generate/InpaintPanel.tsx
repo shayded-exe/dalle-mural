@@ -1,8 +1,9 @@
-import { chakra, Flex, Icon, IconButton, Input, Spinner } from '@chakra-ui/react';
+import { chakra, Flex, IconButton, Input, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import { CgClose } from 'react-icons/cg';
 
+import { CgIcon } from '../components/CgIcon';
 import { useStores } from '../store';
 import { GeneratePanelContainer } from './GeneratePanelContainer';
 import { GenerationHistory } from './GenerationHistory';
@@ -40,13 +41,8 @@ function _InpaintPanel({ ...passthrough }: {}) {
 
         <IconButton
           onClick={closePanel}
-          icon={
-            <Icon
-              as={CgClose}
-              boxSize={'1.5rem'}
-            />
-          }
-          aria-label='Close panel'
+          icon={<CgIcon as={CgClose} />}
+          aria-label='close'
         />
       </Flex>
 

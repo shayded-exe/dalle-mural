@@ -4,8 +4,11 @@ const override: ThemeOverride = {
   semanticTokens: {
     colors: {
       'transparent-bg': `
-        repeating-conic-gradient(var(--chakra-colors-blackAlpha-200) 0% 25%, transparent 0% 50%)
-          50% / 2rem 2rem
+        repeating-conic-gradient(
+          var(--chakra-colors-blackAlpha-200) 0% 25%,
+          transparent 0% 50%
+        )
+        50% / 2rem 2rem
       `,
     },
   },
@@ -24,6 +27,15 @@ const override: ThemeOverride = {
     'mural-placed': 110,
     'mural-preview': 120,
     'mural-overlay': 150,
+  },
+  components: {
+    Button: {
+      variants: {
+        solid: ({ colorScheme }) => ({
+          bg: colorScheme === 'gray' ? 'gray.200' : undefined,
+        }),
+      },
+    },
   },
 };
 

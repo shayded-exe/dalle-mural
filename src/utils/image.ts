@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import ky from 'ky';
 
-import { createCanvas } from '../canvas';
+import { canvasToImage, createCanvas } from '../canvas';
 import { ImageBase64, ImageDataUrl } from './primitives';
 
 export async function urlToImage(url: string): Promise<HTMLImageElement> {
@@ -32,7 +32,7 @@ async function urlToImageDataUrl_canvas(url: string): Promise<ImageDataUrl> {
 
   ctx.drawImage(img, 0, 0);
 
-  return canvas.toDataURL() as ImageDataUrl;
+  return canvasToImage(canvas);
 }
 
 export async function openImage(src: string) {
