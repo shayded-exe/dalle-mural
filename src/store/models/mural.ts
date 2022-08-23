@@ -7,6 +7,7 @@ import { Generation } from './generation';
 export interface Mural extends Dimensions {
   id: string;
   items: Mural.Item[];
+  previewImage: ImageDataUrl | null;
 
   widthSquares: number;
   heightSquares: number;
@@ -50,6 +51,7 @@ export namespace Mural {
     return {
       id: uuid.v4(),
       items: [],
+      previewImage: null,
       gridOverlapRatio: overlapRatio,
       gridSubdivideRatio: 1 / 8,
       widthSquares,

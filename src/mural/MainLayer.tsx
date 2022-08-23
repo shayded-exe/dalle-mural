@@ -9,16 +9,20 @@ export const MainLayer = observer(_MainLayer);
 
 function _MainLayer({
   mural,
+  onPaint,
   canvasRef,
   ...passthrough
 }: {
   mural: models.Mural;
+  onPaint?: (ctx: CanvasRenderingContext2D) => void;
   canvasRef?: React.Ref<HTMLCanvasElement>;
 }) {
   const { ref: _ref } = useCanvasDraw(ctx =>
     autorun(() => {
       clearCanvas(ctx);
-      drawMainLayer({ ctx, mural }).catch(console.error);
+      drawMainLayer({ ctx, mural })
+        .then(() => onPaint?.(ctx))
+        .catch(console.error);
     }),
   );
 

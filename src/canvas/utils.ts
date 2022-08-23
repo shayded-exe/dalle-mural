@@ -32,7 +32,11 @@ export function clearCanvas(ctx: CanvasRenderingContext2D) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-export function canvasToImage(canvas: HTMLCanvasElement): ImageDataUrl {
+export function canvasToImage(
+  canvasOrCtx: HTMLCanvasElement | CanvasRenderingContext2D,
+): ImageDataUrl {
+  const canvas = 'canvas' in canvasOrCtx ? canvasOrCtx.canvas : canvasOrCtx;
+
   return canvas.toDataURL('image/png') as ImageDataUrl;
 }
 

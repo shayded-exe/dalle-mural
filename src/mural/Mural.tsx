@@ -43,6 +43,7 @@ function _Mural({
   eraseBrushSize,
   onEraseStart,
   muralRef,
+  onPaint,
   ...passthrough
 }: {
   mural: models.Mural;
@@ -55,6 +56,7 @@ function _Mural({
   canErase: boolean;
   eraseBrushSize: BrushSize;
   onEraseStart: () => void;
+  onPaint?: (ctx: CanvasRenderingContext2D) => void;
   muralRef?: React.Ref<MuralRef>;
 }) {
   const {
@@ -98,6 +100,7 @@ function _Mural({
     >
       <MainLayer
         mural={mural}
+        onPaint={onPaint}
         canvasRef={mainCanvasRef}
       />
 
@@ -119,16 +122,19 @@ function _Mural({
   );
 
   function getHandle(): MuralRef {
+    const mainCanvas = mainCanvasRef.current!;
+    const eraseCanvas = eraseFillCanvasRef.current!;
+
     return {
-      rasterize: () => canvasToImage(mainCanvasRef.current!),
+      rasterize: () => canvasToImage(mainCanvas),
       getRectImage: rect =>
         cropCanvasToImage({
-          canvas: mainCanvasRef.current!,
+          canvas: mainCanvas,
           rect,
         }),
-      getEraseMask: () => canvasToImage(eraseFillCanvasRef.current!),
+      getEraseMask: () => canvasToImage(eraseCanvas),
       clearEraseFill: () => {
-        const ctx = getContextOrFail(eraseFillCanvasRef.current!);
+        const ctx = getContextOrFail(eraseCanvas);
         clearCanvas(ctx);
       },
     };

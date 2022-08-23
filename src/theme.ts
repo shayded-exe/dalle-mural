@@ -36,6 +36,22 @@ const override: ThemeOverride = {
         }),
       },
     },
+    CloseButton: {
+      defaultProps: {
+        size: 'lg',
+      },
+    },
+    Modal: {
+      baseStyle: {
+        closeButton: {
+          top: 4,
+          insetEnd: 4,
+        },
+        header: {
+          fontSize: '2xl',
+        },
+      },
+    },
   },
 };
 

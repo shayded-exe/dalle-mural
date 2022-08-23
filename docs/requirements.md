@@ -35,7 +35,7 @@
 ### erase mode
 
 - [x] brush panel
-- [ ] rect/circle shape selector
+- [x] rect/circle shape selector
 - [x] size slider
 
 ### outpaint mode

@@ -21,7 +21,7 @@ export function useMouseBrush({
 }: {
   canPaint: boolean;
   size: BrushSize;
-  onPaintStart?: (brush: Brush) => void;
+  onPaintStart?: () => void;
   onPaintEnd?: () => void;
   adjustPosition?: AdjustFunc;
 }) {
@@ -29,19 +29,22 @@ export function useMouseBrush({
 
   const [isPainting, _setIsPainting] = useState(false);
   const setIsPainting = (value: boolean) => {
+    if (!canPaint) {
+      return;
+    }
+
     _setIsPainting(value);
 
     if (value) {
-      onPaintStart?.(brush!);
+      onPaintStart?.();
     } else {
       onPaintEnd?.();
     }
   };
+  const setIsPaintingDeps = [canPaint];
 
   const onMouseMove = useMouseBrushCallback({
-    callback: brush => {
-      setBrush(brush);
-    },
+    callback: setBrush,
     deps: [],
     canPaint,
     size,
@@ -51,10 +54,10 @@ export function useMouseBrush({
   const onMouseDown = useMouseCallback({
     callback: () => setIsPainting(true),
     button: 0,
-    deps: [],
+    deps: setIsPaintingDeps,
   });
 
-  const onMouseUp = useCallback(() => setIsPainting(false), []);
+  const onMouseUp = useCallback(() => setIsPainting(false), setIsPaintingDeps);
 
   useEffect(updateSize, [size]);
   useEffect(resetBrush, [canPaint, isPainting]);

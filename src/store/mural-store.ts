@@ -18,18 +18,17 @@ export class MuralStore {
       ],
     });
 
-    if (!this.hasActiveMural) {
-      this.createAndActivate();
-    }
+    // if (!this.hasActiveMural) {
+    //   this.createAndActivate();
+    // }
   }
 
-  murals: { [id: string]: Mural } = {};
-  activeMuralId: string | null = null;
+  murals: Mural[] = [];
 
+  activeMuralId: string | null = null;
   get hasActiveMural(): boolean {
     return !!this.activeMuralId;
   }
-
   get activeMural(): Mural {
     return this.getById(this.activeMuralId!);
   }
@@ -37,20 +36,24 @@ export class MuralStore {
   createAndActivate(): Mural {
     const mural = Mural.create();
 
-    this.murals[mural.id] = mural;
+    this.murals.unshift(mural);
     this.activeMuralId = mural.id;
 
     return mural;
   }
 
   getById(id: string): Mural {
-    const mural = this.murals[id];
+    const mural = this.murals.find(m => m.id === id);
 
     if (!mural) {
       throw new Error(`Generation not found: ${id}`);
     }
 
     return mural;
+  }
+
+  setPreviewImage(image: ImageDataUrl | null) {
+    this.activeMural.previewImage = image;
   }
 
   placeGeneration({

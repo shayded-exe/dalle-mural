@@ -2,7 +2,7 @@ import { Center, Flex, Spacer, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
 import { CommandToolbar } from './components/CommandToolbar';
-import { SettingsToolbar } from './components/SettingsToolbar';
+import { TopToolbar } from './components/TopToolbar';
 import { ErasePanel } from './erase/ErasePanel';
 import { GeneratePanel } from './generate/GeneratePanel';
 import { InpaintPanel } from './generate/InpaintPanel';
@@ -35,7 +35,7 @@ export const App = observer(() => {
       height='100vh'
       backgroundColor={'blackAlpha.50'}
     >
-      <SettingsToolbar
+      <TopToolbar
         margin='2rem'
         width='calc(100% - 4rem)'
         maxWidth='80rem'
