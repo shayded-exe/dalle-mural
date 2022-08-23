@@ -52,22 +52,13 @@ fit some error handling in there somewhere at some point
 2. set token and submit
 3. can logout from settings menu
 
-### generate
+### generate/inpaint
 
-1. click generate
-2. generate panel appears
+1. open generate panel
+2. optionally enable inpaint switch and select an inpainting area
 3. type prompt and submit
-4. select result & placement location in either order
+4. select result & placement location
 5. confirm placement
-
-### inpaint
-
-1. click inpaint
-2. select area to inpaint
-3. inpaint panel appears
-4. type prompt and submit
-5. select result
-6. confirm placement
 
 ### erase
 

@@ -17,7 +17,7 @@ export const GenerationImage = chakra(_GenerationImage, {
 
 function _GenerationImage({
   image,
-  transparentBg = false,
+  transparentBg = true,
   ...passthrough
 }: {
   image: ImageDataUrl | null | undefined;

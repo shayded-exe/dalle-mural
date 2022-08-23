@@ -28,8 +28,21 @@ const override: ThemeOverride = {
     'mural-preview': 120,
     'mural-overlay': 150,
   },
+  layerStyles: {
+    hoverZoom: {
+      transition: 'transform 150ms ease',
+      _hover: {
+        transform: 'scale(1.1, 1.1)',
+      },
+    },
+  },
   components: {
     Button: {
+      sizes: {
+        lg: {
+          fontSize: 'xl',
+        },
+      },
       variants: {
         solid: ({ colorScheme }) => ({
           bg: colorScheme === 'gray' ? 'gray.200' : undefined,
@@ -50,6 +63,23 @@ const override: ThemeOverride = {
         header: {
           fontSize: '2xl',
         },
+        footer: {
+          gap: '0.75rem',
+        },
+      },
+    },
+    Slider: {
+      baseStyle: {
+        thumb: {
+          boxSize: '1.75rem',
+          boxShadow: 'md',
+          background: 'gray.100',
+        },
+      },
+    },
+    SliderMark: {
+      baseStyle: {
+        color: 'red',
       },
     },
   },

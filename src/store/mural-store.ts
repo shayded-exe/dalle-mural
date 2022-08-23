@@ -1,10 +1,11 @@
+import { pull } from 'lodash';
 import { makeAutoObservable } from 'mobx';
 import { makePersistable } from 'mobx-persist-store';
 import * as uuid from 'uuid';
 
 import { Coordinates } from '../canvas';
 import { ImageDataUrl } from '../utils';
-import { Generation, Mural } from './models';
+import { Generation, Mural, MuralOptions } from './models';
 
 export class MuralStore {
   constructor() {
@@ -29,31 +30,46 @@ export class MuralStore {
   get hasActiveMural(): boolean {
     return !!this.activeMuralId;
   }
-  get activeMural(): Mural {
+  get activeMural(): Mural | undefined {
     return this.getById(this.activeMuralId!);
   }
 
-  createAndActivate(): Mural {
-    const mural = Mural.create();
-
-    this.murals.unshift(mural);
-    this.activeMuralId = mural.id;
-
-    return mural;
+  getById(id: string): Mural | undefined {
+    return this.murals.find(m => m.id === id);
   }
-
-  getById(id: string): Mural {
-    const mural = this.murals.find(m => m.id === id);
+  getByIdOrFail(id: string): Mural {
+    const mural = this.getById(id);
 
     if (!mural) {
-      throw new Error(`Generation not found: ${id}`);
+      throw new Error(`Mural not found: ${id}`);
     }
 
     return mural;
   }
 
-  setPreviewImage(image: ImageDataUrl | null) {
-    this.activeMural.previewImage = image;
+  createAndOpen(options: MuralOptions): Mural {
+    const mural = Mural.create(options);
+    this.murals.unshift(mural);
+    return this.open(mural.id);
+  }
+
+  open(id: string): Mural {
+    const mural = this.getByIdOrFail(id);
+    this.activeMuralId = mural.id;
+    return mural;
+  }
+
+  delete(id: string) {
+    const mural = this.getByIdOrFail(id);
+    if (this.activeMuralId === id) {
+      this.activeMuralId = null;
+    }
+    pull(this.murals, mural);
+  }
+
+  setIsFavorite(id: string, isFavorite: boolean) {
+    const mural = this.getByIdOrFail(id);
+    mural.isFavorite = isFavorite;
   }
 
   placeGeneration({
@@ -63,7 +79,7 @@ export class MuralStore {
   }: {
     generation: Generation;
   } & Coordinates): Mural.GenerationItem {
-    const mural = this.activeMural;
+    const mural = this.activeMural!;
 
     if (
       x + Generation.SIZE < 0 ||
@@ -87,7 +103,7 @@ export class MuralStore {
   }
 
   placeErase(mask: ImageDataUrl): Mural.EraseItem {
-    const mural = this.activeMural;
+    const mural = this.activeMural!;
 
     const item: Mural.EraseItem = {
       id: uuid.v4(),
@@ -103,10 +119,14 @@ export class MuralStore {
   }
 
   undo(): Mural.Item | undefined {
-    return this.activeMural.items.pop();
+    return this.activeMural!.items.pop();
   }
 
   clearMural() {
-    this.activeMural.items = [];
+    this.activeMural!.items = [];
+  }
+
+  setPreviewImage(image: ImageDataUrl | null) {
+    this.activeMural!.previewImage = image;
   }
 }

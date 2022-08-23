@@ -17,13 +17,15 @@ function _MainLayer({
   onPaint?: (ctx: CanvasRenderingContext2D) => void;
   canvasRef?: React.Ref<HTMLCanvasElement>;
 }) {
-  const { ref: _ref } = useCanvasDraw(ctx =>
-    autorun(() => {
-      clearCanvas(ctx);
-      drawMainLayer({ ctx, mural })
-        .then(() => onPaint?.(ctx))
-        .catch(console.error);
-    }),
+  const { ref: _ref } = useCanvasDraw(
+    ctx =>
+      autorun(() => {
+        clearCanvas(ctx);
+        drawMainLayer({ ctx, mural })
+          .then(() => onPaint?.(ctx))
+          .catch(console.error);
+      }),
+    [mural],
   );
 
   return (

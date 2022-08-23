@@ -4,8 +4,18 @@ import { Dimensions, Rect } from '../../canvas';
 import { ImageDataUrl } from '../../utils';
 import { Generation } from './generation';
 
+export interface MuralOptions {
+  name: string;
+  widthSquares: number;
+  heightSquares: number;
+  overlapRatio: number;
+}
+
 export interface Mural extends Dimensions {
   id: string;
+  name: string;
+  isFavorite: boolean;
+
   items: Mural.Item[];
   previewImage: ImageDataUrl | null;
 
@@ -40,16 +50,15 @@ export namespace Mural {
   }
 
   export function create({
-    widthSquares = 3,
-    heightSquares = 3,
-    overlapRatio = 1 / 8,
-  }: {
-    widthSquares?: number;
-    heightSquares?: number;
-    overlapRatio?: number;
-  } = {}): Mural {
+    name,
+    widthSquares,
+    heightSquares,
+    overlapRatio,
+  }: MuralOptions): Mural {
     return {
       id: uuid.v4(),
+      name: name,
+      isFavorite: false,
       items: [],
       previewImage: null,
       gridOverlapRatio: overlapRatio,

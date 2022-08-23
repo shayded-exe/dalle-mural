@@ -53,7 +53,6 @@ function _GenerationHistory({
           <GenerationImage
             key={task.id}
             image={isFirst ? promptImage : task.promptImage}
-            transparentBg={true}
           />
         )}
 

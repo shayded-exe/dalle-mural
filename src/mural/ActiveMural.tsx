@@ -8,7 +8,7 @@ export const ActiveMural = observer(_ActiveMural);
 
 function _ActiveMural({ ...passthrough }: {}) {
   const {
-    muralStore: { activeMural, setPreviewImage },
+    muralStore: { hasActiveMural, activeMural, setPreviewImage },
     uiStore: {
       canSelectArea,
       setSelectionArea,
@@ -22,9 +22,11 @@ function _ActiveMural({ ...passthrough }: {}) {
     },
   } = useStores();
 
-  return (
+  return !hasActiveMural ? (
+    <div> </div>
+  ) : (
     <Mural
-      mural={activeMural}
+      mural={activeMural!}
       canSelect={canSelectArea}
       onSelectionChange={setSelectionArea}
       onSelect={selectArea}

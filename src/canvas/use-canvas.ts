@@ -17,7 +17,7 @@ export function useCanvas() {
 
 export function useCanvasDraw(
   draw: (ctx: CanvasRenderingContext2D) => ReturnType<EffectCallback>,
-  deps: DependencyList = [],
+  deps: DependencyList,
 ) {
   const { ctx, ...rest } = useCanvas();
 

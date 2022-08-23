@@ -53,11 +53,7 @@ export function _EraseBrushSizeSlider({
         >
           <SliderFilledTrack />
         </SliderTrack>
-        <SliderThumb
-          bg={'gray.100'}
-          boxShadow={'md'}
-          boxSize={'1.5rem'}
-        />
+        <SliderThumb />
       </Slider>
 
       <CgIcon as={shapeIcon} />
