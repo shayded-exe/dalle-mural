@@ -1,6 +1,9 @@
+import './App.css';
+
 import { Center, Flex, Spacer, Spinner } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
+import { AuthPage } from './auth/AuthPage';
 import { CommandToolbar } from './components/CommandToolbar';
 import { TopToolbar } from './components/TopToolbar';
 import { ErasePanel } from './erase/ErasePanel';
@@ -13,6 +16,7 @@ import { UIMode } from './store/models';
 
 export const App = observer(() => {
   const {
+    dalleStore: { isSignedIn },
     uiStore: { activeMode },
     isHydrated,
   } = useStores();
@@ -25,13 +29,20 @@ export const App = observer(() => {
     );
   }
 
+  if (!isSignedIn) {
+    return (
+      <Center>
+        <AuthPage marginTop='10rem' />
+      </Center>
+    );
+  }
+
   return (
     <Flex
       position={'relative'}
       direction={'column'}
       align={'center'}
       justify={'space-between'}
-      width='100vw'
       height='100vh'
       backgroundColor={'background'}
     >

@@ -14,7 +14,7 @@ import { DalleId } from './types';
 export const DALLE_AUTH_TOKEN_LENGTH = 45;
 
 export class Dalle {
-  authToken?: string;
+  authToken: string | null;
 
   get isSignedIn(): boolean {
     return !!this.authToken;
@@ -31,7 +31,7 @@ export class Dalle {
   }
 
   constructor(authToken?: string) {
-    this.authToken = authToken;
+    this.authToken = authToken ?? null;
   }
 
   async generate({ prompt }: { prompt: string }): Promise<SuccessfulDalleTask> {

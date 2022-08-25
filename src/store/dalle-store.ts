@@ -23,13 +23,16 @@ export class DalleStore {
 
   readonly dalle = new Dalle();
 
-  authToken = '';
-  setAuthToken(authToken: string) {
-    this.authToken = authToken;
-  }
+  authToken: string | null = null;
   get isSignedIn() {
     this.authToken; // observe
     return !!this.dalle.isSignedIn;
+  }
+  signIn(authToken: string) {
+    this.authToken = authToken;
+  }
+  signOut() {
+    this.authToken = null;
   }
 
   // newest first

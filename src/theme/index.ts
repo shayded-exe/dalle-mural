@@ -21,6 +21,12 @@ const override: ThemeOverride = {
     body: `Ubuntu, sans-serif`,
     mono: `'Fira Code', consolas, monospace`,
   },
+  textStyles: {
+    hint: {
+      color: 'blackAlpha.700',
+      fontSize: 'sm',
+    },
+  },
   shadows: {
     'window-left': `
       -4px 0 12px -1px rgba(0, 0, 0, 0.08),

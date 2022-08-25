@@ -10,7 +10,8 @@
     "inpaintings",
     "Jsonify",
     "rasterization",
-    "rasterize"
+    "rasterize",
+    "sess"
   ],
   "prettier.configPath": "./.prettierrc",
   "typescript.tsdk": "node_modules\\typescript\\lib"

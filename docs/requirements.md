@@ -18,7 +18,8 @@
 
 ### mural canvas
 
-- [ ] save/load murals
+- [x] create murals
+- [x] save/load murals
 - [ ] toggleable grid
 - [ ] toggleable grid snapping
 - [ ] set overlap %
