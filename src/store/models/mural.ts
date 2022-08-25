@@ -17,6 +17,7 @@ export interface Mural extends Dimensions {
   isFavorite: boolean;
 
   items: Mural.Item[];
+  redoStack: Mural.Item[];
   previewImage: ImageDataUrl | null;
 
   widthSquares: number;
@@ -60,6 +61,7 @@ export namespace Mural {
       name: name,
       isFavorite: false,
       items: [],
+      redoStack: [],
       previewImage: null,
       gridOverlapRatio: overlapRatio,
       gridSubdivideRatio: 1 / 8,

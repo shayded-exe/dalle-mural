@@ -118,8 +118,27 @@ export class MuralStore {
     return item;
   }
 
-  undo(): Mural.Item | undefined {
-    return this.activeMural!.items.pop();
+  undo(): Mural.Item | false {
+    const mural = this.activeMural!;
+
+    const item = mural.items.pop();
+    if (!item) {
+      return false;
+    }
+
+    mural.redoStack.push(item);
+    return item;
+  }
+  redo(): Mural.Item | false {
+    const mural = this.activeMural!;
+
+    const item = mural.redoStack.pop();
+    if (!item) {
+      return false;
+    }
+
+    mural.items.push(item);
+    return item;
   }
 
   clearMural() {

@@ -29,7 +29,7 @@ export const MuralTools = chakra(observer(_MuralTools));
 
 function _MuralTools({ ...passthrough }: MuralToolsProps) {
   const {
-    muralStore: { undo },
+    muralStore: { undo, redo },
     uiStore: { activateMode, rasterize },
   } = useStores();
 
@@ -69,7 +69,7 @@ function _MuralTools({ ...passthrough }: MuralToolsProps) {
         </ToolButton>
 
         <ToolButton
-          // onClick={() => }
+          onClick={redo}
           icon={CgRedo}
           size='md'
         >
