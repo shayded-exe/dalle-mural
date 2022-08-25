@@ -1,8 +1,12 @@
+import '@fontsource/fira-code/latin.css';
+import '@fontsource/ubuntu/latin.css';
+
 import { extendTheme, ThemeOverride } from '@chakra-ui/react';
 
 const override: ThemeOverride = {
   semanticTokens: {
     colors: {
+      background: '#f5f5f5',
       'transparent-bg': `
         repeating-conic-gradient(
           var(--chakra-colors-blackAlpha-200) 0% 25%,
@@ -11,6 +15,11 @@ const override: ThemeOverride = {
         50% / 2rem 2rem
       `,
     },
+  },
+  fonts: {
+    heading: `Ubuntu, sans-serif`,
+    body: `Ubuntu, sans-serif`,
+    mono: `'Fira Code', consolas, monospace`,
   },
   shadows: {
     'window-left': `

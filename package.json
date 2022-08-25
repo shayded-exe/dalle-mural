@@ -16,6 +16,8 @@
     "@chakra-ui/react": "2.2.8",
     "@emotion/react": "11.10.0",
     "@emotion/styled": "11.10.0",
+    "@fontsource/fira-code": "4.5.11",
+    "@fontsource/ubuntu": "4.5.11",
     "buffer": "6.0.3",
     "classnames": "2.3.1",
     "cors": "2.8.5",

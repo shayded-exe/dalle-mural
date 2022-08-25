@@ -9,7 +9,7 @@ configurePersistable(
     storage: localForage,
   },
   {
-    delay: 1000,
+    delay: 300,
   },
 );
 

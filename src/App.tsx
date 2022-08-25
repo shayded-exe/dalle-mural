@@ -33,7 +33,7 @@ export const App = observer(() => {
       justify={'space-between'}
       width='100vw'
       height='100vh'
-      backgroundColor={'blackAlpha.50'}
+      backgroundColor={'background'}
     >
       <TopToolbar
         margin='2rem'

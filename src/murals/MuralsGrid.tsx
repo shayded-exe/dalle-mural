@@ -18,7 +18,8 @@ function _MuralsGrid({
     <Grid
       templateColumns={'repeat(3, minmax(0, 1fr))'}
       autoRows={'minmax(0, max-content)'}
-      justifyItems={'center'}
+      justifyItems={'stretch'}
+      gap={'3rem'}
       {...passthrough}
     >
       {murals.map(mural => (

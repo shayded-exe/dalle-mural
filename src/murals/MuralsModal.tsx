@@ -1,7 +1,7 @@
 import {
   chakra,
-  CloseButton,
   Heading,
+  IconButton,
   Modal,
   ModalBody,
   ModalContent,
@@ -11,7 +11,9 @@ import {
   UseModalProps,
 } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
+import { CgChevronDoubleLeft } from 'react-icons/cg';
 
+import { CgIcon } from '../components/CgIcon';
 import { models, useStores } from '../store';
 import { CreateMuralButton } from './CreateMuralButton';
 import { MuralsGrid } from './MuralsGrid';
@@ -26,6 +28,7 @@ function _MuralsModal({ onClose, ...passthrough }: UseModalProps) {
   return (
     <Modal
       size={'6xl'}
+      scrollBehavior={'inside'}
       onClose={onClose}
       {...passthrough}
     >
@@ -34,26 +37,33 @@ function _MuralsModal({ onClose, ...passthrough }: UseModalProps) {
       <ModalContent
         padding={'1rem'}
         minHeight={'30vh'}
+        backgroundColor={'background'}
       >
         <ModalHeader
           display={'flex'}
           alignItems={'center'}
         >
-          <Heading fontSize={'4xl'}>Murals</Heading>
+          <IconButton
+            onClick={onClose}
+            icon={<CgIcon as={CgChevronDoubleLeft} />}
+            aria-label='back'
+          />
+
+          <Heading
+            fontSize={'4xl'}
+            marginLeft={'1rem'}
+          >
+            Murals
+          </Heading>
 
           <Spacer />
 
-          <CreateMuralButton
-            marginRight={'1.5rem'}
-            onCreated={onClose}
-          />
-
-          <CloseButton onClick={onClose} />
+          <CreateMuralButton onCreated={onClose} />
         </ModalHeader>
 
         <ModalBody
-          paddingTop={'1rem'}
-          paddingX={'4rem'}
+          paddingTop={'2rem'}
+          // paddingX={'4rem'}
           paddingBottom={'4rem'}
         >
           <MuralsGrid

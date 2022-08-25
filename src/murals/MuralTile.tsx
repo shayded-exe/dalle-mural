@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Box,
   chakra,
   Flex,
@@ -50,13 +51,17 @@ function _MuralTile({
           {mural.name}
         </Heading>
 
-        <GenerationImage
-          onClick={onSelect}
-          image={mural.previewImage}
-          borderTopWidth={'1px'}
-          borderBottomWidth={'1px'}
-          cursor={'pointer'}
-        />
+        <AspectRatio ratio={1}>
+          <GenerationImage
+            onClick={onSelect}
+            image={mural.previewImage}
+            maxWidth={'512px'}
+            maxHeight={'512px'}
+            borderTopWidth={'1px'}
+            borderBottomWidth={'1px'}
+            cursor={'pointer'}
+          />
+        </AspectRatio>
 
         <Flex padding={'0.5rem'}>
           <IconButton
