@@ -53,6 +53,10 @@ const override: ThemeOverride = {
   },
   components: {
     Button: {
+      baseStyle: {
+        fontFamily: 'mono',
+        // fontWeight: 'normal',
+      },
       sizes: {
         lg: {
           fontSize: 'xl',

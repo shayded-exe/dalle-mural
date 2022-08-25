@@ -31,8 +31,8 @@ export function _EraseBrushSizeSlider({
 
   return (
     <Flex
-      align={'center'}
-      gap={'1.25rem'}
+      align='center'
+      gap='1.25rem'
       {...passthrough}
     >
       <CgIcon

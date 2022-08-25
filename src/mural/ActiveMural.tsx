@@ -1,14 +1,15 @@
+import { chakra } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 
 import { canvasToImage } from '../canvas';
 import { useStores } from '../store';
 import { Mural } from './Mural';
 
-export const ActiveMural = observer(_ActiveMural);
+export const ActiveMural = chakra(observer(_ActiveMural));
 
 function _ActiveMural({ ...passthrough }: {}) {
   const {
-    muralStore: { hasActiveMural, activeMural, setPreviewImage },
+    muralStore: { activeMural, setPreviewImage },
     uiStore: {
       canSelectArea,
       setSelectionArea,
@@ -22,9 +23,7 @@ function _ActiveMural({ ...passthrough }: {}) {
     },
   } = useStores();
 
-  return !hasActiveMural ? (
-    <div> </div>
-  ) : (
+  return (
     <Mural
       mural={activeMural!}
       canSelect={canSelectArea}

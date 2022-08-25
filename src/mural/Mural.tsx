@@ -17,6 +17,7 @@ import { BrushFillLayer } from './BrushFillLayer';
 import { BrushOutlineLayer } from './BrushOutlineLayer';
 import { GridLayer } from './GridLayer';
 import { MainLayer } from './MainLayer';
+import { MuralTransformWrapper } from './MuralTransformWrapper';
 import { SelectionLayer } from './SelectionLayer';
 import { useMouseBrush } from './use-mouse-brush';
 import { useMouseRectSelection } from './use-mouse-rect-selection';
@@ -93,32 +94,34 @@ function _Mural({
   useImperativeHandle(muralRef, getHandle);
 
   return (
-    <ZStack
-      width={mural.width}
-      height={mural.height}
-      {...mergeProps(selectionEvents, brushEvents, passthrough)}
-    >
-      <MainLayer
-        mural={mural}
-        onPaint={onPaint}
-        canvasRef={mainCanvasRef}
-      />
+    <MuralTransformWrapper {...passthrough}>
+      <ZStack
+        width={mural.width}
+        height={mural.height}
+        {...mergeProps(selectionEvents, brushEvents)}
+      >
+        <MainLayer
+          mural={mural}
+          onPaint={onPaint}
+          canvasRef={mainCanvasRef}
+        />
 
-      <GridLayer mural={mural} />
+        <GridLayer mural={mural} />
 
-      <SelectionLayer
-        selection={selection}
-        isSelected={isSelected}
-        selectedGeneration={selectedGeneration}
-      />
+        <SelectionLayer
+          selection={selection}
+          isSelected={isSelected}
+          selectedGeneration={selectedGeneration}
+        />
 
-      <BrushFillLayer
-        brush={eraseBrush}
-        isPainting={isErasing}
-        canvasRef={eraseFillCanvasRef}
-      />
-      <BrushOutlineLayer brush={eraseBrush} />
-    </ZStack>
+        <BrushFillLayer
+          brush={eraseBrush}
+          isPainting={isErasing}
+          canvasRef={eraseFillCanvasRef}
+        />
+        <BrushOutlineLayer brush={eraseBrush} />
+      </ZStack>
+    </MuralTransformWrapper>
   );
 
   function getHandle(): MuralRef {
