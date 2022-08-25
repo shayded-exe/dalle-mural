@@ -7,7 +7,6 @@ import { useStores } from '../store';
 import { downloadImage } from '../utils';
 import { CgIcon } from './CgIcon';
 import { SelectionInfo } from './SelectionInfo';
-import { SettingsMenu } from './SettingsMenu';
 
 export const TopToolbar = chakra(observer(_TopToolbar));
 
@@ -54,8 +53,6 @@ function _TopToolbar({ ...passthrough }: {}) {
         icon={<CgIcon as={CgLogOut} />}
         aria-label='sign out'
       />
-
-      <SettingsMenu />
     </Flex>
   );
 }
