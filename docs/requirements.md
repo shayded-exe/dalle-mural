@@ -28,6 +28,7 @@
 - [ ] dynamically expand canvas
 - place mode
   - [x] generate or inpaint from a prompt
+  - [ ] upload image
   - [x] place generated image anywhere on the canvas
     - [x] show overlay of selected generation under cursor on canvas
   - [x] confirm before placing

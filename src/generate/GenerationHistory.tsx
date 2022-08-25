@@ -39,7 +39,10 @@ function _GenerationHistory({
     >
       {isLoading &&
         Array.from({ length: 4 }, (_, i) => (
-          <Skeleton key={i}>
+          <Skeleton
+            key={i}
+            borderRadius='4px'
+          >
             <GenerationImage image={null} />
           </Skeleton>
         ))}

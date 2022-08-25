@@ -142,6 +142,12 @@ function _GeneratePanel({ ...passthrough }: {}) {
     async function getTask() {
       if (prompt.startsWith('task-')) {
         return await dalle.getSuccessfulTask(prompt);
+      } else if (isInpaintMode) {
+        return await dalle.generateInpainting({
+          prompt,
+          maskedImage: selectionAreaImage!,
+          sourceImage: selectionAreaImage!,
+        });
       } else {
         return await dalle.generate({ prompt });
       }

@@ -153,6 +153,8 @@ function _CreateMuralModal({
                 min={0}
                 max={3 / 4}
                 step={1 / 8}
+                // idk why this isn't set by register
+                defaultValue={1 / 8}
                 focusThumbOnChange={false}
               >
                 {['0', '1/8', '3/8', '5/8', '3/4'].map(value => (
