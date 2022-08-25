@@ -9,14 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { observer } from 'mobx-react-lite';
 import { IconType } from 'react-icons';
-import {
-  CgAddR,
-  CgColorPicker,
-  CgErase,
-  CgRedo,
-  CgSoftwareDownload,
-  CgUndo,
-} from 'react-icons/cg';
+import { CgAddR, CgErase, CgRedo, CgSoftwareDownload, CgUndo } from 'react-icons/cg';
 
 import { CgIcon } from '../components/CgIcon';
 import { useStores } from '../store';
@@ -43,13 +36,6 @@ function _MuralTools({ ...passthrough }: MuralToolsProps) {
         icon={CgAddR}
       >
         generate
-      </ToolButton>
-
-      <ToolButton
-        onClick={() => activateMode(UIMode.Inpaint)}
-        icon={CgColorPicker}
-      >
-        inpaint
       </ToolButton>
 
       <ToolButton

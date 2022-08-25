@@ -24,13 +24,19 @@ function _GenerationImage({
   transparentBg?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }) {
+  const borderRadius = '4px';
+
   return (
     <Box
       background={transparentBg ? 'transparent-bg' : undefined}
+      borderRadius={borderRadius}
       {...passthrough}
     >
       {image ? (
-        <Image src={image} />
+        <Image
+          src={image}
+          borderRadius={borderRadius}
+        />
       ) : (
         <Box
           width={'100%'}

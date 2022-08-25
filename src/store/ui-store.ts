@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import { BrushShape, BrushSize, CircleSize, Dimensions, Rect } from '../canvas';
 import { MuralRef } from '../mural/Mural';
 import { ImageDataUrl } from '../utils';
-import { Generation, UIMode } from './models';
+import { GenerateMode, Generation, UIMode } from './models';
 import { RootStore } from './root-store';
 
 export class UIStore {
@@ -17,6 +17,11 @@ export class UIStore {
     this.#rootStore = rootStore;
 
     makeAutoObservable(this, {}, { autoBind: true });
+  }
+
+  muralRef: MuralRef | null = null;
+  setMuralRef(ref: MuralRef | null) {
+    this.muralRef = ref;
   }
 
   activeMode = UIMode.None;
@@ -33,9 +38,12 @@ export class UIStore {
     this.deselectGeneration();
   }
 
-  muralRef: MuralRef | null = null;
-  setMuralRef(ref: MuralRef | null) {
-    this.muralRef = ref;
+  generateMode = GenerateMode.Generate;
+  setGenerateMode(value: GenerateMode) {
+    this.generateMode = value;
+  }
+  get isInpaintMode() {
+    return this.generateMode === GenerateMode.Inpaint;
   }
 
   selectedGeneration: Generation | null = null;
@@ -47,11 +55,7 @@ export class UIStore {
   }
 
   get canSelectArea() {
-    return [
-      //
-      UIMode.Generate,
-      UIMode.Inpaint,
-    ].includes(this.activeMode);
+    return this.activeMode === UIMode.Generate;
   }
   selectionArea: Rect | null = null;
   setSelectionArea(value: Rect | null) {
@@ -65,8 +69,8 @@ export class UIStore {
     this.isAreaSelected = false;
   }
   get selectionAreaImage(): ImageDataUrl | null {
-    if (this.isAreaSelected && this.activeMode === UIMode.Inpaint) {
-      return this.muralRef!.getRectImage(this.selectionArea!);
+    if (this.activeMode === UIMode.Generate && this.isAreaSelected) {
+      return this.muralRef!.rasterizeRect(this.selectionArea!);
     }
 
     return null;

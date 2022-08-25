@@ -24,7 +24,7 @@ import { useMouseRectSelection } from './use-mouse-rect-selection';
 
 export interface MuralRef {
   rasterize: () => ImageDataUrl;
-  getRectImage: (rect: Rect) => ImageDataUrl;
+  rasterizeRect: (rect: Rect) => ImageDataUrl;
   getEraseMask: () => ImageDataUrl;
   clearEraseFill: () => void;
 }
@@ -130,7 +130,7 @@ function _Mural({
 
     return {
       rasterize: () => canvasToImage(mainCanvas),
-      getRectImage: rect =>
+      rasterizeRect: rect =>
         cropCanvasToImage({
           canvas: mainCanvas,
           rect,

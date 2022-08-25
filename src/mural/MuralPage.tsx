@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { TopToolbar } from '../components/TopToolbar';
 import { ZStack } from '../components/ZStack';
 import { ErasePanel } from '../erase/ErasePanel';
+import { ConfirmPlaceButton } from '../generate/ConfirmPlaceButton';
 import { GeneratePanel } from '../generate/GeneratePanel';
-import { InpaintPanel } from '../generate/InpaintPanel';
 import { useStores } from '../store';
 import { UIMode } from '../store/models';
 import { ActiveMural } from './ActiveMural';
@@ -28,39 +28,37 @@ function _MuralPage({ ...passthrough }: MuralPageProps) {
     >
       <Flex
         width='100%'
-        maxWidth='100rem'
+        maxWidth='120rem'
         marginX='auto'
-        padding='2rem'
-        paddingBottom='4rem'
+        paddingTop='2rem'
+        padding='4rem'
         direction='column'
         align='stretch'
       >
         <TopToolbar
-          marginX='10rem'
+          marginX='20rem'
           zIndex='docked'
         />
 
-        <MuralTools
-          alignSelf='end'
-          marginTop='8rem'
-          zIndex='docked'
-        />
+        {activeMode === UIMode.Generate ? (
+          <GeneratePanel
+            alignSelf='start'
+            marginTop='4rem'
+            zIndex='docked'
+            minWidth='40rem'
+            maxWidth='40rem'
+            minHeight='0'
+          />
+        ) : (
+          <MuralTools
+            alignSelf='start'
+            marginTop='8rem'
+            marginLeft='10rem'
+            zIndex='docked'
+          />
+        )}
 
         <Spacer />
-
-        {activeMode === UIMode.Generate && (
-          <GeneratePanel
-            marginX='10rem'
-            zIndex='docked'
-          />
-        )}
-
-        {activeMode === UIMode.Inpaint && (
-          <InpaintPanel
-            marginX='10rem'
-            zIndex='docked'
-          />
-        )}
 
         {activeMode === UIMode.Erase && (
           <ErasePanel
@@ -69,6 +67,17 @@ function _MuralPage({ ...passthrough }: MuralPageProps) {
             zIndex='docked'
           />
         )}
+      </Flex>
+
+      <Flex
+        align='end'
+        justify='center'
+        padding='4rem'
+      >
+        <ConfirmPlaceButton
+          marginBottom='2rem'
+          zIndex='docked'
+        />
       </Flex>
 
       {hasActiveMural && <ActiveMural />}

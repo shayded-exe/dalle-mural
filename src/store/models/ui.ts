@@ -1,6 +1,10 @@
 export enum UIMode {
   None,
   Generate,
-  Inpaint,
   Erase,
+}
+
+export enum GenerateMode {
+  Generate,
+  Inpaint,
 }

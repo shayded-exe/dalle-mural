@@ -20,24 +20,21 @@
 
 - [x] create murals
 - [x] save/load murals
+- [x] download
+- [x] undo/redo
 - [ ] toggleable grid
 - [ ] toggleable grid snapping
 - [ ] set overlap %
 - [ ] dynamically expand canvas
-- [ ] undo/redo
-
-### place mode
-
-- [x] generate or inpaint from a prompt
-- [x] place generated image anywhere on the canvas
-  - [x] show overlay of selected generation under cursor on canvas
-- [x] confirm before placing
-
-### erase mode
-
-- [x] brush panel
-- [x] rect/circle shape selector
-- [x] size slider
+- place mode
+  - [x] generate or inpaint from a prompt
+  - [x] place generated image anywhere on the canvas
+    - [x] show overlay of selected generation under cursor on canvas
+  - [x] confirm before placing
+- erase mode
+  - [x] brush panel
+  - [x] rect/circle shape selector
+  - [x] size slider
 
 ### outpaint mode
 
