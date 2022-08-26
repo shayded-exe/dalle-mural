@@ -1,0 +1,1 @@
+- [ ] consider if redo stack should be cleared on new placement

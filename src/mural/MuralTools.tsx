@@ -18,7 +18,14 @@ import { downloadImage } from '../utils';
 
 export interface MuralToolsProps {}
 
-export const MuralTools = chakra(observer(_MuralTools));
+export const MuralTools = chakra(observer(_MuralTools), {
+  baseStyle: {
+    padding: '0.75rem',
+    backgroundColor: 'white',
+    boxShadow: 'lg',
+    borderRadius: 'lg',
+  },
+});
 
 function _MuralTools({ ...passthrough }: MuralToolsProps) {
   const {

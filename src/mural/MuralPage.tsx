@@ -53,7 +53,7 @@ function _MuralPage({ ...passthrough }: MuralPageProps) {
           <MuralTools
             alignSelf='start'
             marginTop='8rem'
-            marginLeft='10rem'
+            // marginLeft='10rem'
             zIndex='docked'
           />
         )}

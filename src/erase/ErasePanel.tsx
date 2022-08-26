@@ -7,7 +7,14 @@ import { CgIcon } from '../components/CgIcon';
 import { useStores } from '../store';
 import { EraseBrushSizeSlider } from './EraseBrushSizeSlider';
 
-export const ErasePanel = chakra(observer(_ErasePanel));
+export const ErasePanel = chakra(observer(_ErasePanel), {
+  baseStyle: {
+    padding: '0.75rem',
+    background: 'white',
+    boxShadow: 'lg',
+    borderRadius: 'lg',
+  },
+});
 
 function _ErasePanel({ ...passthrough }: {}) {
   const {
