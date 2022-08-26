@@ -41,6 +41,18 @@
 
 - [ ] scale down mural and outpaint
 
+### performance
+
+- [x] optimize mural canvas to not always redraw
+- [ ] add mural cache layers
+- [ ] use virtualized list for generation history
+- [ ] actually use IndexedDB instead of treating it as a KV store
+      https://web.dev/indexeddb-best-practices/
+- [ ] use files api for mural save/load
+      https://web.dev/file-system-access/
+      https://dexie.org/
+- [ ] use service worker for image loading
+
 fit some error handling in there somewhere at some point
 
 ## flows
