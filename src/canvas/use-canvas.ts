@@ -23,7 +23,7 @@ export function useCanvasDraw(
 
   useEffect(() => {
     if (ctx) {
-      draw(ctx);
+      return draw(ctx);
     }
   }, [ctx, ...deps]);
 

@@ -25,7 +25,7 @@ function _MainLayer({
           .then(() => onPaint?.(ctx))
           .catch(console.error);
       }),
-    [mural],
+    [],
   );
 
   return (
