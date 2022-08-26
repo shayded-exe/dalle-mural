@@ -18,6 +18,8 @@ const rootStore = new RootStore();
 globalThis.__store = rootStore;
 globalThis.__toJS = toJS;
 
+navigator.storage.persist().then(canPersist => console.log({ canPersist }));
+
 const rootElement = document.getElementById('root')!;
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
