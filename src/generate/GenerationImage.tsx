@@ -24,7 +24,7 @@ function _GenerationImage({
   transparentBg?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }) {
-  const borderRadius = '4px';
+  const borderRadius = 'base';
 
   return (
     <Box
@@ -35,6 +35,8 @@ function _GenerationImage({
       {image ? (
         <Image
           src={image}
+          decoding='async'
+          loading='lazy'
           borderRadius={borderRadius}
         />
       ) : (

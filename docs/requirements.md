@@ -45,6 +45,10 @@
 
 - [x] optimize mural canvas to not always redraw
 - [ ] add mural cache layers
+- [ ] optimize img loading
+      https://web.dev/lazy-loading-images/
+      https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading
+      https://github.com/twobin/react-lazyload
 - [ ] use virtualized list for generation history
 - [ ] actually use IndexedDB instead of treating it as a KV store
       https://web.dev/indexeddb-best-practices/

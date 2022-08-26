@@ -28,7 +28,6 @@ export function Task({ task, selectedGeneration, select, deselect }: TaskProps) 
           onSelect={() => select(generation)}
           onDeselect={deselect}
           cursor='pointer'
-          scrollSnapAlign='start'
         />
       ))}
     </>

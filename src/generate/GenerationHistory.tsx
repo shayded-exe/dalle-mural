@@ -34,14 +34,13 @@ function _GenerationHistory({
       scrollPadding='0.5rem'
       maxHeight='100%'
       overflowY='scroll'
-      scrollSnapType='y proximity'
       {...passthrough}
     >
       {isLoading &&
         Array.from({ length: 4 }, (_, i) => (
           <Skeleton
             key={i}
-            borderRadius='4px'
+            borderRadius='base'
           >
             <GenerationImage image={null} />
           </Skeleton>
