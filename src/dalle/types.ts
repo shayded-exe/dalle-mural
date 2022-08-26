@@ -1,6 +1,6 @@
 import { Opaque } from 'type-fest';
 
-export type DalleId = Opaque<'DalleId', string>;
+export type DalleId = Opaque<string, 'DalleId'>;
 
 export interface DalleObject {
   id: DalleId;
