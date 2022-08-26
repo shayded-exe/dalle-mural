@@ -1,6 +1,7 @@
 import { useMergeRefs } from '@chakra-ui/react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { useRef } from 'react';
 
 import { clearCanvas, drawImageUrl, useCanvasDraw } from '../canvas';
 import { models } from '../store';
@@ -17,13 +18,12 @@ function _MainLayer({
   onPaint?: (ctx: CanvasRenderingContext2D) => void;
   canvasRef?: React.Ref<HTMLCanvasElement>;
 }) {
+  const lastItemDrawn = useRef(-1);
+
   const { ref: _ref } = useCanvasDraw(
     ctx =>
       autorun(() => {
-        clearCanvas(ctx);
-        drawMainLayer({ ctx, mural })
-          .then(() => onPaint?.(ctx))
-          .catch(console.error);
+        onDraw(ctx);
       }),
     [],
   );
@@ -34,18 +34,40 @@ function _MainLayer({
       {...passthrough}
     />
   );
+
+  function onDraw(ctx: CanvasRenderingContext2D) {
+    // clear canvas if we had an undo
+    if (mural.items.length - 1 < lastItemDrawn.current) {
+      clearCanvas(ctx);
+      lastItemDrawn.current = -1;
+    }
+
+    drawMainLayer({ ctx, mural, lastItemDrawn: lastItemDrawn.current })
+      .then(res => (lastItemDrawn.current = res.lastItemDrawn))
+      .then(() => onPaint?.(ctx))
+      .catch(console.error);
+  }
 }
 
 async function drawMainLayer({
   ctx,
   mural,
+  lastItemDrawn,
 }: {
   ctx: CanvasRenderingContext2D;
   mural: models.Mural;
-}) {
-  for (const item of mural.items) {
+  lastItemDrawn: number;
+}): Promise<{ lastItemDrawn: number }> {
+  for (const [i, item] of mural.items.entries()) {
+    if (i <= lastItemDrawn) {
+      continue;
+    }
+
     await drawItem(item);
+    lastItemDrawn = i;
   }
+
+  return { lastItemDrawn };
 
   async function drawItem(item: models.Mural.Item) {
     switch (item.type) {
