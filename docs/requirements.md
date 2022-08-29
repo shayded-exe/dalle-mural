@@ -36,10 +36,11 @@
   - [x] place generated image anywhere on the canvas
     - [x] show overlay of selected generation under cursor on canvas
   - [x] confirm before placing
-- [x] erase mode
+- [-] erase mode
   - [x] brush panel
   - [x] rect/circle shape selector
   - [x] size slider
+  - [ ] individual erase strokes can be undone
 
 ### outpaint mode
 

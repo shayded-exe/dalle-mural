@@ -7,6 +7,7 @@ import { RootStore } from './root-store';
 configurePersistable(
   {
     storage: localForage,
+    stringify: false,
   },
   {
     delay: 300,

@@ -8,7 +8,7 @@ export class DalleStore {
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
     makePersistable(this, {
-      name: 'AuthStore',
+      name: 'DalleStore',
       properties: [
         //
         'authToken',
