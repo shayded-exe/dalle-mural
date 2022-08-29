@@ -1,4 +1,4 @@
-import { autorun } from 'mobx';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
 import { clearCanvas, Path2DBuilder, strokePath, useCanvasDraw } from '../canvas';
@@ -16,14 +16,18 @@ function _GridLayer({
 }) {
   const { ref } = useCanvasDraw(
     ctx =>
-      autorun(() => {
-        clearCanvas(ctx);
+      reaction(
+        () => mural,
+        () => {
+          clearCanvas(ctx);
 
-        if (isVisible) {
-          drawGridLayer({ ctx, mural });
-        }
-      }),
-    [isVisible],
+          if (isVisible) {
+            drawGridLayer({ ctx, mural });
+          }
+        },
+        { fireImmediately: true },
+      ),
+    [mural, isVisible],
   );
 
   return (
