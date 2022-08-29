@@ -1,4 +1,30 @@
-import { DependencyList, useCallback } from 'react';
+import {
+  autorun,
+  IAutorunOptions,
+  IReactionOptions,
+  IReactionPublic,
+  reaction,
+} from 'mobx';
+import { DependencyList, useCallback, useEffect } from 'react';
+
+export function useAutorun(
+  view: (r: IReactionPublic) => any,
+  opts?: IAutorunOptions,
+): void {
+  useEffect(() => autorun(view, opts), []);
+}
+
+export function useReaction<T, FireImmediately extends boolean = false>(
+  expression: (r: IReactionPublic) => T,
+  effect: (
+    arg: T,
+    prev: FireImmediately extends true ? T | undefined : T,
+    r: IReactionPublic,
+  ) => void,
+  opts?: IReactionOptions<T, FireImmediately>,
+): void {
+  return useEffect(() => reaction(expression, effect, opts), []);
+}
 
 export function useOnInitRef<T>(
   callback: ((ref: T) => void) | undefined,

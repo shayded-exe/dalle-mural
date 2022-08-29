@@ -1,7 +1,7 @@
 import { useMergeRefs } from '@chakra-ui/react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { clearCanvas, drawImageUrl, useCanvasDraw } from '../canvas';
 import { models } from '../store';
@@ -19,13 +19,17 @@ function _MainLayer({
   canvasRef?: React.Ref<HTMLCanvasElement>;
 }) {
   const lastItemDrawn = useRef(-1);
+  // force clear when a new mural is loaded
+  useEffect(() => {
+    lastItemDrawn.current = Infinity;
+  }, [mural]);
 
   const { ref: _ref } = useCanvasDraw(
     ctx =>
       autorun(() => {
         onDraw(ctx);
       }),
-    [],
+    [mural],
   );
 
   return (
@@ -36,7 +40,7 @@ function _MainLayer({
   );
 
   function onDraw(ctx: CanvasRenderingContext2D) {
-    // clear canvas if we had an undo
+    // clear canvas if we had an undo or a new mural is loaded
     if (mural.items.length - 1 < lastItemDrawn.current) {
       clearCanvas(ctx);
       lastItemDrawn.current = -1;

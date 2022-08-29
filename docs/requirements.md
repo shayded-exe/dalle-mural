@@ -26,13 +26,17 @@
 - [ ] toggleable grid snapping
 - [ ] set overlap %
 - [ ] dynamically expand canvas
-- place mode
+
+### tools panel
+
+- [ ] collapsible
+- [-] place mode
   - [x] generate or inpaint from a prompt
   - [ ] upload image
   - [x] place generated image anywhere on the canvas
     - [x] show overlay of selected generation under cursor on canvas
   - [x] confirm before placing
-- erase mode
+- [x] erase mode
   - [x] brush panel
   - [x] rect/circle shape selector
   - [x] size slider
@@ -45,16 +49,16 @@
 
 - [x] optimize mural canvas to not always redraw
 - [ ] add mural cache layers
-- [ ] optimize img loading
-      https://web.dev/lazy-loading-images/
-      https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading
-      https://github.com/twobin/react-lazyload
+- [ ] optimize img loading  
+       https://web.dev/lazy-loading-images/  
+       https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading  
+       https://github.com/twobin/react-lazyload
 - [ ] use virtualized list for generation history
-- [ ] actually use IndexedDB instead of treating it as a KV store
-      https://web.dev/indexeddb-best-practices/
-- [ ] use files api for mural save/load
-      https://web.dev/file-system-access/
-      https://dexie.org/
+- [ ] actually use IndexedDB instead of treating it as a KV store  
+       https://web.dev/indexeddb-best-practices/
+- [ ] use files api for mural save/load  
+       https://web.dev/file-system-access/  
+       https://dexie.org/
 - [ ] use service worker for image loading
 
 fit some error handling in there somewhere at some point
